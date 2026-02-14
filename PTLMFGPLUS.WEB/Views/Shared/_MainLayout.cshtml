@@ -1,0 +1,167 @@
+﻿@{
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Starter | UBold - Responsive Admin Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.ico">
+    <link href="~/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+    <link href="~/offline/datatables/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/offline/datatables/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/offline/datatables/css/responsive.bootstrap.css" rel="stylesheet" />
+    <link href="~/offline/datatables/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/offline/datatables/css/responsive.datatables.css" rel="stylesheet" />
+
+    <!-- App css -->
+    <link href="~/css/config/saas/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
+    <!-- icons -->
+    <link href="~/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/offline/css/select2.min.css" rel="stylesheet" />
+
+
+</head>
+@* horizontal, two-column, vertical *@
+
+<body class="loading" data-layout-mode="default" data-layout-color="light" data-topbar-color="dark" data-leftbar-color="light" data-sidebar-user='false'>
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            <partial name="_TopInfo" />
+        </div>
+        <!-- end Topbar -->
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="left-side-menu">
+            <partial name="_LeftSideBar" />
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start Content-->
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">UBold</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Extra Pages</a></li>
+                                        <li class="breadcrumb-item active">Starter</li>
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">
+                                    Starter Page
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+                    @RenderBody()
+                </div> <!-- container -->
+
+            </div> <!-- content -->
+            <!-- Footer Start -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <script>document.write(new Date().getFullYear())</script> &copy; UBold theme by <a href="">Coderthemes</a>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-md-end footer-links d-none d-sm-block">
+                                <a href="javascript:void(0);">About Us</a>
+                                <a href="javascript:void(0);">Help</a>
+                                <a href="javascript:void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+
+    </div>
+    <!-- END wrapper -->
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/ui-js/vendor.min.js"></script>
+    <script src="~/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+    <script src="~/offline/datatables/js/jquery.datatables.min.js"></script>
+    <script src="~/offline/datatables/js/datatables.bootstrap4.min.js"></script>
+    <script src="~/offline/datatables/js/datatables.buttons.min.js"></script>
+    <script src="~/offline/datatables/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/offline/datatables/js/buttons.html5.min.js"></script>
+    <script src="~/offline/datatables/js/buttons.print.min.js"></script>
+    <script src="~/offline/datatables/js/buttons.colvis.min.js"></script>
+    <script src="~/offline/datatables/js/datatables.responsive.min.js"></script>
+    <script src="~/offline/datatables/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+    <script src="~/offline/js/busy-load.min.js"></script>
+    <script src="~/offline/js/apexcharts.js"></script>
+    <script src="~/ui-js/app.min.js"></script>
+
+    <script src="~/offline/js/sweetalert.min.js"></script>
+    <script src="~/offline/js/toastr.min.js"></script>
+    <script src="~/offline/js/select2.min.js"></script>
+    <script asp-append-version="true">
+        var appPath= '@Url.Content("~/")';
+        function initCommonPlugins() {
+            $(document).on("select2:open", () => {
+                document.querySelector(".select2-search__field").focus();
+            });
+            $("select:not(.no-select2)").select2();
+            toastr.options = {
+                closeButton: true,
+                newestOnTop: true,
+                progressBar: true,
+                positionClass: "toast-top-center",
+                showDuration: "500",
+                hideDuration: "1000",
+                timeOut: "5000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+        }
+        $(document).ready(initCommonPlugins);
+
+    </script>
+    <script src="~/js/common/site.js"></script>
+
+    <script src="~/js/common/FetchHelper.js"></script>
+    <script src="~/js/common/Helper.js"></script>
+    <script src="~/js/common/notifyhelper.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

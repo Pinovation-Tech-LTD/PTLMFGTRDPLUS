@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+		
+    </PropertyGroup>
+	<Target Name="RemoveExtraFiles" AfterTargets="Publish">
+		<RemoveDir Directories="$(PublishDir)wwwroot\Images" />
+		<RemoveDir Directories="$(PublishDir)wwwroot\QuotationUpload" />
+	</Target>
+	<ItemGroup>
+	  <Content Include="Data\license.dat" />
+	</ItemGroup>
+		
+
+	<ItemGroup>
+		<Content Update="appsettings.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
+		<Content Update="appsettings.*.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	
+    <ItemGroup>             
+        <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.3.0" />             
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.12" />
+        
+        <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.26" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\PTL.PRINTRDLC\PTL.PRINTRDLC.csproj" />
+        <ProjectReference Include="..\PTLMFGPLUS.ENTITY\PTLMFGPLUS.ENTITY.csproj" />
+        <ProjectReference Include="..\PTLMFGPLUS.LIB\PTLMFGPLUS.LIB.csproj" />
+        <ProjectReference Include="..\PTLMFGPLUS.SERVICE\PTLMFGPLUS.SERVICE.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Areas\Transfer\Controllers\" />
+      <Folder Include="Areas\Transfer\Views\" />
+      <Folder Include="Data\" />
+      <Folder Include="wwwroot\Reports\" />
+      <Folder Include="wwwroot\Upload\" />
+    </ItemGroup>
+   
+</Project>
