@@ -8,9 +8,8 @@ namespace PTLMFGPLUS.SERVICE
     {
         public static IServiceCollection AddApplicationDI(this IServiceCollection services)
         {
-
-            services.AddTransient<ILoginService, LoginService>();
-
+            services.AddScoped<ICommonService, CommonService>();
+            services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IPageRegistry, PageRegistry>();
             return services;
         }
