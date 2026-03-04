@@ -10,7 +10,7 @@ namespace PTLMFGPLUS.ENTITY
     {
         public enum ModuleType
         {
-            Inventory=1,
+            Inventory=19,
             Accounts=2,
             HR=3,
             Sales=4
