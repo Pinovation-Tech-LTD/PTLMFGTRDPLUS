@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace PTLMFGPLUS.ENTITY
 {
-    public class UserModule
+    public class EUserModule
     {
         public int CompType { get; set; }
         public int id { get; set; }
-        public int moduleid { get; set; }
-        public int modulename { get; set; }
-        public int commod { get; set; }
+        public string moduleid { get; set; }
+        public string modulename { get; set; }
+        public string commod { get; set; }
         public bool usrper { get; set; }
         public bool flag { get; set; }
     }

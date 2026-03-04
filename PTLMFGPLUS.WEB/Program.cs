@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,20 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Home/Login";   // Redirect here if user is not authenticated
+        options.LogoutPath = "/Home/Logout"; // Optional
+        options.AccessDeniedPath = "/Home/AccessDenied"; // Optional
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);     // Cookie expiration
+        options.SlidingExpiration = true;                  // Renew cookie if close to expiration
+        options.Cookie.HttpOnly = true;
+        options.Cookie.Name = "MFGAppAuth";           // Optional: customize cookie name
+    });
+
+
 builder.Services.Configure<SecurityStampValidatorOptions>(o => o.ValidationInterval = TimeSpan.FromHours(2));
 builder.Services.Configure<IISServerOptions>(options =>
 {
@@ -60,6 +75,7 @@ app.UseHttpsRedirection();
 //app.UseResponseCompression();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 //app.MapHub<NotificationHub>("/notificationHub");
