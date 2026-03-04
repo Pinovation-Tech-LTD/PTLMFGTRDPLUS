@@ -39,6 +39,7 @@ namespace PTLMFGPLUS.SERVICE
             ValidateUniquePageKeys(pages);
             return pages;
         }
+
         private void ValidateUniquePageKeys(IEnumerable<PageDefinition> pages)
         {
             var duplicates = pages

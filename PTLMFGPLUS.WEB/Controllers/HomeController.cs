@@ -70,7 +70,7 @@ namespace PTLMFGPLUS.WEB.Controllers
                     new Claim("UserId", item.usrid),
                     new Claim("EmpId", item.empid),
                     new Claim(ClaimTypes.Name, item.usrname),                    
-                    new Claim(ClaimTypes.Role, item.userrole),                  
+                    new Claim(ClaimTypes.Role, item.userrole??""),                  
                     new Claim("Dept", item.deptcode),
                 };
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

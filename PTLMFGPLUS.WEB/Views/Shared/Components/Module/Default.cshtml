@@ -1,0 +1,11 @@
+﻿@model List<PTLMFGPLUS.ENTITY.EUserModule>
+
+<ul class="nav-second-level">
+    @foreach (var module in Model)
+    {
+        string url = Url.Content("~/") + "StepOfOperation" + module.moduleid;
+        <li>
+            <a href="@url">@module.modulename</a>
+        </li>
+    }
+</ul>
