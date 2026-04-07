@@ -279,29 +279,5 @@ namespace PTLMFGPLUS.LIB
             }
             return Q_;
         }
-
-        public static PageDefinition CreatePage(
-    string key,
-    string name,
-    string area,
-    string controller,
-    string action,
-    string queryString,
-    ModuleType Module,
-    PageCategory category)
-        {
-            return new PageDefinition
-            {
-                PageKey = key,
-                PageName = name,
-                Area = area,
-                Controller = controller,
-                Action = action,
-                Module = Module,
-                Category = category,
-                QueryString = queryString,
-            };
-        }
-
     }
 }

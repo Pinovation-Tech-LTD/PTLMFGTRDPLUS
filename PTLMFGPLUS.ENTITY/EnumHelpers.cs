@@ -8,29 +8,29 @@ namespace PTLMFGPLUS.ENTITY
 {
     public class EnumHelpers
     {
-        public enum ModuleType
+        public enum ModuleList
         {
-            Inventory=19,
-            Accounts=2,
-            HR=3,
-            Sales=4
-        }
-
-        public enum PageCategory
-        {
-            OneTimeInput,
-            Operational,
-            Report
-        }
-
-        public enum PagePermissionType
-        {
-            View,
-            Add,
-            Edit,
-            Delete,
-            Print,
-            Approval
+            BudgetPlan = 01,
+            StdCost = 03,
+            RawMatInv = 07,
+            LC = 09,
+            Pro = 11,
+            ProdMon = 13,
+            Account = 15,
+            Export = 16,
+            Audit = 18,
+            FGInv = 19,
+            Service = 20,
+            Sales = 23,
+            SalesExport = 24,
+            FixedAsset = 25,
+            MIS = 27,
+            KPI=28,
+            Doc= 29,
+            MgtAccount=31,
+            Mgt=33,
+            CRM=52,
+            HR=80
         }
 
     }

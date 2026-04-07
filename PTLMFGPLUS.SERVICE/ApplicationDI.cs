@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PTLMFGPLUS.SERVICE.ControlPanel;
 
 
 
@@ -11,8 +12,7 @@ namespace PTLMFGPLUS.SERVICE
             services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IMenuService, MenuService>();
-            services.AddScoped<IPageRegistry, PageRegistry>();
-            services.AddScoped<IPageRegistry, PageRegistry>();
+            services.AddScoped<Icomperm, compermService>();
             return services;
         }
     }

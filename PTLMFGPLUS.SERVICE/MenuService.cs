@@ -15,10 +15,15 @@ namespace PTLMFGPLUS.SERVICE
 {
     public interface IMenuService
     {
+        Exception GetError();
         public Task<IEnumerable<EUserModule>> GetModules();
     }
     public class MenuService(ICommonService _common, IUnitOfWork _unitofwork, IHttpContextAccessor _httpContextAccessor) : IMenuService
     {
+        public Exception GetError()
+        {
+            return _common.GetError();
+        }
         public async Task<IEnumerable<EUserModule>> GetModules()
         {
             var items = await GetAllModules();
