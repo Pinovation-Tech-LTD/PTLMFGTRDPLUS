@@ -15,3 +15,43 @@ window.hideLoader = function () {
         $.busyLoadFull("hide");
     }
 }
+function ShowFooterWithButtons() {
+    const divFooter = document.querySelector("#div-footer");
+    divFooter.style.display = "block";
+}
+function HideFooterWithButtons() {
+    const divFooter = document.querySelector("#div-footer");
+    divFooter.style.display = "block";
+}
+
+function HideRefresh() {
+    const btn = document.querySelector("#btnFooterRefresh");
+    btn.style.display = "none";
+}
+
+function HideRecalculate() {
+    const btn = document.querySelector("#btnFooterRecalculate");
+    btn.style.display = "none";
+}
+
+function HideSave() {
+    const btn = document.querySelector("#btnFooterSave");
+    btn.style.display = "none";
+}
+
+function HideCancel() {
+    const btn = document.querySelector("#btnFooterCancel");
+    btn.style.display = "none";
+}
+
+function ShowingDelete() {
+    const btn = document.querySelector("#btnFooterDelete");
+    btn.style.display = "inline-block";
+}
+
+
+
+function ShowSaveNew() {
+    const btn = document.querySelector("#btnFooterSaveNew");
+    btn.style.display = "inline";
+}

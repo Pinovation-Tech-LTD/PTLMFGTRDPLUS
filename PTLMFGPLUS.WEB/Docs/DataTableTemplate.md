@@ -44,11 +44,7 @@ let request={
 dataTable.destroy();
 dataTable = $("#Table_Id").DataTable({      
     "ajax": function (data, callback, settings) {           
-        sendAjaxRequest(`${basicurl}Area/Controller/Action`, 'GET', request, function (json) {
-            callback({
-                data: json.obj
-            });
-        })
+        return service.method();
     },
     "columnDefs": [
         {

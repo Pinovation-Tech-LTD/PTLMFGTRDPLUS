@@ -21,6 +21,10 @@ namespace PTLMFGPLUS.SERVICE
         {
             return UtilityClass.EncodePassword(username + password.Trim());
         }
+
+
+
+
         public async Task<Tuple<IEnumerable<EUserInfo>, IEnumerable<ECompanyStandard>>> GetValidUser(string comcod, string username, string userpass)
         {
             string ipaddress = _common.GetIPAddress();
