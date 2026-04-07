@@ -1,0 +1,16 @@
+﻿@using static PTLMFGPLUS.ENTITY.FacebookModels
+@model List<FacebookPage>
+
+
+<div class="container mt-5">
+    <h3>Select Your Facebook Page</h3>
+    @foreach (var info in Model)
+    {
+        <form method="post" action="/facebook/select-page">
+            <input type="text" name="pageId" value="@info.id" />
+            <input type="text" name="pageAccessToken" value="@info.access_token" />
+            <input type="text" name="pageName" value="@info.name" />
+            <button type="submit" class="btn btn-outline-primary m-2">@info.name</button>
+        </form>
+    }
+</div>

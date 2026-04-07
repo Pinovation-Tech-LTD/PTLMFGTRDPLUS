@@ -1,0 +1,75 @@
+﻿@{
+    string url_basic = Url.Content("~/");
+
+    List<EUserModule> moduleList = ViewBag.ddlmodule == null ? new List<EUserModule>() : (List<EUserModule>)ViewBag.ddlmodule;
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3  col-sm-12 col-xs-12">
+                        <label for="tblModule" class="form-label">Module Name</label>
+                        <select class="form-select select2" id="ddlmodule" data-toggle="select2">
+                            @if (ViewBag.ddlmodule != null)
+                            {
+                                foreach (var item in moduleList)
+                                {
+                                    if (item.moduleid == "AA")
+                                    {
+                                        <option value="@(item.moduleid)" selected>@(item.modulename)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@(item.moduleid)">@(item.modulename)</option>
+                                    }
+
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-sm-3 col-xs-12 mb-1 align-self-end d-flex align-items-center">
+                        <input type="checkbox" id="showAll" data-switch="primary" />
+                        <label for="showAll" data-on-label="" data-off-label=""></label>
+                        <span>  Show All</span>
+                    </div>
+                    <div class="offset-md-2 col-lg-2 col-md-2 col-sm-3 col-xs-12 mb-1 align-self-end d-flex align-items-center">
+                        <a asp-area="ControlPanel" asp-controller="UserPerm" asp-action="UserPermIndex" class="btn btn-sm btn-primary"><i class="bi bi-plus-circle"></i> User Permission</a>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-8 col-sm-12 col-xs-12">
+
+                        <table id="tblpageperCheck" class="table table-bordered display w-100">
+                            <thead class="table-light">
+                                <tr id="searchRow">
+                                    <th class="align-middle text-center">#</th>
+                                    <th class="align-middle text-center">Menu</th>
+                                    <th class="align-middle text-left">Description</th>
+                                    <th class="align-middle text-center">Permission<input type="checkbox" id="chktblall" /></th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-white">
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* @section Scripts {
+    <script src="~/js/controlpanel/compermission.js" asp-append-version="true"></script>
+}
+ *@
+
+

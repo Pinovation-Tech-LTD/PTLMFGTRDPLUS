@@ -1,0 +1,15 @@
+﻿@using static PTLMFGPLUS.ENTITY.FacebookModels
+@model List<LeadForm>
+<div class="container mt-5">
+    <h3>Select a Lead Ad Form</h3>
+    @foreach (var form in Model)
+    {
+        <form method="post" action="/facebook/select-form">
+            <input type="text" name="formId" value="@form.Id" />
+            <input type="text" name="formName" value="@form.Name" />
+            <button type="submit" class="btn btn-outline-success m-2">
+                @form.Name <span class="badge bg-secondary">@form.Status</span>
+            </button>
+        </form>
+    }
+</div>

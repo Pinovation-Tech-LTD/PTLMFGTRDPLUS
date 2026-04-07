@@ -1,0 +1,114 @@
+﻿@using Newtonsoft.Json.Linq
+
+@{
+    ViewBag.Title = "Form Leads";
+    var leads = ViewBag.Leads as JArray;
+}
+
+<div class="container mt-4">
+
+    <!-- Connection Info -->
+    <div class="alert alert-success">
+        <h5>✅ Connected Successfully!</h5>
+        <table class="table table-sm mb-0">
+            <tr>
+                <td><strong>Page:</strong></td>
+                <td>@ViewBag.PageName (ID: @ViewBag.PageId)</td>
+            </tr>
+            <tr>
+                <td><strong>Form:</strong></td>
+                <td>@ViewBag.FormName (ID: @ViewBag.FormId)</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Raw JSON (to verify data coming) -->
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <strong>Raw JSON from Facebook API</strong>
+            <small class="ms-2 text-muted">(this confirms the API is working)</small>
+        </div>
+        <div class="card-body">
+            <pre style="max-height:300px; overflow-y:auto; font-size:12px;">@leads?.ToString(Newtonsoft.Json.Formatting.Indented)</pre>
+        </div>
+    </div>
+
+    <!-- Parsed Leads Table -->
+    <div class="card">
+        <div class="card-header">
+            <strong>Leads (@(leads?.Count ?? 0) found)</strong>
+        </div>
+        <div class="card-body">
+            @if (leads == null || !leads.Any())
+            {
+                <div class="alert alert-info">
+                    No leads yet on this form.
+                    Use the <a href="https://developers.facebook.com/tools/lead-ads-testing"
+                               target="_blank">Lead Ads Testing Tool</a> to submit a test lead.
+                </div>
+            }
+            else
+            {
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Lead ID</th>
+                            <th>Created Time</th>
+                            <th>Fields</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var lead in leads)
+                        {
+                            <tr>
+                                <td><small>@lead["id"]</small></td>
+                                <td>@lead["created_time"]</td>
+                                <td>
+                                    @if (lead["field_data"] is JArray fieldData)
+                                    {
+                                        <table class="table table-sm mb-0">
+                                            @foreach (var field in fieldData)
+                                            {
+                                                <tr>
+                                                    <td><strong>@field["name"]</strong></td>
+                                                    <td>@field["values"]?[0]</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="card mt-4">
+        <div class="card-header bg-warning">
+            <strong>Test New Lead Arrival</strong>
+        </div>
+        <div class="card-body">
+            <p>Submit a test lead to see it appear:</p>
+            <ol>
+                <li>
+                    Go to
+                    <a href="https://developers.facebook.com/tools/lead-ads-testing" target="_blank">
+                        Facebook Lead Ads Testing Tool
+                    </a>
+                </li>
+                <li>Select your Page and Form</li>
+                <li>Fill and submit the form</li>
+                <li>
+                    <a href="/facebook/select-form" class="btn btn-sm btn-primary">
+                        Refresh this page
+                    </a>
+                    to see the new lead
+                </li>
+            </ol>
+        </div>
+    </div>
+
+</div>

@@ -38,6 +38,10 @@
         <ProjectReference Include="..\PTLMFGPLUS.SERVICE\PTLMFGPLUS.SERVICE.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Areas\F_07_RM\Controllers\" />
+      <Folder Include="Areas\F_07_RM\Data\" />
+      <Folder Include="Areas\F_07_RM\Models\" />
+      <Folder Include="Areas\F_07_RM\Views\" />
       <Folder Include="Areas\Transfer\Controllers\" />
       <Folder Include="Areas\Transfer\Views\" />
       <Folder Include="Data\" />
