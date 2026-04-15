@@ -10,7 +10,7 @@ using PTLMFGPLUS.WEB;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation(); 
 builder.Services.AddHttpClient<FacebookService>();
 builder.Services.AddMvc();
 builder.Services.AddControllersWithViews();

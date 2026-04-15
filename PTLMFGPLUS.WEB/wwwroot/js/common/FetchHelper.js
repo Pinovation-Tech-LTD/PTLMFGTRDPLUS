@@ -52,13 +52,13 @@
 
             return result;
         }
-        
+
         finally {
             if (showLoading) hideLoaderSafe();
         }
     }
 
- 
+
 
     function getForm(url, data = null, showLoading = true) {
         const query = data
@@ -95,7 +95,35 @@
             showLoading
         );
     }
+    // Inside your FetchHelpers object/class
 
+    //function postForm(url, data, showLoading = true) {
+    //    const params = new URLSearchParams();
+
+    //    Object.entries(data).forEach(([key, value]) => {
+    //        if (Array.isArray(value)) {
+    //            value.forEach((item, index) => {
+    //                if (typeof item === 'object' && item !== null) {
+    //                    Object.entries(item).forEach(([prop, propValue]) => {
+    //                        params.append(`${key}[${index}].${prop}`, propValue ?? '');
+    //                    });
+    //                } else {
+    //                    params.append(`${key}[${index}]`, item ?? '');
+    //                }
+    //            });
+    //        } else {
+    //            params.append(key, value ?? '');
+    //        }
+    //    });
+
+    //    return request(
+    //        "POST",
+    //        url,
+    //        params.toString(),
+    //        "application/x-www-form-urlencoded",
+    //        showLoading
+    //    );
+    //}
     function postJson(url, data, showLoading = true) {
         return request(
             "POST",
