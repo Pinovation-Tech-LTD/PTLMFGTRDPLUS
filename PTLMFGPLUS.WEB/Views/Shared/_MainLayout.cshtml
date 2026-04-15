@@ -55,23 +55,7 @@
                 <!-- Start Content-->
                 <div class="container-fluid">
 
-                    <!-- start page title -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box">
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">UBold</a></li>
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Extra Pages</a></li>
-                                        <li class="breadcrumb-item active">Starter</li>
-                                    </ol>
-                                </div>
-                                <h4 class="page-title">
-                                    Starter Page
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <!-- end page title -->
                     @RenderBody()
                 </div> <!-- container -->
@@ -158,11 +142,10 @@
         $(document).ready(initCommonPlugins);
 
     </script>
-    <script src="~/js/common/site.js"></script>
-
-    <script src="~/js/common/FetchHelper.js"></script>
-    <script src="~/js/common/Helper.js"></script>
-    <script src="~/js/common/notifyhelper.js"></script>
+    <script src="~/js/common/site.js" asp-append-version="true"></script>
+    <script src="~/js/common/FetchHelper.js" asp-append-version="true"></script>
+    <script src="~/js/common/Helper.js" asp-append-version="true"></script>
+    <script src="~/js/common/notifyhelper.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

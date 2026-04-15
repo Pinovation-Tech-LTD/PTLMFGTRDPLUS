@@ -2528,9 +2528,9 @@ progress {
     }
 }
 
-.form-label {
+/*.form-label {
     margin-bottom: .5rem
-}
+}*/
 
 .col-form-label {
     padding-top: calc(.45rem + 1px);
