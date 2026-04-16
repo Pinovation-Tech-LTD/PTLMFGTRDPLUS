@@ -61,7 +61,20 @@ namespace PTLMFGPLUS.ENTITY.E_07_RM
             public double qty { get; set; }
             public double rate { get; set; }
             public double amt { get; set; }
-        }       
+        } 
+        public class GetMatTransInfo
+        {
+            public string comcod { get; set; }
+            public string mtreqno { get; set; }
+            public string rsircode { get; set; }
+            public string spcfcod { get; set; }
+            public string resdesc { get; set; }
+            public string sirunit { get; set; }
+            public double balqty { get; set; }
+            public double qty { get; set; }
+            public double rate { get; set; }
+            public double amt { get; set; }
+        }
 
 
     }

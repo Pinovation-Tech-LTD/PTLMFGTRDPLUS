@@ -66,6 +66,16 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
             }
             return Ok("Update Successfully");
         }
+        [HttpGet]
+        public async Task<IActionResult> GetMatTransferInfo(string mtrno, string date)
+        {
+            var projectlist = await _purMTReq.Get_Mat_Transfer(mtrno, date);
+            if (projectlist == null)
+            {
+                return BadRequest("No Data");
+            }
+            return Ok(projectlist.ToList());
+        }
         
 
         #endregion

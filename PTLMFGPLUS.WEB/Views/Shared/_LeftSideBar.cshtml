@@ -56,7 +56,16 @@
                 <div class="collapse" id="sidebarTasks">
                     <ul class="nav-second-level">
                         <li>
-                            <a href="task-list.html">List</a>
+                            <a asp-area="F_07_RM"
+                               asp-controller="PurMTReq"
+                               asp-action="PurMTReqIndex"
+                               asp-route-type="entry">New MTR Request</a>
+                        </li>
+                        <li>
+                            <a asp-area="F_07_RM"
+                               asp-controller="PurMTReq"
+                               asp-action="PurMTReqIndex"
+                               asp-route-type="approved">Approve MTR Request</a>
                         </li>
                         <li>
                             <a href="task-details.html">Details</a>

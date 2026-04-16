@@ -1,12 +1,15 @@
 ﻿
 /*Area/Controller/*/
 const commonPath = "/F_07_RM/PurMTReq/";
+const urlParams = new URLSearchParams(window.location.search);
+const qparam = urlParams.get('type');
 var ActionPage = (function () {
     var state = {
         item1: [],
         item2: [],
         selectedItems: [],
         FromToList: []
+
     };   
     var service = {
         async loaddropdown() {
@@ -17,6 +20,9 @@ var ActionPage = (function () {
         },
         async loadPreviousOrder(date) {
             return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetPreviousOrderList`), { date: date }));
+        },
+        async loadApprovedData(mtrno,date) {
+            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetMatTransferInfo`), {mtrno: mtrno, date: date }));
         },
         async loadProjectFromList() {
             return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetProjectFromList`), {}));
@@ -32,7 +38,7 @@ var ActionPage = (function () {
 
 
     };
-    var ui = {
+    var ui = {        
         setValue(id, value) {
             var el = document.getElementById(id);
             if (el) el.value = value;
@@ -182,15 +188,25 @@ var ActionPage = (function () {
     }
     function bindEvents() {
         $("#btnOk").on("click", function () {
-            ToggleDiv();
-            GetResource();         
-            $("#txtProjectToList").prop("disabled", true);
-            $("#txtProjectFromList").prop("disabled", true);
-           
-            $("#lblPreviousOrder").hide();
-            $("#txtPreviousOrder").next(".select2").hide();
+            let btnText = $(this).text().trim();
+            if (btnText === "OK") {
+                // First click
+                ToggleDiv();
+                GetResource();
 
-            //$("#previousOrder").closest(".col-md-4").hide();   //full div hide previous order
+                $("#txtProjectToList").prop("disabled", true);
+                $("#txtProjectFromList").prop("disabled", true);
+
+                $("#lblPreviousOrder").hide();
+                $("#txtPreviousOrder").next(".select2").hide();
+                //$("#previousOrder").closest(".col-md-4").hide();   //full div hide previous order
+                $(this).text("New");
+            }
+            else if (btnText === "New") {                
+                location.reload();
+            }
+            
+           
             
             
         });
@@ -304,17 +320,43 @@ var ActionPage = (function () {
         }        
     }
     async function GetTransIdByDate() {
-        const date = ui.getValue("txtdate");
-        const formatteddate = formatDate(date);
-        const moduleItems = await service.loadLastMTRNumber(formatteddate);        
-        ui.renderCurTransNo(moduleItems);  
+        if (qparam === 'entry') {
+            const date = ui.getValue("txtdate");
+            const formatteddate = formatDate(date);
+            const moduleItems = await service.loadLastMTRNumber(formatteddate);
+            ui.renderCurTransNo(moduleItems);  
+        }
+        else {
+            const date = ui.getValue("txtdate");
+            const formatteddate = formatDate(date);
+            const moduleItems = await service.loadApprovedData("MTR20260400005", formatteddate);
+            ui.renderTable(moduleItems);  
+        }
+        
     }
    
-    async function loadInitialData() {         
-        GetTransIdByDate();
-        const projectFromListItems = await service.loadProjectFromList(); 
-        FromToList = projectFromListItems;
-        ui.renderProjectFromList(FromToList);      
+    async function loadInitialData() {      
+        
+        if (qparam === 'entry') {
+            GetTransIdByDate();
+            const projectFromListItems = await service.loadProjectFromList();
+            FromToList = projectFromListItems;
+            ui.renderProjectFromList(FromToList);
+        }
+        else {
+            GetTransIdByDate();
+            const projectFromListItems = await service.loadApprovedData();
+            FromToList = projectFromListItems;
+            ui.renderProjectFromList(FromToList);
+            $("#txtProjectToList").prop("disabled", true);
+            $("#txtProjectFromList").prop("disabled", true);
+            $("#txtCurTransNo").prop("disabled", true);
+            var div = document.getElementById("btnOkClick");
+            if (div) {
+                div.style.display = "flex";
+            } 
+
+        }
     }
     return {
         init: init
