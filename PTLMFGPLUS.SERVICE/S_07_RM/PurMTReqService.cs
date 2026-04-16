@@ -21,6 +21,7 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
         public Task<IEnumerable<MatTrnsNo>> Get_MATTRANS_No(string date);
         public Task<IEnumerable<PreviousOrder>> Get_Previous_Order(string date);
         public Task<IEnumerable<ProjectFromList>> Get_Project_From_List();
+        public Task<IEnumerable<GetMatTransInfo>> Get_Mat_Transfer(string mTRNNo, string date);
         public Task<Tuple<IEnumerable<ProjectResourseList>,IEnumerable<ProjectResourseList1>>> Get_Project_Resource_List(string projectcode, string curdate, string findResDesc, string stockCheck);
         public Task<bool> Post_Save_Data(string mtrref, string mtreqdat, string fromprj, string toprj, string mtrnar,List<EPurMTReq.SelectedItemListSave>selectedItem);
         
@@ -68,6 +69,20 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
             var results = await _unitofwork.SP_Call.ListAsync<ProjectFromList>(parms);
             return results;
         }
+        public async Task<IEnumerable<GetMatTransInfo>> Get_Mat_Transfer(string mtreqno, string date)
+        {
+            string comcod = _common.GetComcod();
+            ClassProAccessParams parms = new ClassProAccessParams();
+            parms.StoredProcedure = "SP_ENTRY_PURCHASE_05";
+            parms.Calltype = "PrevMTRInfo";
+            parms.Comp1 = comcod;
+            parms.Desc01 = mtreqno;
+            parms.Desc02 = date;
+            
+            var results = await _unitofwork.SP_Call.ListAsync<GetMatTransInfo>(parms);
+            return results;
+        }
+
         public async Task<Tuple<IEnumerable<ProjectResourseList>, IEnumerable<ProjectResourseList1>>> Get_Project_Resource_List(string projectcode, string curdate, string findResDesc, string stockCheck)
         {
             string comcod = _common.GetComcod();
