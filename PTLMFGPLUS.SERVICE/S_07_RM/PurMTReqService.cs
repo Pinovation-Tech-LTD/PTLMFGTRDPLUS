@@ -21,10 +21,12 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
         public Task<IEnumerable<MatTrnsNo>> Get_MATTRANS_No(string date);
         public Task<IEnumerable<PreviousOrder>> Get_Previous_Order(string date);
         public Task<IEnumerable<ProjectFromList>> Get_Project_From_List();
-        public Task<IEnumerable<GetMatTransInfo>> Get_Mat_Transfer(string mTRNNo, string date);
+        public Task<Tuple<IEnumerable<GetMatTransInfo>,IEnumerable<GetMatTransInfoSingleData>>> Get_Mat_Transfer(string mTRNNo, string date);
         public Task<Tuple<IEnumerable<ProjectResourseList>,IEnumerable<ProjectResourseList1>>> Get_Project_Resource_List(string projectcode, string curdate, string findResDesc, string stockCheck);
         public Task<bool> Post_Save_Data(string mtrref, string mtreqdat, string fromprj, string toprj, string mtrnar,List<EPurMTReq.SelectedItemListSave>selectedItem);
-        
+        public Task<bool> ApprovedMTReq(string mtreqno);
+
+
     }
     public class PurMTReqService(ICommonService _common, IUnitOfWork _unitofwork, IHttpContextAccessor _httpContextAccessor) : IPurMTReqService
     {
@@ -69,7 +71,7 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
             var results = await _unitofwork.SP_Call.ListAsync<ProjectFromList>(parms);
             return results;
         }
-        public async Task<IEnumerable<GetMatTransInfo>> Get_Mat_Transfer(string mtreqno, string date)
+        public async Task<Tuple<IEnumerable<GetMatTransInfo>,IEnumerable<GetMatTransInfoSingleData>>> Get_Mat_Transfer(string mtreqno, string date)
         {
             string comcod = _common.GetComcod();
             ClassProAccessParams parms = new ClassProAccessParams();
@@ -77,10 +79,13 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
             parms.Calltype = "PrevMTRInfo";
             parms.Comp1 = comcod;
             parms.Desc01 = mtreqno;
-            parms.Desc02 = date;
+            parms.Desc02 = date;          
             
-            var results = await _unitofwork.SP_Call.ListAsync<GetMatTransInfo>(parms);
-            return results;
+           
+
+            var matTransferInfo = await _unitofwork.SP_Call.ListAsync<GetMatTransInfo, GetMatTransInfoSingleData>(parms);
+
+            return matTransferInfo;
         }
 
         public async Task<Tuple<IEnumerable<ProjectResourseList>, IEnumerable<ProjectResourseList1>>> Get_Project_Resource_List(string projectcode, string curdate, string findResDesc, string stockCheck)
@@ -96,6 +101,20 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
             parms.Desc04 = stockCheck;
 
             var results = await _unitofwork.SP_Call.ListAsync<ProjectResourseList,ProjectResourseList1>(parms);
+            return results;
+        }
+        public async Task<bool> ApprovedMTReq(string mtreqno)
+        {
+            string comcod = _common.GetComcod();
+            ClassProAccessParams parms = new ClassProAccessParams();
+            parms.StoredProcedure = "SP_REPORT_TRANSFER_INTERFACE";
+            parms.Calltype = "APPROVE_MATERIAL_TRANSFER_REQUISITION";
+            parms.Comp1 = comcod;
+            parms.Desc01 = mtreqno;
+            parms.Desc02 = _common.GetUserId();
+            parms.Desc03 = DateTime.UtcNow.ToString();           
+
+            var results = await _unitofwork.SP_Call.ExecuteAsync(parms);
             return results;
         }
         public async Task<bool> Post_Save_Data(string mtrref, string mtreqdat, string fromprj, string toprj, string mtrnar, List<EPurMTReq.SelectedItemListSave> selectedItem)

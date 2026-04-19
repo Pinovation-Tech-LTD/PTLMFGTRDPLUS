@@ -66,6 +66,18 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
             }
             return Ok("Update Successfully");
         }
+        [HttpPost]
+        public async Task<IActionResult> ApprovedButtonClick(string mtreqno)
+        {            
+           
+            var result = await _purMTReq.ApprovedMTReq(mtreqno);
+            if (result == false)
+            {
+                return BadRequest("No Update");
+            }
+            return Ok("Update Successfully");
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetMatTransferInfo(string mtrno, string date)
         {
@@ -74,8 +86,13 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
             {
                 return BadRequest("No Data");
             }
-            return Ok(projectlist.ToList());
+            return Ok(new
+            {
+                item1 = projectlist.Item1.ToList(),
+                item2 = projectlist.Item2.ToList()
+            });
         }
+        
         
 
         #endregion
