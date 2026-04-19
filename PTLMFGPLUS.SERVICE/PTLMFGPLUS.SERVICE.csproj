@@ -14,4 +14,8 @@
     <ProjectReference Include="..\PTLMFGPLUS.LIB\PTLMFGPLUS.LIB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="S_07_RM\" />
+  </ItemGroup>
+
 </Project>

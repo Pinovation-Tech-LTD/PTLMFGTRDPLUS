@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="E_07_RM\" />
+  </ItemGroup>
+
 </Project>
