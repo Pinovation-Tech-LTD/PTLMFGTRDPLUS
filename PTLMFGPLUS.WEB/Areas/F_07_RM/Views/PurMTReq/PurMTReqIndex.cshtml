@@ -3,7 +3,7 @@
 }
 
 <div class="card shadow-xl border-0 rounded-4 overflow-hidden">
-    <div class="card-body px-3 py-3 bg-gradient-light bg-opacity-75">
+    <div class="card-body px-3 bg-gradient-light bg-opacity-75">
         <div class="row g-3 align-items-end header-wrapper  bg-light rounded-3 shadow-sm">
             <div class="col-md-2">
                 <label for="lbldate" class="form-label fw-bold text-dark fs-6 mb-2">
@@ -22,7 +22,7 @@
                 <input id="txtRefNo" type="text" class="form-control form-control-sm shadow-sm border-0 bg-white rounded-3" placeholder="Enter MTRF No....." required />
             </div>
             <div class="col-md-1">
-                <button id="btnOk" class="btn btn-primary btn-sm px-4 fw-bold shadow-sm lift-hover rounded-pill w-100 h-100">
+                <button id="btnOk" class="btn btn-primary btn-sm fw-bold shadow-sm lift-hover rounded-pill w-100 h-100">
                     <i class="bi bi-check-lg"></i> OK
                 </button>
             </div>
@@ -78,7 +78,7 @@
                 </button>
             </div>
             <div class="row mt-4">
-                <div id="tableContainer" class="table-responsive shadow-lg border rounded-3 overflow-hidden">
+                <div id="tableContainer" class="table-responsive shadow-lg border rounded-3 overflow-hidden ">
                     <table class="table table-hover mb-0 align-middle" style="table-layout:fixed; width:100%;">
                         <thead class="table-light sticky-top border-bottom">
                             <tr>
@@ -104,8 +104,12 @@
             </div>
         </div>
     </div>
+    <div class="col-md-2 align-content-md-end">
+        <button id="btnFooterApprove" class="btn btn-primary btn-sm fw-bold shadow-sm lift-hover rounded-pill w-100 h-50 p-2">
+            <i class="bi bi-check-lg"></i> Approved
+        </button>
+    </div>
 </div>
-
 @section Scripts {
     <script src="~/js/j_07_rm/jspurmtreq.js" asp-append-version="true"></script>
     <style>
@@ -138,9 +142,8 @@
 
         .header-wrapper {
             border-left: 5px solid #0d6efd;
+            padding: 6px 7px;
         }
-
-            /* Smooth previousOrder toggle */
             .header-wrapper #previousOrder {
                 transition: all 0.4s ease;
                 min-width: 0;
@@ -159,20 +162,55 @@
                     height: 0 !important;
                     overflow: hidden;
                 }
-
-        .table thead th {
-            font-weight: 600;
-            letter-spacing: 0.025em;
-            border-bottom: 3px solid #dee2e6;
-            background: rgba(255,255,255,0.8);
+        
+        #tableContainer {
+            position: relative;
+            z-index: 10;
+            margin-bottom: 1rem;
         }
+
+            #tableContainer .table-light.sticky-top {
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 1020 !important; 
+                background: rgba(255,255,255,0.98) !important;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            #tableContainer thead th {
+                font-weight: 600;
+                letter-spacing: 0.025em;
+                border-bottom: 3px solid #dee2e6;
+                background: rgba(255,255,255,1) !important;
+                position: relative;
+            }
 
         .table tbody td {
             border-color: rgba(0,0,0,0.05);
+            vertical-align: middle;
         }
 
         .narration-wrapper {
             min-height: 120px;
+            position: relative;
+            z-index: 5;
+        }
+        .card {
+            min-height: calc(100vh - 120px);
+        }
+        body {
+            overflow-x: hidden;
+        }
+        @@media (max-width: 768px) {
+            .header-wrapper {
+                padding: 1rem 0.5rem;
+            }
+
+            #tableContainer .sticky-top {
+                top: 80px !important;
+            }
+            
         }
     </style>
 }
