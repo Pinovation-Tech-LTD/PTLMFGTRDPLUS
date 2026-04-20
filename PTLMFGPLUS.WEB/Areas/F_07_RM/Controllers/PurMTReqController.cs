@@ -55,11 +55,11 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
             });
         }
         [HttpPost]
-        public async Task<IActionResult> SaveButtonClick(string mtrref, string mtreqdat, string seletedFrom, string selectedTo, string mtrnar, string selectedItem)
+        public async Task<IActionResult> SaveButtonClick(string previousOrderDataid,string mtrref, string mtreqdat, string seletedFrom, string selectedTo, string mtrnar, string selectedItem)
         {
             var items = JsonSerializer.Deserialize<List<SelectedItemListSave>>(selectedItem);
            
-            var result = await _purMTReq.Post_Save_Data(mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, items);
+            var result = await _purMTReq.Post_Save_Data(previousOrderDataid,mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, items);
             if (result == false)
             {
                 return BadRequest("No Update");

@@ -23,7 +23,7 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
         public Task<IEnumerable<ProjectFromList>> Get_Project_From_List();
         public Task<Tuple<IEnumerable<GetMatTransInfo>,IEnumerable<GetMatTransInfoSingleData>>> Get_Mat_Transfer(string mTRNNo, string date);
         public Task<Tuple<IEnumerable<ProjectResourseList>,IEnumerable<ProjectResourseList1>>> Get_Project_Resource_List(string projectcode, string curdate, string findResDesc, string stockCheck);
-        public Task<bool> Post_Save_Data(string mtrref, string mtreqdat, string fromprj, string toprj, string mtrnar,List<EPurMTReq.SelectedItemListSave>selectedItem);
+        public Task<bool> Post_Save_Data(string previousOrderDataid, string mtrref, string mtreqdat, string fromprj, string toprj, string mtrnar,List<EPurMTReq.SelectedItemListSave>selectedItem);
         public Task<bool> ApprovedMTReq(string mtreqno);
 
 
@@ -117,11 +117,19 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
             var results = await _unitofwork.SP_Call.ExecuteAsync(parms);
             return results;
         }
-        public async Task<bool> Post_Save_Data(string mtrref, string mtreqdat, string fromprj, string toprj, string mtrnar, List<EPurMTReq.SelectedItemListSave> selectedItem)
+        public async Task<bool> Post_Save_Data(string previousOrderDataid, string mtrref, string mtreqdat, string fromprj, string toprj, string mtrnar, List<EPurMTReq.SelectedItemListSave> selectedItem)
         {
-            
-            var newmtreq = await Get_MATTRANS_No(mtreqdat);
-            string newmtreqno = newmtreq.FirstOrDefault()?.maxmtrno;
+            string newmtreqno;
+
+            if (string.IsNullOrEmpty(previousOrderDataid))
+            {
+                var newmtreq = await Get_MATTRANS_No(mtreqdat);
+                newmtreqno = newmtreq.FirstOrDefault()?.maxmtrno;
+            }
+            else
+            {
+                newmtreqno = previousOrderDataid;
+            }
             string comcod = _common.GetComcod();
            
             ClassProAccessParams parms = new ClassProAccessParams();

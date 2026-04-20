@@ -1,8 +1,9 @@
 ﻿/*Area/Controller/*/
 const commonPath = "/F_07_RM/PurMTReq/";
 const urlParams = new URLSearchParams(window.location.search);
-const qparam = urlParams.get('type');
-var ActionPage = (function () {
+const qparam = urlParams.get("type");
+const mtreqnoApproved = urlParams.get("mtrref");
+var PurMtReqPage = (function () {
     var state =
     {
         item1: [],
@@ -29,9 +30,9 @@ var ActionPage = (function () {
         async loadProjectResourceList(projectcode, curdate, findResDesc, stockCheck) {
             return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetProjectResourceList`), { projectcode: projectcode, curdate: curdate, findResDesc: findResDesc, stockCheck: stockCheck }));
         },
-        async footerSaveButton(mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, selecteditem) {
+        async footerSaveButton(previousOrderDataid,mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, selecteditem) {
 
-            return Helpers.withLoader(() => FetchHelpers.postForm(FetchHelpers.urlconfig(`${commonPath}SaveButtonClick`), { mtrref: mtrref, mtreqdat: mtreqdat, seletedFrom: seletedFrom, selectedTo: selectedTo, mtrnar: mtrnar, selectedItem: JSON.stringify(selecteditem) }));
+            return Helpers.withLoader(() => FetchHelpers.postForm(FetchHelpers.urlconfig(`${commonPath}SaveButtonClick`), { previousOrderDataid: previousOrderDataid, mtrref: mtrref, mtreqdat: mtreqdat, seletedFrom: seletedFrom, selectedTo: selectedTo, mtrnar: mtrnar, selectedItem: JSON.stringify(selecteditem) }));
         },
         async approveButton(mtreqno) {
             return Helpers.withLoader(() => FetchHelpers.postForm(FetchHelpers.urlconfig(`${commonPath}ApprovedButtonClick`), { mtreqno: mtreqno }));
@@ -191,31 +192,31 @@ var ActionPage = (function () {
         HideRecalculate();
     }
     function okClick() {
-        ToggleDiv();
-        GetResource();
-
+        ToggleDiv();        
         $("#txtProjectToList").prop("disabled", true);
         $("#txtProjectFromList").prop("disabled", true);
-
-        $("#lblPreviousOrder").hide();
-        $("#txtPreviousOrder").next(".select2").hide();
-        //$("#previousOrder").closest(".col-md-4").hide();   //full div hide previous order
+        $("#previousOrder").hide();
         $(this).text("New");
+        //$("#previousOrder").closest(".col-md-4").hide();   //full div hide previous order
+        
     }
     function bindEvents() {
         $("#btnOk").on("click", function () {
             let btnText = $(this).text().trim();
+            const previousOrderData = ui.getValue("txtPreviousOrder");
+
+            if (previousOrderData !== "") {
+                ApprovedDataLoad(previousOrderData);
+                
+            }
+
             if (btnText === "OK") {
-                // First click
+                GetResource();
                 okClick();
             }
             else if (btnText === "New") {
                 location.reload();
             }
-
-
-
-
         });
         $("#lblPreviousOrder").on("click", function () {
             GetPreviousOrder();
@@ -227,25 +228,41 @@ var ActionPage = (function () {
                 alert("MRF No is required!");
                 return;
             }
+            const isConfirm = confirm("Are you sure you want to save this record?");
+
+            if (!isConfirm) {
+                return; 
+            }
             const mtrnar = ui.getValue("txtReqNarr");
             const mtreqdat = ui.getValue("txtdate");
             const seletedFrom = ui.getValue("txtProjectFromList");
             const selectedTo = ui.getValue("txtProjectToList");
             const selecteditem = state.selectedItems;
-            let result = await service.footerSaveButton(mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, selecteditem);
+            const previousOrderDataid = ui.getValue("txtPreviousOrder");
+            let result = await service.footerSaveButton(previousOrderDataid,mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, selecteditem);
             if (result === null) {
                 alert("No update");
                 return;
             }
+            alert("Update Successfully");
+            window.location.href = `/F_07_RM/RawMattInterface/InterfaceIndex`;
         });
 
         $("#btnFooterApprove").on("click", async function () {
             const mtrref = ui.getValue("txtRefNo");
-            if (!mtrref) { alert("MRF No is required!"); return; }
-            let mtreqno = "MTR20260400006";
-            let result = await service.approveButton(mtreqno);
-            if (result === null) { alert("Approval failed"); return; }
+            if (!mtrref) { alert("MRF No is required!"); return; }           
+            let result = await service.approveButton(mtreqnoApproved);
+            if (result === null) {
+                alert("Approval failed");
+                return;
+            }
+            const isConfirm = confirm("Are you sure you want to save this record?");
+
+            if (!isConfirm) {
+                return; // stop save
+            }
             alert("Approved successfully!");
+            window.location.href = `/F_07_RM/RawMattInterface/InterfaceIndex`;
         });
         $("#txtProjectResourceList").on("change", function () {
             const selectedResource = ui.getValue("txtProjectResourceList");
@@ -344,47 +361,51 @@ var ActionPage = (function () {
         }      
 
     }
+    async function ApprovedDataLoad(mtreqnoid) {
+        const date = ui.getValue("txtdate");
+        const formatteddate = formatDate(date);
+        const approvedData = await service.loadApprovedData(mtreqnoid, formatteddate);
+        if (!approvedData) return;
+        ui.setValue("txtRefNo", approvedData.item2[0].mtrref);
+        let formattedDate = new Date(approvedData.item2[0].mtrdat)
+            .toISOString()
+            .split("T")[0];
 
+        ui.setValue("txtdate", formattedDate);
+        ui.setValue("txtCurTransNo", approvedData.item2[0].trnno1);
+        ui.setValue("txtReqNarr", approvedData.item2[0].mtrnar);
+        state.FromToList = await service.loadProjectFromList();
+        ui.renderProjectFromList(state.FromToList);
+        ui.renderProjectToList(state.FromToList);
+        $("#txtProjectFromList")
+            .val(approvedData.item2[0].tfpactcode)
+            .trigger("change");
+
+        $("#txtProjectToList")
+            .val(approvedData.item2[0].ttpactcode)
+            .trigger("change");
+        $("#txtProjectToList").prop("disabled", true);
+        $("#txtProjectFromList").prop("disabled", true);
+        $("#btnOk").prop("disabled", true);
+        $("#txtCurTransNo").prop("disabled", true);
+        $("#txtRefNo").prop("disabled", true);
+        $("#txtdate").prop("disabled", true);
+        $("#previousOrder").hide();
+        GetResource();
+        state.selectedItems = approvedData.item1 || [];
+        ui.renderTable(state.selectedItems, true);
+    }
     async function loadInitialData() {
         if (qparam === 'entry') {
             GetTransIdByDate();
             const projectFromListItems = await service.loadProjectFromList();
             state.FromToList = projectFromListItems;
             ui.renderProjectFromList(state.FromToList);
+                 
+            $("#btnFooterApprove").hide();
 
         } else if (qparam === 'approved') {
-            const date = ui.getValue("txtdate");
-            const formatteddate = formatDate(date);            
-            const approvedData = await service.loadApprovedData("MTR20260400006", formatteddate);
-            if (!approvedData) return;
-            ui.setValue("txtRefNo", approvedData.item2[0].mtrref);
-            let formattedDate = new Date(approvedData.item2[0].mtrdat)
-                .toISOString()
-                .split("T")[0];
-
-            ui.setValue("txtdate", formattedDate);
-            ui.setValue("txtCurTransNo", approvedData.item2[0].trnno1);
-            state.FromToList = await service.loadProjectFromList();
-            ui.renderProjectFromList(state.FromToList);
-            ui.renderProjectToList(state.FromToList);
-            $("#txtProjectFromList")
-                .val(approvedData.item2[0].tfpactcode)
-                .trigger("change");
-
-            $("#txtProjectToList")
-                .val(approvedData.item2[0].ttpactcode)
-                .trigger("change");
-            $("#txtProjectToList").prop("disabled", true);
-            $("#txtProjectFromList").prop("disabled", true);
-            $("#btnOk").prop("disabled", true);
-            $("#txtCurTransNo").prop("disabled", true);
-            $("#txtRefNo").prop("disabled", true);
-            $("#txtdate").prop("disabled", true);   
-            $("#lblPreviousOrder").hide();
-            $("#txtPreviousOrder").next(".select2").hide();
-            GetResource();
-            state.selectedItems = approvedData.item1 || [];
-            ui.renderTable(state.selectedItems, true);
+            ApprovedDataLoad(mtreqnoApproved);
             ToggleDiv();           
         }
     }
@@ -393,4 +414,4 @@ var ActionPage = (function () {
     };
 })();
 
-document.addEventListener('DOMContentLoaded', ActionPage.init);
+document.addEventListener('DOMContentLoaded', PurMtReqPage.init);

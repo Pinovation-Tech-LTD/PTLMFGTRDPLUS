@@ -21,6 +21,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Include="Areas\F_07_RM\Controllers\PurMTReqController.cs" />
+	  <Compile Include="Areas\F_07_RM\Controllers\RawMattInterfaceController.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Include="Data\license.dat" />
@@ -58,6 +59,7 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="Areas\F_07_RM\Views\PurMTReq\PurMTReqIndex.cshtml" />
+      <None Include="Areas\F_07_RM\Views\RawMattInterface\InterfaceIndex.cshtml" />
     </ItemGroup>
    
 </Project>
