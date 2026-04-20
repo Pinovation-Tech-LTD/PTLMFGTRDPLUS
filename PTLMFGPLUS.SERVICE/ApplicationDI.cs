@@ -15,6 +15,7 @@ namespace PTLMFGPLUS.SERVICE
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<Icomperm, compermService>();
             services.AddScoped<IPurMTReqService, PurMTReqService>();
+            services.AddScoped<IRawMattInterfaceService, RawMattInterfaceService>();
             return services;
         }
     }

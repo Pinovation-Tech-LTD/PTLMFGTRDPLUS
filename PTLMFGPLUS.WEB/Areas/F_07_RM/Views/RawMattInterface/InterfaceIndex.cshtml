@@ -1,0 +1,156 @@
+﻿@{
+    var today = DateTime.Now.ToString("yyyy-MM-dd");
+}
+
+<div class="container-fluid">
+
+    <!-- Header Card -->
+    <div class="card border-0 shadow-lg rounded-4 mb-2">
+        <div class="card-body bg-light rounded-4">
+
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label for="txtfrmdate" class="form-label fw-semibold text-dark">
+                        <i class="bi bi-calendar3 text-primary me-1"></i> From Date
+                    </label>
+                    <input id="txtfrmdate" type="date"
+                           class="form-control form-control-sm rounded-3 shadow-sm"
+                           value="@today" />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="txttodate" class="form-label fw-semibold text-dark">
+                        <i class="bi bi-calendar3 text-primary me-1"></i> To Date
+                    </label>
+                    <input id="txttodate" type="date"
+                           class="form-control form-control-sm rounded-3 shadow-sm"
+                           value="@today" />
+                </div>
+
+                <div class="col-md-2">
+                    <button id="btnOk"
+                            class="btn btn-primary btn-sm rounded-pill shadow-sm w-50 py-1">
+                        <i class="bi bi-check-lg me-1"></i> Load Data
+                    </button>
+                </div>
+
+                <div class="col-md-3 text-end">
+                    <button id="requisitionEntry"
+                            class="btn btn-success btn-sm rounded-pill shadow-sm px-2 py-2">
+                        <i class="bi bi-plus-circle me-1"></i> New Requisition
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Summary -->
+    <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body">
+
+            <div class="row g-4 text-center">
+
+                <div class="col-md-2" id="requisitionDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4 h-100">
+                        <div class="fs-3 fw-bold text-primary" id="reqQty"></div>
+                        <div class="text-muted mt-2">Requisition</div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" id="reqApprovalDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4  h-100">
+                        <div class="fs-3 fw-bold text-warning" id="reqApprQty"></div>
+                        <div class="text-muted  mt-2">Req. Approval</div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" id="storeIssueDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4  h-100">
+                        <div class="fs-3 fw-bold text-info" id="storeIssueQty"></div>
+                        <div class="text-muted  mt-2">Store Issue</div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" id="storeReceiveDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4  h-100">
+                        <div class="fs-3 fw-bold text-success" id="storeRecvQty"></div>
+                        <div class="text-muted  mt-2">Store Receive</div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" id="mattTransferedDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4  h-100">
+                        <div class="fs-3 fw-bold text-danger" id="mattTransQty"></div>
+                        <div class="text-muted  mt-2">Transferred</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Table Section -->
+            <div class="row mt-1">
+                <div id="tableContainer"
+                     class="table-responsive border rounded-4 shadow-sm"
+                     style="display:none">
+
+                    <table class="table table-hover table-striped align-middle mb-0">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>#</th>
+                                <th>Req No</th>
+                                <th>Req Date</th>
+                                <th>Matt Ref</th>
+                                <th>Trans From</th>
+                                <th>Trans To</th>
+                                <th>Note</th>
+                                <th>Matt Qty</th>
+                                <th>Total Amount</th>
+                                <th>Posted By</th>
+                            </tr>
+                        </thead>
+                        <tbody id="selectedtabledata">
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/j_07_rm/jsrawmattinterface.js" asp-append-version="true"></script>
+
+    <style>
+        .dashboard-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+            .dashboard-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 24px rgba(0,0,0,0.12) !important;
+                background: #E3E1E1;
+            }
+
+        .table thead th {
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .card {
+            overflow: hidden;
+        }
+    </style>
+}
