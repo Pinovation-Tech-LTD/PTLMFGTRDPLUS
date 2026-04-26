@@ -4,7 +4,8 @@ const urlParams = new URLSearchParams(window.location.search);
 var MatInterfacePage = (function () {
     var state =
     {
-        interfacedata: []
+        interfacedata: [],
+        selectedInterface: ""
     };
     var service = {        
         async loadInterfaceData(frmdate,todate) {
@@ -111,18 +112,39 @@ var MatInterfacePage = (function () {
         });
         $("#requisitionDiv").on("click", async function () {
             loadTableInterface();
+            state.selectedInterface = "requisition";
         });
         $("#reqApprovalDiv").on("click", async function () {
             loadReqApprovedData();
+            state.selectedInterface = "reqApproved";
+        });
+        $("#storeIssueDiv").on("click", async function () {
+            loadGpassData();
+            state.selectedInterface = "storeissue";
         });
         $(document).on("click", ".btn-confirm", function () {
             let mtreqno = $(this).data("mtreqno");
-            console.log("Confirm clicked:", mtreqno); 
-            window.location.href = `/F_07_RM/PurMTReq/PurMTReqIndex?type=approved&mtrref=${mtreqno}`;
+            let checkinterface = state.selectedInterface;
+            if (checkinterface === 'reqApproved') {
+                window.location.href = `/F_07_RM/PurMTReq/PurMTReqIndex?type=approved&mtrref=${mtreqno}`;
+            }
+            else if (checkinterface === 'storeissue') {
+                window.location.href = `/F_07_RM/PurMTReqGatePass/PurMTReqGatePassIndex?type=entry&mtrref=${mtreqno}`;
+            }           
         });        
         $("#requisitionEntry").on("click", async function () {
             window.location.href = `/F_07_RM/PurMTReq/PurMTReqIndex?type=entry`;
-        });      
+        });        
+    }
+    async function loadGpassData() {
+        if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item1 || [];
+        let filterdata = data.filter(x => x.gatpbal !== "0" && x.approved.toUpperCase() === "OK");
+        ui.renderRequisitionApprovedTable(filterdata);
+        document.getElementById("tableContainer").style.display = "table";        
     }
     async function loadReqApprovedData() {
         if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
