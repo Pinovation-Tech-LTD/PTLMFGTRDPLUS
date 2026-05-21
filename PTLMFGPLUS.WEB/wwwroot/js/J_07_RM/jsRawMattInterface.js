@@ -4,7 +4,8 @@ const urlParams = new URLSearchParams(window.location.search);
 var MatInterfacePage = (function () {
     var state =
     {
-        interfacedata: []
+        interfacedata: [],
+        selectedInterface: ""
     };
     var service = {        
         async loadInterfaceData(frmdate,todate) {
@@ -59,6 +60,7 @@ var MatInterfacePage = (function () {
             <tr>
                 <td class="fs-6">${index + 1}</td>
                 <td class="fs-6">${item.mtreqno}</td>
+                <td class="fs-6 getpno-col">${item.getpno}</td>
                 <td class="fs-6">${item.mtrdat}</td> 
                 <td class="fs-6">${item.mtrref}</td> 
                 <td class="fs-6">${item.tfpactdesc}</td> 
@@ -69,7 +71,7 @@ var MatInterfacePage = (function () {
                 <td class="fs-6">${item.postedusr}</td>   
                 <td>
                     <div class="btn-group btn-group-sm">
-                        <button class="btn btn-success btn-confirm" data-mtreqno="${item.mtreqno}"  title="Confirm">
+                        <button class="btn btn-success btn-confirm" data-mtreqno="${item.mtreqno}" data-getpno="${item.getpno ?? ''}"  title="Confirm">
                             <i class="bi bi-check-lg"></i>
                         </button>
 
@@ -110,19 +112,75 @@ var MatInterfacePage = (function () {
         $("#btnFooterSave").on("click", async function () {
         });
         $("#requisitionDiv").on("click", async function () {
+            $(".getpno-col").hide();
+            state.selectedInterface = "requisition";
             loadTableInterface();
+           
         });
         $("#reqApprovalDiv").on("click", async function () {
+            state.selectedInterface = "reqApproved";
+            $(".getpno-col").hide();
             loadReqApprovedData();
+            
         });
+        $("#storeIssueDiv").on("click", async function () {
+            state.selectedInterface = "storeissue";
+            $(".getpno-col").hide();
+            loadGpassData();
+            
+        });
+        $("#storeReceiveDiv").on("click", async function () {
+            state.selectedInterface = "storerecive";
+            $(".getpno-col").show();
+            loadStoreReceiveData();
+            
+        });
+
         $(document).on("click", ".btn-confirm", function () {
             let mtreqno = $(this).data("mtreqno");
-            console.log("Confirm clicked:", mtreqno); 
-            window.location.href = `/F_07_RM/PurMTReq/PurMTReqIndex?type=approved&mtrref=${mtreqno}`;
+            let getpno = $(this).data("getpno");
+            let checkinterface = state.selectedInterface;
+            if (checkinterface === 'reqApproved') {                
+                window.open(`/F_07_RM/PurMTReq/PurMTReqIndex?type=approved&mtrref=${mtreqno}`,'_blank');
+            }
+            else if (checkinterface === 'storeissue') {                
+               window.open(`/F_07_RM/PurMTReqGatePass/PurMTReqGatePassIndex?type=entry&mtrref=${mtreqno}`,'_blank');
+            } 
+            else if (checkinterface === 'storerecive')            {
+                     
+                window.open(`/F_07_RM/MaterialsTransfer/MaterialTransferIndex?type=entry&getpno=${getpno}`, '_blank');
+            }
+
         });        
         $("#requisitionEntry").on("click", async function () {
-            window.location.href = `/F_07_RM/PurMTReq/PurMTReqIndex?type=entry`;
-        });      
+             window.open(`/F_07_RM/PurMTReq/PurMTReqIndex?type=entry`,'_blank');
+        });        
+    }
+    async function loadGpassData() {
+        if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item1 || [];
+        let filterdata = data.filter(x =>
+            Number(x.gatpbal) !== 0 &&
+            x.approved &&
+            x.approved.trim().toUpperCase() === "OK"
+        );
+        ui.renderRequisitionApprovedTable(filterdata);
+        document.getElementById("tableContainer").style.display = "table";        
+    }
+    async function loadStoreReceiveData() {
+        if (!state.interfacedata.item2 || state.interfacedata.item1.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item2 || [];
+        let filterdata = data.filter(x =>
+            Number(x.gatpqty) > 0 && Number(x.trnbal) > 0
+        );
+        ui.renderRequisitionApprovedTable(filterdata);
+        document.getElementById("tableContainer").style.display = "table";        
     }
     async function loadReqApprovedData() {
         if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
@@ -130,18 +188,16 @@ var MatInterfacePage = (function () {
             return;
         }
         let data = state.interfacedata.item1 || [];
-        let filterdata = data.filter(x => x.approved.toUpperCase() !== "OK");
+        let filterdata = data.filter(x => x.approved.trim().toUpperCase() !== "OK");
         ui.renderRequisitionApprovedTable(filterdata);
         document.getElementById("tableContainer").style.display = "table";
     }
     async function loadQtyInterface() {
-
         ui.setValue("reqQty", state.interfacedata.item3[0].reqqty);
         ui.setValue("reqApprQty", state.interfacedata.item3[0].reqaqty);
         ui.setValue("storeIssueQty", state.interfacedata.item3[0].gpqty);
         ui.setValue("storeRecvQty", state.interfacedata.item3[0].trnsqty);
         ui.setValue("mattTransQty", state.interfacedata.item3[0].trnsappqty);
-
     }
     async function loadTableInterface() {
         if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
