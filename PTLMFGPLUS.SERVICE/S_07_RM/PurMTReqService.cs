@@ -79,10 +79,7 @@ namespace PTLMFGPLUS.SERVICE.S_07_RM
             parms.Calltype = "PrevMTRInfo";
             parms.Comp1 = comcod;
             parms.Desc01 = mtreqno;
-            parms.Desc02 = date;          
-            
-           
-
+            parms.Desc02 = date;         
             var matTransferInfo = await _unitofwork.SP_Call.ListAsync<GetMatTransInfo, GetMatTransInfoSingleData>(parms);
 
             return matTransferInfo;

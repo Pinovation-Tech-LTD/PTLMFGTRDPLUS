@@ -32,7 +32,8 @@ var PurMtReqPage = (function () {
         },
         async footerSaveButton(previousOrderDataid,mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, selecteditem) {
 
-            return Helpers.withLoader(() => FetchHelpers.postForm(FetchHelpers.urlconfig(`${commonPath}SaveButtonClick`), { previousOrderDataid: previousOrderDataid, mtrref: mtrref, mtreqdat: mtreqdat, seletedFrom: seletedFrom, selectedTo: selectedTo, mtrnar: mtrnar, selectedItem: JSON.stringify(selecteditem) }));
+            return Helpers.withLoader(() => FetchHelpers.postForm(FetchHelpers.urlconfig(`${commonPath}SaveButtonClick`),
+                { previousOrderDataid: previousOrderDataid, mtrref: mtrref, mtreqdat: mtreqdat, seletedFrom: seletedFrom, selectedTo: selectedTo, mtrnar: mtrnar, selectedItem: JSON.stringify(selecteditem) }));
         },
         async approveButton(mtreqno) {
             return Helpers.withLoader(() => FetchHelpers.postForm(FetchHelpers.urlconfig(`${commonPath}ApprovedButtonClick`), { mtreqno: mtreqno }));
@@ -259,7 +260,7 @@ var PurMtReqPage = (function () {
             const isConfirm = confirm("Are you sure you want to save this record?");
 
             if (!isConfirm) {
-                return; // stop save
+                return; 
             }
             alert("Approved successfully!");
             window.location.href = `/F_07_RM/RawMattInterface/InterfaceIndex`;

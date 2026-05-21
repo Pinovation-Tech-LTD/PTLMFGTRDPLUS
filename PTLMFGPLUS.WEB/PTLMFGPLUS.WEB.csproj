@@ -20,6 +20,7 @@
 	  <None Remove="Areas\Transfer\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Include="Areas\F_07_RM\Controllers\MaterialsTransferController.cs" />
 	  <Compile Include="Areas\F_07_RM\Controllers\PurMTReqController.cs" />
 	  <Compile Include="Areas\F_07_RM\Controllers\PurMTReqGatePassController.cs" />
 	  <Compile Include="Areas\F_07_RM\Controllers\RawMattInterfaceController.cs" />
@@ -59,6 +60,7 @@
       <Folder Include="wwwroot\Upload\" />
     </ItemGroup>
     <ItemGroup>
+      <None Include="Areas\F_07_RM\Views\MaterialsTransfer\MaterialTransferIndex.cshtml" />
       <None Include="Areas\F_07_RM\Views\PurMTReqGatePass\PurMTReqGatePassIndex.cshtml" />
       <None Include="Areas\F_07_RM\Views\PurMTReq\PurMTReqIndex.cshtml" />
       <None Include="Areas\F_07_RM\Views\RawMattInterface\InterfaceIndex.cshtml" />

@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PTLMFGPLUS.ENTITY.E_07_RM;
 using PTLMFGPLUS.SERVICE.S_07_RM;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using static PTLMFGPLUS.ENTITY.E_07_RM.EPurMTReq;
 
 namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
 {
@@ -14,9 +18,9 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
         }
         #region API
         [HttpGet]
-        public async Task<IActionResult> GetPassNo(string curdate1)
+        public async Task<IActionResult> GetPassNo(string todate)
         {
-            var result = await _PurMTReqGatePass.Get_Last_PNO(curdate1);
+            var result = await _PurMTReqGatePass.Get_Last_PNO(todate);
             if (result == null)
             {
                 return BadRequest("No data");
@@ -37,6 +41,14 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
                 item2 = result.Item2.ToList(),
                 item3 = result.Item3.ToList()
             });
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveButtonClick(string qparam,string mGetpNo, string mmGetpDat,string getpref,string mtrNar,string issueData)
+        {
+            var issueDataList = JsonSerializer.Deserialize<List<EPurMTReqGatePass.SaveIssueDataList>>(issueData);
+            var result = await _PurMTReqGatePass.Post_Update_Pur_Approved(qparam, mGetpNo, mmGetpDat,getpref,mtrNar, issueDataList);
+           
+            return Ok();
         }
         #endregion
     }
