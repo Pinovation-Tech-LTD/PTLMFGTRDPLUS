@@ -67,9 +67,6 @@ var MaterialsTransferPage = (function () {
         $("#btnFooterSave").on("click", function () {
             
         });
-
-
-
     }
     async function LastTransId() {
         const date = ui.getValue("txtdate");
