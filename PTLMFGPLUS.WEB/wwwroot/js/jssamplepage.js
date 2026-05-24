@@ -79,6 +79,6 @@ var ActionPage = (function () {
     return {
         init: init
     };
-});
+})();
 
 document.addEventListener('DOMContentLoaded', ActionPage.init);

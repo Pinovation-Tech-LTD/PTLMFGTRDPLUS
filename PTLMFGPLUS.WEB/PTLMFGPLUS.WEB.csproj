@@ -10,6 +10,19 @@
 		<RemoveDir Directories="$(PublishDir)wwwroot\QuotationUpload" />
 	</Target>
 	<ItemGroup>
+	  <Compile Remove="Areas\F_07_RM\**" />
+	  <Compile Remove="Areas\Transfer\**" />
+	  <Content Remove="Areas\F_07_RM\**" />
+	  <Content Remove="Areas\Transfer\**" />
+	  <EmbeddedResource Remove="Areas\F_07_RM\**" />
+	  <EmbeddedResource Remove="Areas\Transfer\**" />
+	  <None Remove="Areas\F_07_RM\**" />
+	  <None Remove="Areas\Transfer\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Include="Areas\F_07_RM\Controllers\PurMTReqController.cs" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Content Include="Data\license.dat" />
 	</ItemGroup>
 		
@@ -26,6 +39,7 @@
 	</ItemGroup>
 	
     <ItemGroup>             
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.14" />             
         <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.3.9" />             
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.12" />
         
@@ -38,13 +52,12 @@
         <ProjectReference Include="..\PTLMFGPLUS.SERVICE\PTLMFGPLUS.SERVICE.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Areas\F_07_RM\Controllers\" />
-      <Folder Include="Areas\F_07_RM\Views\" />
-      <Folder Include="Areas\Transfer\Controllers\" />
-      <Folder Include="Areas\Transfer\Views\" />
       <Folder Include="Data\" />
       <Folder Include="wwwroot\Reports\" />
       <Folder Include="wwwroot\Upload\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="Areas\F_07_RM\Views\PurMTReq\PurMTReqIndex.cshtml" />
     </ItemGroup>
    
 </Project>
