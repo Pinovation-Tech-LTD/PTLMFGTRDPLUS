@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.ObjectModelRemoting;
 using PTLMFGPLUS.ENTITY.E_07_RM;
 using PTLMFGPLUS.SERVICE.S_07_RM;
 using System.Collections.Generic;
@@ -21,19 +22,22 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
         public async Task<IActionResult> GetPassNo(string todate)
         {
             var result = await _PurMTReqGatePass.Get_Last_PNO(todate);
-            if (result == null)
+            var error = _PurMTReqGatePass.GetError();
+            if (result == null || error != null)
             {
-                return BadRequest("No data");
+                return BadRequest(new { objError = error.Message });
             }
+            
             return Ok(result);
         }
         [HttpGet]
         public async Task<IActionResult> GetPassData(string curdate1,string searchtext)
         {
             var result = await _PurMTReqGatePass.Get_Find_Res_List(curdate1, searchtext);
-            if(result==null)
+            var error = _PurMTReqGatePass.GetError();
+            if (result == null || error != null)
             {
-                return BadRequest("No Data Found");
+                return BadRequest(new { objError = error.Message });
             }
             return Ok(new
             {
@@ -47,7 +51,12 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
         {
             var issueDataList = JsonSerializer.Deserialize<List<EPurMTReqGatePass.SaveIssueDataList>>(issueData);
             var result = await _PurMTReqGatePass.Post_Update_Pur_Approved(qparam, mGetpNo, mmGetpDat,getpref,mtrNar, issueDataList);
-           
+            var error = _PurMTReqGatePass.GetError();
+            if (result == null || error != null)
+            {
+                return BadRequest(new { objError = error.Message });
+            }
+
             return Ok();
         }
         #endregion
