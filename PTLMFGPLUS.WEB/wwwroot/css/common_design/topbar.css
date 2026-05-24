@@ -1,0 +1,107 @@
+﻿.topbar {
+    height: var(--topbar-height);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    background: #0c101d;
+}
+
+.topbar-center h3 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: var(--fw-semibold);
+}
+
+.topbar-left i,
+.notification-btn i {
+    color: #8f96b2;
+    font-size: 18px;
+}
+
+.notification-btn {
+    background: transparent;
+    border: none;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-btn {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(123,97,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+}
+
+.profile-info h6 {
+    margin: 0;
+    font-weight: var(--fw-semibold);
+}
+
+.profile-menu {
+    position: absolute;
+    right: 0;
+    top: 60px;
+    width: 260px;
+    background: #131827;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    display: none;
+    z-index: 100;
+}
+
+    .profile-menu.show {
+        display: block;
+    }
+
+.profile-menu-header {
+    padding: 20px;
+}
+
+    .profile-menu-header h6 {
+        margin: 0;
+    }
+
+    .profile-menu-header span {
+        color: var(--text-secondary);
+    }
+
+.profile-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    color: #c8cdef;
+    border-top: 1px solid var(--border-color);
+}
+
+    .profile-menu a:hover {
+        background: rgba(255,255,255,0.04);
+    }
+
+.logout-link {
+    color: #ff6a7d !important;
+}
