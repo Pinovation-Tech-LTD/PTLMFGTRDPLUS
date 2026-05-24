@@ -99,8 +99,8 @@ var MatInterfacePage = (function () {
         $("#btnOk").on("click",async function () {
             let frmdate = ui.getValue("txtfrmdate");
             let todate = ui.getValue("txttodate");
-            const formatfrmdate = formatDate(frmdate);
-            const formattodate = formatDate(todate);
+            const formatfrmdate = (frmdate);
+            const formattodate = (todate);
 
             const result = await service.loadInterfaceData(formatfrmdate, formattodate);
             if (result === null) {

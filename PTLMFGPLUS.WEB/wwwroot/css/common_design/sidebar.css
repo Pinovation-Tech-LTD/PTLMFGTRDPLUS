@@ -1,0 +1,149 @@
+﻿.sidebar {
+    width: var(--sidebar-width);
+    background: #0b0e19;
+    border-right: 1px solid var(--border-color);
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: var(--transition);
+    z-index: 999;
+}
+
+    .sidebar.collapsed {
+        width: var(--sidebar-collapsed-width);
+    }
+
+.sidebar-top {
+    padding: 20px 15px;
+}
+
+.brand-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.brand-logo {
+    width: 36px;
+    height: 36px;
+    background: var(--primary-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.brand-text h5 {
+    margin: 0;
+    font-weight: var(--fw-semibold);
+}
+
+.sidebar-toggle-btn {
+    background: transparent;
+    border: none;
+    color: #9097b7;
+}
+
+.sidebar-menu li {
+    margin-bottom: 10px;
+}
+
+.sidebar-menu a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #8f96b2;
+    padding: 14px 16px;
+    border-radius: 14px;
+    transition: var(--transition);
+}
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+        background: #171c2f;
+        color: white;
+    }
+
+.menu-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.menu-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 50%;
+}
+
+.submenu {
+    padding-left: 20px;
+    display: none;
+}
+
+    .submenu li a {
+        padding: 12px 18px;
+        font-size: 13px;
+    }
+
+.has-submenu.open .submenu {
+    display: block;
+}
+
+.has-submenu.open .submenu-arrow {
+    transform: rotate(90deg);
+}
+
+.submenu-arrow {
+    transition: var(--transition);
+}
+
+.sidebar-user {
+    border-top: 1px solid var(--border-color);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(123,97,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+}
+
+.sidebar-user h6 {
+    margin: 0;
+    font-weight: var(--fw-semibold);
+}
+
+.sidebar-user span {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+/* COLLAPSED */
+.sidebar.collapsed .sidebar-text {
+    display: none;
+}
+
+.sidebar.collapsed .submenu {
+    display: none !important;
+}
+
+.sidebar.collapsed .brand-area {
+    flex-direction: column;
+    gap: 10px;
+}

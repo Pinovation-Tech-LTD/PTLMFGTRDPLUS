@@ -1,0 +1,379 @@
+﻿:root {
+    /* =========================
+       BRAND
+    ========================== */
+    --primary-color: #6a4cff;
+    --success-color: #18b99a;
+    --danger-color: #e24b63;
+    --cyan-color: #1fbad6;
+    /* =========================
+       SURFACES
+    ========================== */
+    --bg-body: #f7f8fc;
+    --bg-card: #ffffff;
+    --bg-surface-2: #f4f6ff;
+    --bg-surface-3: #eef1ff;
+    --bg-hover: rgba(106, 76, 255, 0.08);
+    /* =========================
+       INPUTS
+    ========================== */
+    --input-bg: #ffffff;
+    --input-border: rgba(20, 25, 40, 0.12);
+    --input-text: #1a1d2e;
+    --input-placeholder: #7a8199;
+    /* =========================
+       TEXT
+    ========================== */
+    --text-primary: #1a1d2e;
+    --text-secondary: #4b556a;
+    --text-muted: #7a8199;
+    /* =========================
+       BORDER
+    ========================== */
+    --border-color: rgba(20, 25, 40, 0.08);
+    /* =========================
+       LAYOUT
+    ========================== */
+    --sidebar-width: 280px;
+    --sidebar-collapsed-width: 70px;
+    --topbar-height: 70px;
+    /* =========================
+       UI
+    ========================== */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --transition: all 0.3s ease;
+    /* =========================
+       FONT
+    ========================== */
+    --font-family: "Inter", sans-serif;
+}
+[data-theme="dark"] {
+    --bg-body: #090b14;
+    --bg-card: #111523;
+    --bg-surface-2: #151b2d;
+    --bg-surface-3: #0d1321;
+    --bg-hover: rgba(123,97,255,0.12);
+    --input-bg: #0d1321;
+    --input-border: rgba(255,255,255,0.10);
+    --input-text: #ffffff;
+    --input-placeholder: #7f89ad;
+    --text-primary: #ffffff;
+    --text-secondary: #8f96b2;
+    --text-muted: #6c7394;
+    --border-color: rgba(255,255,255,0.06);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    transition: background-color 0.35s ease, color 0.35s ease;
+}
+body {
+    background: var(--bg-body);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    transition: background-color 0.35s ease, color 0.35s ease;
+}
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.app-wrapper {
+    display: flex;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    transition: var(--transition);
+    min-height: 100vh;
+    transition: margin-left 0.35s ease;
+}
+
+.sidebar-collapsed .main-content {
+    margin-left: var(--sidebar-collapsed-width);
+}
+
+.dashboard-content {
+    padding: 30px;
+    background: var(--bg-card);
+}
+
+/*CARDS*/
+.dashboard-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    transition: var(--transition);
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--primary-color);
+    }
+
+.card-icon {
+    background: var(--bg-surface-2);
+    color: var(--primary-color);
+}
+
+/*TABLES*/
+.table {
+    color: var(--text-primary);
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: var(--bg-surface-2);
+    --bs-table-hover-bg: var(--bg-hover);
+    --bs-table-border-color: var(--border-color);
+}
+
+    .table thead {
+        background: var(--bg-surface-2);
+    }
+
+        .table thead th {
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+            background: var(--bg-surface-2);
+        }
+
+    .table tbody td {
+        border-color: var(--border-color);
+        color: var(--text-primary);
+    }
+
+.table-hover tbody tr:hover {
+    background: var(--bg-hover);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background: var(--bg-surface-2);
+}
+
+.table tfoot {
+    background: var(--bg-surface-2);
+}
+
+/*INPUTS*/
+.form-control,
+.form-select {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+    border-radius: 12px;
+    min-height: 44px;
+}
+
+    .form-control::placeholder {
+        color: var(--input-placeholder);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.18rem rgba(106,76,255,0.2);
+    }
+.input-group-text {
+    background: var(--bg-surface-2);
+    color: var(--text-secondary);
+}
+
+.form-check-input {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+}
+
+    .form-check-input:checked {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+/*BUTTONS*/
+.btn-primary {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+    .btn-primary:hover {
+        filter: brightness(0.92);
+    }
+
+/*DATATABLES*/
+.dataTables_wrapper {
+    color: var(--text-primary);
+}
+
+    .dataTables_wrapper input,
+    .dataTables_wrapper select {
+        background: var(--input-bg);
+        border: 1px solid var(--input-border);
+        color: var(--input-text);
+    }
+
+.dataTables_info {
+    color: var(--text-secondary);
+}
+
+.paginate_button {
+    background: var(--bg-surface-2);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+    .paginate_button.current {
+        background: var(--primary-color);
+        color: #fff;
+    }
+
+
+
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+}
+
+.select2-selection__rendered {
+    color: var(--input-text);
+}
+
+.select2-dropdown {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.select2-search__field {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+}
+
+.select2-results__option--highlighted {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+
+
+.modal-content,
+.dropdown-menu {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-primary);
+}
+
+    .dropdown-item:hover {
+        background: var(--bg-hover);
+    }
+
+
+
+.accordion-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.accordion-button {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.page-link {
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.page-item.active .page-link {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.card {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+
+    .card:hover {
+        transform: translateY(-4px);
+        border-color: var(--primary-color);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+.card-header {
+    background: var(--bg-surface-2);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    transition: background-color 0.35s ease, color 0.35s ease;
+}
+.card-footer {
+    background: var(--bg-surface-2);
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+    transition: background-color 0.35s ease, color 0.35s ease;
+}
+.card-body {
+    background: transparent;
+    color: var(--text-primary);
+}
+.card-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--bg-surface-2);
+    color: var(--primary-color);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.35s ease;
+}
+.card,
+.modal-content,
+.table,
+.form-control,
+.form-select,
+.input-group-text,
+.dropdown-menu,
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-surface-3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 20px;
+}

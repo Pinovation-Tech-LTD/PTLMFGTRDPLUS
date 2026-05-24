@@ -1,0 +1,338 @@
+﻿@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dark Admin Dashboard</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Select 2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+
+    <link href="~/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+
+    <!-- =========================================================
+         DATATABLE CSS
+    ========================================================= -->
+    <!-- Core DataTable -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.min.css">
+
+    <!-- Responsive -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.bootstrap5.min.css">
+
+    <!-- Buttons -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/buttons/3.2.4/css/buttons.bootstrap5.min.css">
+
+    <!-- Fixed Header -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/fixedheader/4.0.2/css/fixedHeader.bootstrap5.min.css">
+
+    <!-- Fixed Columns -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/fixedcolumns/5.0.5/css/fixedColumns.bootstrap5.min.css">
+
+    <!-- Select -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/select/3.0.0/css/select.bootstrap5.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/css/common_design/site.css">
+    <link rel="stylesheet" href="~/css/common_design/sidebar.css">
+    <link rel="stylesheet" href="~/css/common_design/topbar.css">
+</head>
+<body>
+
+    <div class="app-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-top">
+
+                <div class="brand-area">
+                    <div class="brand-logo">A</div>
+
+                    <div class="brand-text sidebar-text">
+                        <h5>Axiom</h5>
+                    </div>
+
+                    <button class="sidebar-toggle-btn" id="sidebarToggle">
+                        <i class="bi bi-layout-sidebar-inset"></i>
+                    </button>
+                </div>
+
+                <ul class="sidebar-menu">
+
+                    <li>
+                        <a href="#" class="active">
+                            <div class="menu-left">
+                                <i class="bi bi-house-door"></i>
+                                <span class="sidebar-text">Home</span>
+                            </div>
+
+                            <span class="menu-dot sidebar-text"></span>
+                        </a>
+                    </li>
+
+                    <!-- MODULE -->
+                    <li class="has-submenu">
+
+                        <a href="javascript:void(0)" class="submenu-toggle">
+                            <div class="menu-left">
+                                <i class="bi bi-boxes"></i>
+                                <span class="sidebar-text">Modules</span>
+                            </div>
+
+                            <i class="bi bi-chevron-right submenu-arrow sidebar-text"></i>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><a href="#">HRM</a></li>
+                            <li><a href="#">Accounts</a></li>
+                            <li><a href="#">Inventory</a></li>
+                            <li><a href="#">Payroll</a></li>
+                        </ul>
+
+                    </li>
+
+                    <!-- INTERFACE -->
+                    <li class="has-submenu">
+
+                        <a href="javascript:void(0)" class="submenu-toggle">
+                            <div class="menu-left">
+                                <i class="bi bi-grid"></i>
+                                <span class="sidebar-text">Interface</span>
+                            </div>
+
+                            <i class="bi bi-chevron-right submenu-arrow sidebar-text"></i>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Widgets</a></li>
+                            <li><a href="#">Reports</a></li>
+                            <li><a href="#">Analytics</a></li>
+                        </ul>
+
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- USER -->
+            <div class="sidebar-user">
+
+                <div class="user-avatar">
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <div class="sidebar-text">
+                    <h6>Alex Renner</h6>
+                    <span>Super Admin</span>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-content">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <div class="topbar-center">
+                    <h3>Dashboard Overview</h3>
+                </div>
+
+                <div class="topbar-right">
+
+                    <button class="notification-btn" onclick="toggleTheme()">
+                        <i class="bi bi-bell"></i>
+                    </button>
+
+                    <!-- PROFILE -->
+                    <div class="profile-dropdown">
+
+                        <button class="profile-btn" id="profileBtn">
+
+                            <div class="profile-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+                            <div class="profile-info">
+                                <h6>Alex Renner</h6>
+                            </div>
+
+                            <i class="bi bi-chevron-down"></i>
+
+                        </button>
+
+                        <!-- DROPDOWN -->
+                        <div class="profile-menu" id="profileMenu">
+
+                            <div class="profile-menu-header">
+                                <h6>Alex Renner</h6>
+                                <span>Super Admin</span>
+                            </div>
+
+                            <a href="#">
+                                <i class="bi bi-person"></i>
+                                Profile Settings
+                            </a>
+
+                            <a href="#" class="logout-link">
+                                <i class="bi bi-box-arrow-right"></i>
+                                Logout
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- DASHBOARD CONTENT -->
+            <section class="dashboard-content container-fluid">
+                @RenderBody()
+            </section>
+
+        </main>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"></script>
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Select 2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+
+    <!-- Core -->
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
+
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- Responsive -->
+    <script src="https://cdn.datatables.net/responsive/3.0.4/js/dataTables.responsive.min.js"></script>
+
+    <script src="https://cdn.datatables.net/responsive/3.0.4/js/responsive.bootstrap5.min.js"></script>
+
+    <!-- Buttons -->
+    <script src="https://cdn.datatables.net/buttons/3.2.4/js/dataTables.buttons.min.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.bootstrap5.min.js"></script>
+
+    <!-- Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.html5.min.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.print.min.js"></script>
+
+    <!-- Fixed Header -->
+    <script src="https://cdn.datatables.net/fixedheader/4.0.2/js/dataTables.fixedHeader.min.js"></script>
+
+    <!-- Fixed Columns -->
+    <script src="https://cdn.datatables.net/fixedcolumns/5.0.5/js/dataTables.fixedColumns.min.js"></script>
+
+    <!-- Select -->
+    <script src="https://cdn.datatables.net/select/3.0.0/js/dataTables.select.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
+    <script src="~/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.js"></script>
+
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    <script src="~/js/common/site.js" asp-append-version="true"></script>
+    <script src="~/js/common/FetchHelper.js" asp-append-version="true"></script>
+    <script src="~/js/common/Helper.js" asp-append-version="true"></script>
+    <script src="~/js/common/notifyhelper.js" asp-append-version="true"></script>
+    <script asp-append-version="true">
+        var appPath= '@Url.Content("~/")';
+         $(".datepicker").datepicker({
+                format: 'dd-M-yyyy',
+                closeOnDateSelect: true,
+                autoclose: true,
+                todayHighlight:true,
+                todayBtn: "linked",
+                toggleActive: true,
+                orientation: 'bottom'
+            }).on('changeDate', function(e){
+                $(this).datepicker('hide');
+            }).on('show', function (e) {
+                if (e.date) {
+                    $(this).data('stickyDate', e.date);
+                }
+                else {
+                    $(this).data('stickyDate', null);
+                }
+            }).on('hide', function (e) {
+                var stickyDate = $(this).data('stickyDate');
+                if (!e.date && stickyDate) {
+                    $(this).datepicker('setDate', stickyDate);
+                    $(this).data('stickyDate', null);
+                }
+            });
+        function initCommonPlugins() {
+            $(document).on("select2:open", () => {
+                document.querySelector(".select2-search__field").focus();
+            });
+            $("select:not(.no-select2)").select2();
+            toastr.options = {
+                closeButton: true,
+                newestOnTop: true,
+                progressBar: true,
+                positionClass: "toast-top-center",
+                showDuration: "500",
+                hideDuration: "1000",
+                timeOut: "5000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut"
+            };
+            $(".datepicker-current").datepicker("setDate", new Date());
+            $(".datepicker-current").datepicker("setEndDate", new Date());
+            let savedTheme = localStorage.getItem("theme");
+            if (!savedTheme) {
+                savedTheme = "light"; // default
+            }
+            setTheme(savedTheme);
+        }
+        $(document).ready(initCommonPlugins);
+
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

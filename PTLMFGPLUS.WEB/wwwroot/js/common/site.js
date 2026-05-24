@@ -15,6 +15,27 @@ window.hideLoader = function () {
         $.busyLoadFull("hide");
     }
 }
+
+
+function setTheme(theme) {
+    document.documentElement.style.transition = "all 0.35s ease";
+
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+
+    // remove inline transition after animation (prevents lag on scroll/layout)
+    setTimeout(() => {
+        document.documentElement.style.transition = "";
+    }, 400);
+}
+
+function toggleTheme() {
+    const current = localStorage.getItem("theme") || "light";
+    setTheme(current === "dark" ? "light" : "dark");
+}
+
+
+
 function ShowFooterWithButtons() {
     const divFooter = document.querySelector("#div-footer");
     divFooter.style.display = "block";

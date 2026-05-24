@@ -4,29 +4,21 @@
 
 
 <div class="row">
- 
-
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
-               
-
-
-
                 Select 2
-                <select class="form-select">
+                <select class="form-select" id="select2">
                     <option>Select 1</option>
                     <option>Select 2</option>
                     <option>Select 3</option>
                     <option>Select 4</option>
                 </select>
-                Date
-                <input type="text" class="form-control" id="date1" data-provide="datepicker" data-date-format="dd-M-yyyy" data-date-autoclose="true" data-date-orientation="bottom" data-date-today-btn="true"
-                       data-date-today-highlight="true">
-                Month
-                <input type="text" class="form-control" id="date2" data-provide="datepicker" data-date-format="M yyyy" data-date-autoclose="true" data-date-orientation="bottom" data-date-min-view-mode="1">
 
+                Date
+                <input type="text" class="form-control datepicker" id="date1">
+                Month
+                <input type="text" class="form-control datepicker datepicker-current" id="date2">
                 <div>
                     <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                         <thead>
@@ -511,7 +503,7 @@
 @section Scripts {
     <script>
         $("#date1").datepicker('setDate', new Date());
-        $("#date2").datepicker('setDate', new Date());
+        //$("#date2").datepicker('setDate', new Date());
         $("#basic-datatable").DataTable();
         
     </script>
