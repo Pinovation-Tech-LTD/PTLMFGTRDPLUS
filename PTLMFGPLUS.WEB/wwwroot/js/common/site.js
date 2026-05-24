@@ -4,7 +4,7 @@ window.showLoader = function () {
     $.busyLoadFull("show", {
         spinner: "accordion",
         text: "Please wait...",
-        background: "rgba(255,255,255,0.6)"
+        background: "rgba(0,0,0,0.6)"
     });
 }
 
@@ -20,6 +20,12 @@ window.hideLoader = function () {
 function setTheme(theme) {
     document.documentElement.style.transition = "all 0.35s ease";
 
+    if (theme == "dark") {
+        document.getElementById("light-dark-toggle").innerHTML = `<i class="bi bi-brightness-high-fill"></i>`;
+    }
+    else {
+        document.getElementById("light-dark-toggle").innerHTML = `<i class="bi bi-moon-fill"></i>`;
+    }
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
 
@@ -69,6 +75,12 @@ function ShowingDelete() {
     const btn = document.querySelector("#btnFooterDelete");
     btn.style.display = "inline-block";
 }
+
+function ShowApprove() {
+    const btn = document.querySelector("#btnFooterApprove");
+    btn.style.display = "inline-block";
+}
+
 
 
 

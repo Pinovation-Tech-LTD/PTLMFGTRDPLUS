@@ -50,11 +50,12 @@
 
     <link href="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.23.0/sweetalert2.css" integrity="sha512-/j+6zx45kh/MDjnlYQL0wjxn+aPaSkaoTczyOGfw64OB2CHR7Uh5v1AML7VUybUnUTscY5ck/gbGygWYcpCA7w==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- CSS -->
-    <link rel="stylesheet" href="~/css/common_design/site.css">
-    <link rel="stylesheet" href="~/css/common_design/sidebar.css">
-    <link rel="stylesheet" href="~/css/common_design/topbar.css">
+    <link rel="stylesheet" href="~/css/common_design/site.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/common_design/sidebar.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/common_design/topbar.css" asp-append-version="true">
 </head>
 <body>
 
@@ -66,15 +67,17 @@
             <div class="sidebar-top">
 
                 <div class="brand-area">
-                    <div class="brand-logo">A</div>
+                    <img src="~/Images/Company_Logo/logo1.png" alt="LOGO" width="150px" class="img-fluid"/>
+                    @* <div class="brand-logo">A</div>
 
-                    <div class="brand-text sidebar-text">
+                    <div class="brand-text sidebar-text ms-3">
                         <h5>Axiom</h5>
-                    </div>
+                    </div> *@
 
-                    <button class="sidebar-toggle-btn" id="sidebarToggle">
+
+                   @*  <button class="sidebar-toggle-btn" id="sidebarToggle">
                         <i class="bi bi-layout-sidebar-inset"></i>
-                    </button>
+                    </button> *@
                 </div>
 
                 <ul class="sidebar-menu">
@@ -134,21 +137,6 @@
 
                 </ul>
             </div>
-
-            <!-- USER -->
-            <div class="sidebar-user">
-
-                <div class="user-avatar">
-                    <i class="bi bi-person"></i>
-                </div>
-
-                <div class="sidebar-text">
-                    <h6>Alex Renner</h6>
-                    <span>Super Admin</span>
-                </div>
-
-            </div>
-
         </aside>
 
         <!-- MAIN -->
@@ -158,7 +146,9 @@
             <header class="topbar">
 
                 <div class="topbar-left">
-                    <i class="bi bi-search"></i>
+                    <button class="sidebar-toggle-btn" id="sidebarToggle">
+                        <i class="bi bi-layout-sidebar-inset"></i>
+                    </button>
                 </div>
 
                 <div class="topbar-center">
@@ -167,8 +157,8 @@
 
                 <div class="topbar-right">
 
-                    <button class="notification-btn" onclick="toggleTheme()">
-                        <i class="bi bi-bell"></i>
+                    <button class="notification-btn" onclick="toggleTheme()" id="light-dark-toggle">
+                        <i class="bi bi-moon-fill"></i>
                     </button>
 
                     <!-- PROFILE -->
@@ -220,6 +210,7 @@
             </section>
 
         </main>
+        <partial name="_Footer" />
 
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -271,7 +262,8 @@
     <script src="~/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.23.0/sweetalert2.min.js" integrity="sha512-pnPZhx5S+z5FSVwy62gcyG2Mun8h6R+PG01MidzU+NGF06/ytcm2r6+AaWMBXAnDHsdHWtsxS0dH8FBKA84FlQ==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>
     <script src="~/js/common/site.js" asp-append-version="true"></script>
     <script src="~/js/common/FetchHelper.js" asp-append-version="true"></script>

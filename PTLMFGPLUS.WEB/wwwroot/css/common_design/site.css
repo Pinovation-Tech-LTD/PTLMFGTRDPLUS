@@ -30,12 +30,12 @@
     /* =========================
        BORDER
     ========================== */
-    --border-color: rgba(20, 25, 40, 0.08);
+    --border-color: rgba(20, 25, 40, 0.3);
     /* =========================
        LAYOUT
     ========================== */
     --sidebar-width: 280px;
-    --sidebar-collapsed-width: 70px;
+    --sidebar-collapsed-width: 80px;
     --topbar-height: 70px;
     /* =========================
        UI
@@ -56,13 +56,13 @@
     --bg-surface-3: #0d1321;
     --bg-hover: rgba(123,97,255,0.12);
     --input-bg: #0d1321;
-    --input-border: rgba(255,255,255,0.10);
+    --input-border: rgba(255,255,255,0.3);
     --input-text: #ffffff;
     --input-placeholder: #7f89ad;
     --text-primary: #ffffff;
     --text-secondary: #8f96b2;
     --text-muted: #6c7394;
-    --border-color: rgba(255,255,255,0.06);
+    --border-color: rgba(255,255,255,0.3);
 }
 
 * {
@@ -107,7 +107,7 @@ ul {
 }
 
 .dashboard-content {
-    padding: 30px;
+    padding: 15px;
     background: var(--bg-card);
 }
 
@@ -120,10 +120,10 @@ ul {
     transition: var(--transition);
 }
 
-    .dashboard-card:hover {
+   /* .dashboard-card:hover {
         transform: translateY(-4px);
         border-color: var(--primary-color);
-    }
+    }*/
 
 .card-icon {
     background: var(--bg-surface-2);
@@ -241,16 +241,18 @@ ul {
 
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
+    background: var(--bg-surface-2);
+    border: 2px solid var(--input-border);
 }
 
 .select2-selection__rendered {
-    color: var(--input-text);
+    color: var(--input-text)!important;
 }
-
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--input-text) !important;
+}
 .select2-dropdown {
-    background: var(--bg-card);
+    background: var(--bg-surface-2);
     border: 1px solid var(--border-color);
 }
 
@@ -317,11 +319,11 @@ ul {
 }
 
 
-    .card:hover {
+   /* .card:hover {
         transform: translateY(-4px);
         border-color: var(--primary-color);
         box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    }
+    }*/
 
 .card-header {
     background: var(--bg-surface-2);
@@ -363,6 +365,10 @@ ul {
     transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
+
+.footer-color {
+    background: var(--bg-surface-2);
+}
 
 ::-webkit-scrollbar {
     width: 10px;
