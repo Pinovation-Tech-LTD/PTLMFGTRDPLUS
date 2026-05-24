@@ -226,27 +226,27 @@ var PurMtReqPage = (function () {
 
             const mtrref = ui.getValue("txtRefNo");
             if (mtrref === null || mtrref === '') {
-                alert("MRF No is required!");
+                Notifications.Sweet.warning("Warning!!", "MTRF not found!!");
                 return;
             }
-            const isConfirm = confirm("Are you sure you want to save this record?");
+            Notifications.Sweet.confirmSave("Are you sure you want to save this record?", async function(){                
+                const mtrnar = ui.getValue("txtReqNarr");
+                const mtreqdat = ui.getValue("txtdate");
+                const seletedFrom = ui.getValue("txtProjectFromList");
+                const selectedTo = ui.getValue("txtProjectToList");
+                const selecteditem = state.selectedItems;
+                const previousOrderDataid = ui.getValue("txtPreviousOrder");
+                let result = await service.footerSaveButton(previousOrderDataid,mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, selecteditem);
+                if (result === null) {                   
+                    Notifications.Sweet.error("Error!!","Update Failed!!!");
+                    return;
+                }
+                 Notifications.Sweet.success("", "", function(response){
+                     window.location.href = FetchHelpers.urlconfig(`/F_07_RM/RawMattInterface/InterfaceIndex`);
+                 });
+            })
 
-            if (!isConfirm) {
-                return; 
-            }
-            const mtrnar = ui.getValue("txtReqNarr");
-            const mtreqdat = ui.getValue("txtdate");
-            const seletedFrom = ui.getValue("txtProjectFromList");
-            const selectedTo = ui.getValue("txtProjectToList");
-            const selecteditem = state.selectedItems;
-            const previousOrderDataid = ui.getValue("txtPreviousOrder");
-            let result = await service.footerSaveButton(previousOrderDataid,mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, selecteditem);
-            if (result === null) {
-                alert("No update");
-                return;
-            }
-            alert("Update Successfully");
-            window.location.href = `/F_07_RM/RawMattInterface/InterfaceIndex`;
+
         });
 
         $("#btnFooterApprove").on("click", async function () {
@@ -334,7 +334,7 @@ var PurMtReqPage = (function () {
     }
     async function GetPreviousOrder() {
         const date = ui.getValue("txtdate");
-        const formatteddate = formatDate(date);
+        const formatteddate = (date);
         const PreviousOrderList = await service.loadPreviousOrder(formatteddate);
         ui.renderPreviousMatOrder(PreviousOrderList);
     }
@@ -355,7 +355,7 @@ var PurMtReqPage = (function () {
     }
     async function GetTransIdByDate() {
         const date = ui.getValue("txtdate");
-        const formatteddate = formatDate(date);
+        const formatteddate = (date);
         if (qparam === 'entry') {            
             const moduleItems = await service.loadLastMTRNumber(formatteddate);
             ui.renderCurTransNo(moduleItems);
@@ -364,7 +364,7 @@ var PurMtReqPage = (function () {
     }
     async function ApprovedDataLoad(mtreqnoid) {
         const date = ui.getValue("txtdate");
-        const formatteddate = formatDate(date);
+        const formatteddate = (date);
         const approvedData = await service.loadApprovedData(mtreqnoid, formatteddate);
         if (!approvedData) return;
         ui.setValue("txtRefNo", approvedData.item2[0].mtrref);

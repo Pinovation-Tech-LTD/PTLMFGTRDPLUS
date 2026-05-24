@@ -1,6 +1,6 @@
 ﻿.sidebar {
     width: var(--sidebar-width);
-    background: #0b0e19;
+    /*background: #0b0e19;*/
     border-right: 1px solid var(--border-color);
     position: fixed;
     left: 0;
@@ -24,8 +24,9 @@
 .brand-area {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 40px;
+    justify-content: center;
+    margin-bottom: 10px;
+
 }
 
 .brand-logo {
@@ -66,7 +67,7 @@
 
     .sidebar-menu a:hover,
     .sidebar-menu a.active {
-        background: #171c2f;
+        background: var(--primary-color);
         color: white;
     }
 

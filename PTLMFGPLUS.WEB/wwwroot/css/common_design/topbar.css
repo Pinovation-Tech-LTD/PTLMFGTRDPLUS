@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 30px;
-    background: #0c101d;
+    background: var(--bg-surface-2);
 }
 
 .topbar-center h3 {
@@ -58,6 +58,7 @@
 .profile-info h6 {
     margin: 0;
     font-weight: var(--fw-semibold);
+    color: var(--text-primary);
 }
 
 .profile-menu {
