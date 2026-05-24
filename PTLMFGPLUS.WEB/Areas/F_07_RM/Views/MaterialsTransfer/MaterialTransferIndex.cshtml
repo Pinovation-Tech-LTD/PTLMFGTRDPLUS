@@ -13,13 +13,13 @@
             </div>
             <div class="col-md-2">
                 <label for="lblCurTransNo" class="form-label fw-bold text-dark fs-6 mb-2">
-                    <i class="bi bi-receipt me-1 text-info"></i>Transaction ID
+                    <i class="bi bi-receipt me-1 text-info"></i>ID
                 </label>
                 <input id="txtCurTransNo" type="text" class="form-control form-control-sm shadow-sm border-0 bg-white rounded-3" />
             </div>
             <div class="col-md-1">
-                <label for="lblRefNo" class="form-label fw-bold text-dark fs-6 mb-2">MTRF No</label>
-                <input id="txtRefNo" type="text" class="form-control form-control-sm shadow-sm border-0 bg-white rounded-3" placeholder="Enter MTRF No....." required />
+                <label for="lblRefNo" class="form-label fw-bold text-dark fs-6 mb-2">Ref</label>
+                <input id="txtRefNo" type="text" class="form-control form-control-sm shadow-sm border-0 bg-white rounded-3" required />
             </div>
             <div class="col-md-1">
                 <button id="btnOk" class="btn btn-primary btn-sm fw-bold shadow-sm lift-hover rounded-pill w-100 h-100">
@@ -28,10 +28,7 @@
             </div>
             <div class="col-md-3">
                 <label for="lblProjectFromList" class="form-label fw-bold text-dark fs-6 mb-2 d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-arrow-left-circle me-1 text-success"></i>From</span>
-                    <div class="form-check m-0 p-0">
-                        <input class="form-check-input shadow-sm" type="checkbox" id="chkStock">
-                    </div>
+                    <span><i class="bi bi-arrow-left-circle me-1 text-success"></i>From</span>                    
                 </label>
                 <select id="txtProjectFromList" class="form-select form-select-sm shadow-sm border-0 bg-white rounded-3">
                     <option value="">Select From...</option>
@@ -44,15 +41,7 @@
                 <select id="txtProjectToList" class="form-select form-select-sm shadow-sm border-0 bg-white rounded-3">
                     <option value="">Select To...</option>
                 </select>
-            </div>
-            <div class="col-md-4" id="previousOrder">
-                <label id="lblPreviousOrder" class="form-label fw-bold text-primary fs-6 mb-2 search-label">
-                    <i class="bi bi-clock-history me-1"></i> Previous Order
-                </label>
-                <select id="txtPreviousOrder" class="form-select form-select-sm shadow-sm border-0 bg-white rounded-3">
-                    <option value="">Select Previous...</option>
-                </select>
-            </div>
+            </div>            
         </div>
 
         <div id="btnOkClick" class="row g-3 align-items-end border-top border-light mt-1" style="display:none;">
@@ -78,40 +67,32 @@
                 </button>
             </div>
             <div class="row mt-2">
-                <div id="tableContainer" class="table-responsive shadow-lg border rounded-3 overflow-hidden ">
-                    <table class="table table-hover mb-0 align-middle" style="table-layout:fixed; width:100%;">
+                <div id="erp-table-container" class=" table-responsive erp-table-container shadow-lg border">
+                    <table class="table table-hover mb-0 align-middle erp-table" style="table-layout:fixed; width:100%;">
                         <thead class="table-light sticky-top border-bottom">
                             <tr>
                                 <th style="width: 5%;">#</th>
-                                <th style="width: 30%;">Resource Description</th>
-                                <th style="width: 10%;">Unit</th>
-                                <th style="width: 15%;">Balance Quantity</th>
-                                <th style="width: 15%;">Quantity</th>
-                                <th style="width: 10%;">Rate</th>
+                                <th style="width: 30%;">MTRF No</th>
+                                <th style="width: 10%;">Gate Pass NO</th>
+                                <th style="width: 15%;">Resource Description</th>
+                                <th style="width: 15%;">Unit</th>
+                                <th style="width: 10%;">MTRF Qty</th>
+                                <th style="width: 15%;">Receiving Qty</th>
+                                <th style="width: 15%;">Rate</th>
                                 <th style="width: 15%;">Amount</th>
+
                             </tr>
                         </thead>
                         <tbody id="selectedtabledata">
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="narration-wrapper p-1 mt-1 bg-light rounded-3 shadow-sm border-start border-primary border-4">
-                <label class="form-label fw-bold text-dark fs-6 mb-2" for="txtReqNarr">
-                    <i class="bi bi-chat-text-fill me-2 text-primary"></i>Narration
-                </label>
-                <textarea id="txtReqNarr" name="txtReqNarr" class="form-control shadow-sm border-0 rounded-3 bg-white fs-4" rows="3" placeholder="Enter detailed narration for this request..."></textarea>
-            </div>
+            </div>            
         </div>
-    </div>
-    <div class="col-md-2 align-content-md-end">
-        <button id="btnFooterApprove" class="btn btn-primary btn-sm fw-bold shadow-sm lift-hover rounded-pill w-100 h-50 p-2">
-            <i class="bi bi-check-lg"></i> Approved
-        </button>
-    </div>
+    </div>    
 </div>
 @section Scripts {
-    <script src="~/js/j_07_rm/jspurmtreq.js" asp-append-version="true"></script>
+    <script src="~/js/j_07_rm/JMaterialsTransfer.js" asp-append-version="true"></script>
     <style>
         .shadow-xl {
             box-shadow: 0 1.5rem 4rem rgba(0,0,0,0.2) !important;
@@ -143,26 +124,8 @@
         .header-wrapper {
             border-left: 5px solid #0d6efd;
             padding: 6px 7px;
-        }
-            .header-wrapper #previousOrder {
-                transition: all 0.4s ease;
-                min-width: 0;
-            }
-
-                .header-wrapper #previousOrder[style*="display: none"],
-                .header-wrapper #previousOrder.d-none,
-                .header-wrapper #previousOrder.hidden {
-                    display: none !important;
-                    width: 0 !important;
-                    min-width: 0 !important;
-                    max-width: 0 !important;
-                    flex: 0 0 0% !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    height: 0 !important;
-                    overflow: hidden;
-                }
-        
+        }            
+/* 
         #tableContainer {
             position: relative;
             z-index: 10;
@@ -172,7 +135,7 @@
             #tableContainer .table-light.sticky-top {
                 position: sticky !important;
                 top: 0 !important;
-                z-index: 1020 !important; 
+                z-index: 1020 !important;
                 background: rgba(255,255,255,0.98) !important;
                 backdrop-filter: blur(10px);
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -189,28 +152,25 @@
         .table tbody td {
             border-color: rgba(0,0,0,0.05);
             vertical-align: middle;
-        }
+        } */
 
-        .narration-wrapper {
-            min-height: 120px;
-            position: relative;
-            z-index: 5;
-        }
+        
         .card {
             min-height: calc(100vh - 120px);
         }
+
         body {
             overflow-x: hidden;
         }
+
         @@media (max-width: 768px) {
             .header-wrapper {
                 padding: 1rem 0.5rem;
             }
 
-            #tableContainer .sticky-top {
+           /*  #tableContainer .sticky-top {
                 top: 80px !important;
-            }
-            
+            } */
         }
     </style>
 }
