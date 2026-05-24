@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PTLMFGPLUS.ENTITY.E_07_RM;
 using PTLMFGPLUS.SERVICE.S_07_RM;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,9 +18,10 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
         public async Task<IActionResult> GetInterfaceInfo(string frmdate,string todate)
         {
             var result = await _RawMattInterface.Get_Goods_Info(frmdate, todate);
-            if (result == null)
+            var error = _RawMattInterface.GetError();
+            if (result == null || error != null)
             {
-                return BadRequest("No Data Found");
+                return BadRequest(new { objError = error.Message });
             }
             return Ok(new
             {

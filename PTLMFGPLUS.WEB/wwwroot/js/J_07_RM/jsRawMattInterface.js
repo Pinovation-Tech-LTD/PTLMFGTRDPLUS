@@ -9,7 +9,7 @@ var MatInterfacePage = (function () {
     };
     var service = {        
         async loadInterfaceData(frmdate,todate) {
-            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetInterfaceInfo`), {frmdate, todate }));
+            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetInterfaceInfo`), { frmdate: frmdate, todate: todate }));
         }
         
     };
@@ -31,7 +31,7 @@ var MatInterfacePage = (function () {
             return el ? el.value : null;
         },        
         renderRequisitionTable(items) {
-            const tbody = document.getElementById('selectedtabledata');
+            const tbody = document.getElementById('selectedtabledataReq');
             tbody.innerHTML = '';
             console.log(items);
             items.forEach((item, index) => {
@@ -39,7 +39,13 @@ var MatInterfacePage = (function () {
             <tr>
                 <td class="fs-6">${index + 1}</td>
                 <td class="fs-6">${item.mtreqno}</td>
-                <td class="fs-6">${item.mtrdat}</td> 
+               <td class="fs-6">
+    ${new Date(item.mtrdat).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    })}
+</td>
                 <td class="fs-6">${item.mtrref}</td> 
                 <td class="fs-6">${item.tfpactdesc}</td> 
                 <td class="fs-6">${item.ttpactdesc}</td> 
@@ -52,16 +58,21 @@ var MatInterfacePage = (function () {
             });
         }, 
         renderRequisitionApprovedTable(items) {
-            const tbody = document.getElementById('selectedtabledata');
+            const tbody = document.getElementById('selectedtabledataReqApp');
             tbody.innerHTML = '';
             console.log(items);
             items.forEach((item, index) => {
                 tbody.innerHTML += `
             <tr>
                 <td class="fs-6">${index + 1}</td>
-                <td class="fs-6">${item.mtreqno}</td>
-                <td class="fs-6 getpno-col">${item.getpno}</td>
-                <td class="fs-6">${item.mtrdat}</td> 
+                <td class="fs-6">${item.mtreqno}</td>                
+                <td class="fs-6">
+    ${new Date(item.mtrdat).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    })}
+</td>
                 <td class="fs-6">${item.mtrref}</td> 
                 <td class="fs-6">${item.tfpactdesc}</td> 
                 <td class="fs-6">${item.ttpactdesc}</td> 
@@ -71,7 +82,7 @@ var MatInterfacePage = (function () {
                 <td class="fs-6">${item.postedusr}</td>   
                 <td>
                     <div class="btn-group btn-group-sm">
-                        <button class="btn btn-success btn-confirm" data-mtreqno="${item.mtreqno}" data-getpno="${item.getpno ?? ''}"  title="Confirm">
+                        <button class="btn btn-success btn-confirm" data-mtreqno="${item.mtreqno}"  title="Confirm">
                             <i class="bi bi-check-lg"></i>
                         </button>
 
@@ -80,6 +91,84 @@ var MatInterfacePage = (function () {
                         </button>
 
                         <button class="btn btn-danger btn-delete" data-mtreqno="${item.mtreqno}"  title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            });
+        },        
+        renderRequisitionStoreIssue(items) {
+            const tbody = document.getElementById('selectedtabledatastoreissue');
+            tbody.innerHTML = '';
+            console.log(items);
+            items.forEach((item, index) => {
+                tbody.innerHTML += `
+            <tr>
+                <td class="fs-6">${index + 1}</td>
+                <td class="fs-6">${item.mtreqno}</td>                
+                <td class="fs-6">
+    ${new Date(item.mtrdat).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    })}
+</td>
+                <td class="fs-6">${item.mtrref}</td> 
+                <td class="fs-6">${item.tfpactdesc}</td> 
+                <td class="fs-6">${item.ttpactdesc}</td> 
+                <td class="fs-6">${item.mtrnar}</td> 
+                <td class="fs-6">${item.tqty}</td> 
+                <td class="fs-6">${item.tamt}</td>                
+                <td class="fs-6">${item.gatpbal}</td>                
+                <td class="fs-6">${item.postedusr}</td>   
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success btn-confirm" data-mtreqno="${item.mtreqno}"  title="Confirm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-danger btn-delete" data-mtreqno="${item.mtreqno}"  title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            });
+        },        
+        renderRequisitionStoreReceive(items) {
+            const tbody = document.getElementById('selectedtabledatastorereceive');
+            tbody.innerHTML = '';
+            console.log(items);
+            items.forEach((item, index) => {
+                tbody.innerHTML += `
+            <tr>
+                <td class="fs-6">${index + 1}</td>
+                <td class="fs-6">${item.mtreqno}</td>                
+                <td class="fs-6">${item.getpno}</td>                
+               <td class="fs-6">
+    ${new Date(item.mtrdat).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    })}
+</td>
+                <td class="fs-6">${item.mtrref}</td> 
+                <td class="fs-6">${item.tfpactdesc}</td> 
+                <td class="fs-6">${item.ttpactdesc}</td> 
+                <td class="fs-6">${item.mtrnar}</td> 
+                <td class="fs-6">${item.tqty}</td> 
+                <td class="fs-6">${item.tamt}</td>                
+                <td class="fs-6">${item.gatpqty}</td>                
+                <td class="fs-6">${item.trnbal}</td>                
+                <td class="fs-6">${item.postedusr}</td>   
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success btn-confirm" data-getpno="${item.getpno}"  title="Confirm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-danger btn-delete" data-getpno="${item.getpno}"  title="Delete">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -111,27 +200,21 @@ var MatInterfacePage = (function () {
         });      
         $("#btnFooterSave").on("click", async function () {
         });
-        $("#requisitionDiv").on("click", async function () {
-            $(".getpno-col").hide();
+        $("#requisitionDiv").on("click", async function () {            
             state.selectedInterface = "requisition";
-            loadTableInterface();
-           
+            loadTableInterface();           
         });
         $("#reqApprovalDiv").on("click", async function () {
-            state.selectedInterface = "reqApproved";
-            $(".getpno-col").hide();
-            loadReqApprovedData();
-            
+            state.selectedInterface = "reqApproved";            
+            loadReqApprovedData();            
         });
         $("#storeIssueDiv").on("click", async function () {
-            state.selectedInterface = "storeissue";
-            $(".getpno-col").hide();
+            state.selectedInterface = "storeissue";            
             loadGpassData();
             
         });
         $("#storeReceiveDiv").on("click", async function () {
-            state.selectedInterface = "storerecive";
-            $(".getpno-col").show();
+            state.selectedInterface = "storerecive";            
             loadStoreReceiveData();
             
         });
@@ -167,8 +250,11 @@ var MatInterfacePage = (function () {
             x.approved &&
             x.approved.trim().toUpperCase() === "OK"
         );
-        ui.renderRequisitionApprovedTable(filterdata);
-        document.getElementById("tableContainer").style.display = "table";        
+        ui.renderRequisitionStoreIssue(filterdata);
+        document.getElementById("tableContainerstorereceive").style.display = "none";
+        document.getElementById("tableContainerstoreissue").style.display = "table"; 
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "none";
     }
     async function loadStoreReceiveData() {
         if (!state.interfacedata.item2 || state.interfacedata.item1.length === 0) {
@@ -179,8 +265,11 @@ var MatInterfacePage = (function () {
         let filterdata = data.filter(x =>
             Number(x.gatpqty) > 0 && Number(x.trnbal) > 0
         );
-        ui.renderRequisitionApprovedTable(filterdata);
-        document.getElementById("tableContainer").style.display = "table";        
+        ui.renderRequisitionStoreReceive(filterdata);
+        document.getElementById("tableContainerstorereceive").style.display = "table"; 
+        document.getElementById("tableContainerstoreissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "none";
     }
     async function loadReqApprovedData() {
         if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
@@ -190,7 +279,10 @@ var MatInterfacePage = (function () {
         let data = state.interfacedata.item1 || [];
         let filterdata = data.filter(x => x.approved.trim().toUpperCase() !== "OK");
         ui.renderRequisitionApprovedTable(filterdata);
-        document.getElementById("tableContainer").style.display = "table";
+        document.getElementById("tableContainerstorereceive").style.display = "none";
+        document.getElementById("tableContainerstoreissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "table";
+        document.getElementById("tableContainerReq").style.display = "none";
     }
     async function loadQtyInterface() {
         ui.setValue("reqQty", state.interfacedata.item3[0].reqqty);
@@ -205,7 +297,11 @@ var MatInterfacePage = (function () {
             return;
         }
         ui.renderRequisitionTable(state.interfacedata.item1);
-        document.getElementById("tableContainer").style.display = "table";
+        document.getElementById("tableContainerstorereceive").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "table";
+        document.getElementById("tableContainerstoreissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        
 
     }
     async function loadInitialData() {      

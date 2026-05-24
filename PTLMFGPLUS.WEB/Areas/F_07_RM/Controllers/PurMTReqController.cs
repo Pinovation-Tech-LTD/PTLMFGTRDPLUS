@@ -22,31 +22,44 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
         public async Task<IActionResult> GetLastMTRNumber(string date)
         {
             var item = await _purMTReq.Get_MATTRANS_No(date);
+            var error = _purMTReq.GetError();
+            if (item == null || error != null)
+            {
+                return BadRequest(new { objError = error.Message });
+            }
             return Ok(item.ToList());
         }
         [HttpGet]
         public async Task<IActionResult> GetPreviousOrderList(string date)
         {
             var item = await _purMTReq.Get_Previous_Order(date);
+            var error = _purMTReq.GetError();
+            if (item == null || error != null)
+            {
+                return BadRequest(new { objError = error.Message });
+            }
             return Ok(item.ToList());
         }
         [HttpGet]
         public async Task<IActionResult> GetProjectFromList()
         {
             var projectlist = await _purMTReq.Get_Project_From_List();
-            if (projectlist == null)
+            var error = _purMTReq.GetError();
+            if (projectlist == null || error != null)
             {
-                return BadRequest("No Data");
+                return BadRequest(new { objError = error.Message });
             }
+            
             return Ok(projectlist.ToList());
         }
         [HttpGet]
         public async Task<IActionResult> GetProjectResourceList(string projectcode, string curdate, string findResDesc, string stockCheck)
         {
             var Resourcelist = await _purMTReq.Get_Project_Resource_List(projectcode, curdate,findResDesc, stockCheck);
-            if(Resourcelist==null)
+            var error = _purMTReq.GetError();
+            if (Resourcelist == null || error != null)
             {
-                return BadRequest("No Data");
+                return BadRequest(new { objError = error.Message });
             }
             return Ok(new
             {
@@ -57,8 +70,7 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveButtonClick(string previousOrderDataid,string mtrref, string mtreqdat, string seletedFrom, string selectedTo, string mtrnar, string selectedItem)
         {
-            var items = JsonSerializer.Deserialize<List<SelectedItemListSave>>(selectedItem);
-           
+            var items = JsonSerializer.Deserialize<List<SelectedItemListSave>>(selectedItem);            
             var result = await _purMTReq.Post_Save_Data(previousOrderDataid,mtrref, mtreqdat, seletedFrom, selectedTo, mtrnar, items);
             if (result == false)
             {
@@ -82,9 +94,10 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_RM.Controllers
         public async Task<IActionResult> GetMatTransferInfo(string mtrno, string date)
         {
             var projectlist = await _purMTReq.Get_Mat_Transfer(mtrno, date);
-            if (projectlist == null)
+            var error = _purMTReq.GetError();
+            if (projectlist == null || error != null)
             {
-                return BadRequest("No Data");
+                return BadRequest(new { objError = error.Message });
             }
             return Ok(new
             {

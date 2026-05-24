@@ -86,33 +86,148 @@
                 </div>
 
             </div>
-
             <!-- Table Section -->
             <div class="row mt-1">
-                <div id="tableContainer"
-                     class="table-responsive border rounded-4 shadow-sm"
-                     style="display:none">
+                <div id="tableContainerReq"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
 
-                    <table class="table table-hover table-striped align-middle mb-0">
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1300px;">
+
                         <thead class="table-primary">
                             <tr>
-                                <th>#</th>
-                                <th>Req No</th>
-                                <th class="getpno-col">Get Pass No</th>
-                                <th>Req Date</th>
-                                <th>Matt Ref</th>
-                                <th>Trans From</th>
-                                <th>Trans To</th>
-                                <th>Note</th>
-                                <th>Matt Qty</th>
-                                <th>Total Amount</th>
-                                <th>Posted By</th>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:120px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:200px;">Note</th>
+                                <th style="width:100px;">Matt. Qty</th>
+                                <th style="width:120px;">Total Amount</th>
+                                <th style="width:100px;">Posted By</th>
                             </tr>
                         </thead>
-                        <tbody id="selectedtabledata">
-                        </tbody>
-                    </table>
 
+                        <tbody id="selectedtabledataReq"></tbody>
+                    </table>
+                </div>
+
+
+                <div id="tableContainerReqApp"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1300px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:120px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:200px;">Note</th>
+                                <th style="width:100px;">Req. Qty</th>
+                                <th style="width:120px;">Total Amount</th>
+                                <th style="width:100px;">Posted By</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledataReqApp"></tbody>
+                    </table>
+                </div>
+
+
+                <div id="tableContainerstoreissue"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1400px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:120px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:200px;">Note</th>
+                                <th style="width:100px;">Req. Qty</th>
+                                <th style="width:120px;">Req. Amount</th>
+                                <th style="width:120px;">Gate Pass Bal</th>
+                                <th style="width:100px;">Posted By</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledatastoreissue"></tbody>
+                    </table>
+                </div>
+
+
+                <div id="tableContainerstorereceive"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1500px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:150px;">Get Pass. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:100px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:180px;">Note</th>
+                                <th style="width:100px;">Req. Qty</th>
+                                <th style="width:120px;">Req. Amount</th>
+                                <th style="width:120px;">Gate Pass Qty</th>
+                                <th style="width:120px;">Transfer Bal</th>
+                                <th style="width:100px;">Posted By</th>
+                                <th style="width:120px;"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledatastorereceive"></tbody>
+                    </table>
+                </div>
+
+
+                <div id="tableContainermatttransfer"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1600px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:150px;">GPN. No</th>
+                                <th style="width:150px;">TRN. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:100px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:100px;">Note</th>
+                                <th style="width:100px;">Req. Qty</th>
+                                <th style="width:100px;">Req. Amount</th>
+                                <th style="width:100px;">Transfer Qty</th>
+                                <th style="width:100px;">Posted By</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledatamatttransfer"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -137,20 +252,6 @@
                 box-shadow: 0 12px 24px rgba(0,0,0,0.12) !important;
                 background: #E3E1E1;
             }
-
-        .table thead th {
-            font-size: 14px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .table tbody td {
-            font-size: 14px;
-            white-space: nowrap;
-        }
-
-        .card {
-            overflow: hidden;
-        }
+        
     </style>
 }
