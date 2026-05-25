@@ -161,8 +161,8 @@ var PurMtReqPage = (function () {
                data-index="${index}"
                value="${item.qty || 0}"
                style="max-width: 100px;"
-               min="0"
-               step="0.01">
+               min=""
+               step="1">
             </td>
 
             <td class="rate">${parseFloat(item.rate).toFixed(2)}</td>
@@ -184,24 +184,28 @@ var PurMtReqPage = (function () {
     function init() {
         if (qparam == 'approved') {
             HideSave();
-            
+            ShowApprove();
+        }
+        else {
+            HideApprove();
         }
         bindEvents();
         loadInitialData();
         ShowFooterWithButtons();
         HideRefresh();
         HideRecalculate();
+       
     }
     function okClick() {
-        ToggleDiv();        
+        //ToggleDiv();        
         $("#txtProjectToList").prop("disabled", true);
         $("#txtProjectFromList").prop("disabled", true);
         $("#previousOrder").hide();
-        $(this).text("New");
-        //$("#previousOrder").closest(".col-md-4").hide();   //full div hide previous order
+        $("#btnOk").text("New");
         
     }
     function bindEvents() {
+        $("#txtCurTransNo").prop("disabled", true);
         $("#btnOk").on("click", function () {
             let btnText = $(this).text().trim();
             const previousOrderData = ui.getValue("txtPreviousOrder");
@@ -212,10 +216,22 @@ var PurMtReqPage = (function () {
             }
 
             if (btnText === "OK") {
+                GetTransIdByDate();
                 GetResource();
                 okClick();
+                $(this).html(`
+            <i class="bi bi-check-lg"></i> New
+        `);
+                var div = document.getElementById("btnOkClick");
+                if (div) {
+                    div.style.display = (div.style.display === "none") ? "flex" : "none";
+                }
+                $("#txtdate").prop("disabled", true);
             }
             else if (btnText === "New") {
+                $(this).html(`
+            <i class="bi bi-check-lg"></i> Ok
+        `);
                 location.reload();
             }
         });
@@ -226,7 +242,18 @@ var PurMtReqPage = (function () {
 
             const mtrref = ui.getValue("txtRefNo");
             if (mtrref === null || mtrref === '') {
-                Notifications.Sweet.warning("Warning!!", "MTRF not found!!");
+                Notifications.Sweet.warning("Warning!!", "MTRF not found!! Please Enter MTRF No");
+                return;
+            }
+            const invalidItem = state.selectedItems.find(x =>
+                parseFloat(x.qty || 0) > parseFloat(x.balqty || 0)
+            );
+
+            if (invalidItem) {
+                Notifications.Sweet.warning(
+                    "Warning!!",
+                    `${invalidItem.resdesc} quantity can't be greater than balance quantity`
+                );
                 return;
             }
             Notifications.Sweet.confirmSave("Are you sure you want to save this record?", async function(){                
@@ -251,10 +278,13 @@ var PurMtReqPage = (function () {
 
         $("#btnFooterApprove").on("click", async function () {
             const mtrref = ui.getValue("txtRefNo");
-            if (!mtrref) { alert("MRF No is required!"); return; }           
+            if (!mtrref) {                
+                Notifications.Sweet.warning("Warning", "MRF No is required!");
+                return;
+            }           
             let result = await service.approveButton(mtreqnoApproved);
-            if (result === null) {
-                alert("Approval failed");
+            if (result === null) {                
+                Notifications.Sweet.error("Error", "Approval Failed");
                 return;
             }
             const isConfirm = confirm("Are you sure you want to save this record?");
@@ -262,8 +292,8 @@ var PurMtReqPage = (function () {
             if (!isConfirm) {
                 return; 
             }
-            alert("Approved successfully!");
-            window.location.href = `/F_07_RM/RawMattInterface/InterfaceIndex`;
+            Notifications.Sweet.success("success", "Approved successfully!");            
+            window.location.href = FetchHelpers.urlconfig( `/F_07_RM/RawMattInterface/InterfaceIndex`);
         });
         $("#txtProjectResourceList").on("change", function () {
             const selectedResource = ui.getValue("txtProjectResourceList");
@@ -281,9 +311,9 @@ var PurMtReqPage = (function () {
             }
             ui.renderProjectToList(toListItems);
         });
-        $("#txtdate").on("change", function () {
-            GetTransIdByDate();
-        });
+        //$("#txtdate").on("change", function () {
+        //    GetTransIdByDate();
+        //});
 
         $("#btnSelect").on("click", function () {
 
@@ -292,12 +322,15 @@ var PurMtReqPage = (function () {
             ui.renderTable(state.selectedItems);
 
         })
-        $(document).on("input", ".qty-input", function () {
+        $(document).on("change", ".qty-input", function () {
 
             let index = $(this).data("index");
             let qty = parseFloat($(this).val()) || 0;
             let item = state.selectedItems[index];
             item.qty = qty;
+            if (qty > item.balqty) {
+                Notifications.Toastr.warning("Warning!!", "Quantity can't be greater than Balance Quantity!!!");
+            }
             item.amt = qty * item.rate;
             $(this).closest("tr").find(".amt").text(item.amt.toFixed(2));
 
@@ -334,8 +367,7 @@ var PurMtReqPage = (function () {
     }
     async function GetPreviousOrder() {
         const date = ui.getValue("txtdate");
-        const formatteddate = (date);
-        const PreviousOrderList = await service.loadPreviousOrder(formatteddate);
+        const PreviousOrderList = await service.loadPreviousOrder(date);
         ui.renderPreviousMatOrder(PreviousOrderList);
     }
     async function GetResource() {
@@ -347,25 +379,19 @@ var PurMtReqPage = (function () {
         state.item2 = projectResourcelist.item2;
         ui.renderProjectResourceList(state.item1);
     }
-    async function ToggleDiv() {
-        var div = document.getElementById("btnOkClick");
-        if (div) {
-            div.style.display = (div.style.display === "none") ? "flex" : "none";
-        }
-    }
+    
     async function GetTransIdByDate() {
-        const date = ui.getValue("txtdate");
-        const formatteddate = (date);
+        let date = ui.getValue("txtdate");
+        
         if (qparam === 'entry') {            
-            const moduleItems = await service.loadLastMTRNumber(formatteddate);
+            const moduleItems = await service.loadLastMTRNumber(date);
             ui.renderCurTransNo(moduleItems);
         }      
 
     }
     async function ApprovedDataLoad(mtreqnoid) {
-        const date = ui.getValue("txtdate");
-        const formatteddate = (date);
-        const approvedData = await service.loadApprovedData(mtreqnoid, formatteddate);
+        const date = ui.getValue("txtdate");        
+        const approvedData = await service.loadApprovedData(mtreqnoid, date);
         if (!approvedData) return;
         ui.setValue("txtRefNo", approvedData.item2[0].mtrref);
         let formattedDate = new Date(approvedData.item2[0].mtrdat)
@@ -389,8 +415,7 @@ var PurMtReqPage = (function () {
         $("#txtProjectFromList").prop("disabled", true);
         $("#btnOk").prop("disabled", true);
         $("#txtCurTransNo").prop("disabled", true);
-        $("#txtRefNo").prop("disabled", true);
-        $("#txtdate").prop("disabled", true);
+        $("#txtRefNo").prop("disabled", true);       
         $("#previousOrder").hide();
         GetResource();
         state.selectedItems = approvedData.item1 || [];
@@ -398,16 +423,18 @@ var PurMtReqPage = (function () {
     }
     async function loadInitialData() {
         if (qparam === 'entry') {
-            GetTransIdByDate();
+            //GetTransIdByDate();
             const projectFromListItems = await service.loadProjectFromList();
             state.FromToList = projectFromListItems;
-            ui.renderProjectFromList(state.FromToList);
-                 
-            $("#btnFooterApprove").hide();
-
+            ui.renderProjectFromList(state.FromToList);                
         } else if (qparam === 'approved') {
             ApprovedDataLoad(mtreqnoApproved);
-            ToggleDiv();           
+           
+                var div = document.getElementById("btnOkClick");
+                if (div) {
+                    div.style.display = (div.style.display === "none") ? "flex" : "none";
+                }
+            
         }
     }
     return {
