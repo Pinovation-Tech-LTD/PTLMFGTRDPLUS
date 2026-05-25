@@ -1,8 +1,4 @@
-﻿@{
-    var today = DateTime.Now.ToString("yyyy-MM-dd");
-}
-
-<div class="card shadow-xl border-0 rounded-4 overflow-hidden">
+﻿<div class="card shadow-xl border-0 rounded-4 overflow-hidden">
     <div class="card-body px-3">
         <div class="row g-3 align-items-end header-wrapper rounded-3 shadow-sm">
             <div class="col-md-2">
@@ -112,6 +108,10 @@
 </div>
 @section Scripts {
     <script src="~/js/j_07_rm/jspurmtreq.js" asp-append-version="true"></script>
+    <script>
+        $("#txtdate").datepicker('setDate', new Date());
+    </script>
+    
     <style>
         .shadow-xl {
             box-shadow: 0 1.5rem 4rem rgba(0,0,0,0.2) !important;

@@ -70,6 +70,10 @@ function HideCancel() {
     const btn = document.querySelector("#btnFooterCancel");
     btn.style.display = "none";
 }
+function HideApprove() {
+    const btn = document.querySelector("#btnFooterApprove");
+    btn.style.display = "none";
+}
 
 function ShowingDelete() {
     const btn = document.querySelector("#btnFooterDelete");

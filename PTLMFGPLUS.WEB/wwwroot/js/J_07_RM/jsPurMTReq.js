@@ -191,17 +191,19 @@ var PurMtReqPage = (function () {
         ShowFooterWithButtons();
         HideRefresh();
         HideRecalculate();
+        HideApprove();
+        
     }
     function okClick() {
         ToggleDiv();        
         $("#txtProjectToList").prop("disabled", true);
         $("#txtProjectFromList").prop("disabled", true);
         $("#previousOrder").hide();
-        $(this).text("New");
-        //$("#previousOrder").closest(".col-md-4").hide();   //full div hide previous order
+        $("#btnOk").text("New");
         
     }
     function bindEvents() {
+        $("#txtCurTransNo").prop("disabled", true);
         $("#btnOk").on("click", function () {
             let btnText = $(this).text().trim();
             const previousOrderData = ui.getValue("txtPreviousOrder");
@@ -212,10 +214,17 @@ var PurMtReqPage = (function () {
             }
 
             if (btnText === "OK") {
-                GetResource();
+                 GetTransIdByDate();
+                 GetResource();
                 okClick();
+                btnOk.innerHTML = `
+            <i class="bi bi-check-lg"></i> New
+        `;
             }
             else if (btnText === "New") {
+                btnOk.innerHTML = `
+            <i class="bi bi-check-lg"></i> OK
+        `;
                 location.reload();
             }
         });
@@ -333,9 +342,8 @@ var PurMtReqPage = (function () {
         });
     }
     async function GetPreviousOrder() {
-        const date = ui.getValue("txtdate");
-        const formatteddate = formatDate(date);
-        const PreviousOrderList = await service.loadPreviousOrder(formatteddate);
+        const date = ui.getValue("txtdate");        
+        const PreviousOrderList = await service.loadPreviousOrder(date);
         ui.renderPreviousMatOrder(PreviousOrderList);
     }
     async function GetResource() {
@@ -355,17 +363,16 @@ var PurMtReqPage = (function () {
     }
     async function GetTransIdByDate() {
         const date = ui.getValue("txtdate");
-        const formatteddate = formatDate(date);
-        if (qparam === 'entry') {            
-            const moduleItems = await service.loadLastMTRNumber(formatteddate);
+               if (qparam === 'entry') {            
+            const moduleItems = await service.loadLastMTRNumber(date);
             ui.renderCurTransNo(moduleItems);
         }      
 
     }
     async function ApprovedDataLoad(mtreqnoid) {
         const date = ui.getValue("txtdate");
-        const formatteddate = formatDate(date);
-        const approvedData = await service.loadApprovedData(mtreqnoid, formatteddate);
+        
+        const approvedData = await service.loadApprovedData(mtreqnoid, date);
         if (!approvedData) return;
         ui.setValue("txtRefNo", approvedData.item2[0].mtrref);
         let formattedDate = new Date(approvedData.item2[0].mtrdat)
@@ -397,8 +404,7 @@ var PurMtReqPage = (function () {
         ui.renderTable(state.selectedItems, true);
     }
     async function loadInitialData() {
-        if (qparam === 'entry') {
-            GetTransIdByDate();
+        if (qparam === 'entry') {            
             const projectFromListItems = await service.loadProjectFromList();
             state.FromToList = projectFromListItems;
             ui.renderProjectFromList(state.FromToList);
