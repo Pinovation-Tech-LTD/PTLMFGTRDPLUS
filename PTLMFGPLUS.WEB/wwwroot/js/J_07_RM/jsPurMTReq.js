@@ -201,8 +201,7 @@ var PurMtReqPage = (function () {
         $("#txtProjectToList").prop("disabled", true);
         $("#txtProjectFromList").prop("disabled", true);
         $("#previousOrder").hide();
-        $(this).text("New");
-        //$("#previousOrder").closest(".col-md-4").hide();   //full div hide previous order
+        $("#btnOk").text("New");
         
     }
     function bindEvents() {
