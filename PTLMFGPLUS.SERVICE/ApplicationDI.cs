@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PTLMFGPLUS.SERVICE.ControlPanel;
 using PTLMFGPLUS.SERVICE.S_07_RM;
+using PTLMFGPLUS.SERVICE.S_13_ProdMon;
 
 
 
@@ -18,6 +19,7 @@ namespace PTLMFGPLUS.SERVICE
             services.AddScoped<IRawMattInterfaceService, RawMattInterfaceService>();
             services.AddScoped< IPurMTReqGatePassService, PurMTReqGatePassService>();
             services.AddScoped<IMaterialsTransferService, MaterialsTransferService>();
+            services.AddScoped<IProductionInterfaceService, ProductionInterfaceService>();
             return services;
         }
     }
