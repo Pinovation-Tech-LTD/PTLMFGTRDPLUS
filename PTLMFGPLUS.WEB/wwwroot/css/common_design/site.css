@@ -167,13 +167,16 @@ ul {
 }
 
 /*INPUTS*/
+
+
+
 .form-control,
 .form-select {
     background: var(--input-bg);
     border: 1px solid var(--input-border);
     color: var(--input-text);
     border-radius: 12px;
-    min-height: 44px;
+    /*min-height: 44px;*/
 }
 
     .form-control::placeholder {
@@ -183,6 +186,8 @@ ul {
     .form-control:focus,
     .form-select:focus {
         border-color: var(--primary-color);
+        color: var(--text-secondary);
+        background: var(--bg-surface-2);
         box-shadow: 0 0 0 0.18rem rgba(106,76,255,0.2);
     }
 .input-group-text {
@@ -201,6 +206,14 @@ ul {
     }
 
 /*BUTTONS*/
+
+.btn {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+
 .btn-primary {
     background: var(--primary-color);
     border-color: var(--primary-color);
@@ -364,6 +377,31 @@ ul {
 .select2-container--default .select2-selection--multiple {
     transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
+
+
+.datepicker {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+    .datepicker table tr td,
+    .datepicker table tr th {
+        color: var(--text-primary) !important;
+    }
+
+        /*.datepicker table tr td.day:hover {
+            background: #0d6efd !important;
+            color: #fff !important;
+        }*/
+
+        /* selected day */
+        /*.datepicker table tr td.active,
+        .datepicker table tr td.active:hover {
+            background: #0d6efd !important;
+            color: #fff !important;
+        }*/
+
 
 
 .footer-color {
