@@ -1,0 +1,252 @@
+﻿
+
+<div class="container-fluid">
+
+    <!-- Header Card -->
+    <div class="card border-0 shadow-lg rounded-4 mb-2">
+        <div class="card-body rounded-4">
+
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-2">
+                    <label for="txtfrmdate" class="form-label fw-semibold">
+                        <i class="bi bi-calendar3 text-primary me-1"></i> From
+                    </label>
+                    <input id="txtfrmdate" type="text"
+                           class="form-control form-control-sm datepicker datepicker-current rounded-3 shadow-sm" />
+                </div>
+
+                <div class="col-md-2">
+                    <label for="txttodate" class="form-label fw-semibold">
+                        <i class="bi bi-calendar3 text-primary me-1"></i> To
+                    </label>
+                    <input id="txttodate" type="text"
+                           class="form-control form-control-sm datepicker datepicker-current rounded-3 shadow-sm" />
+                </div>
+
+                <div class="col-md-2">
+                    <button id="btnOk"
+                            class="btn btn-primary btn-sm">
+                        <i class="bi bi-check-lg"></i> Load Data
+                    </button>
+                </div>
+              
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Summary -->
+    <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body">
+
+            <div class="row g-4 text-center" id="interfacevalue">
+
+                <div class="col-md-2" id="requisitionDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4 h-100">
+                        <div class="fs-3 fw-bold text-primary" id="reqQty"></div>
+                        <div class="mt-2">Request</div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" id="reqApprovalDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4  h-100">
+                        <div class="fs-3 fw-bold text-warning" id="reqApprQty"></div>
+                        <div class=" mt-2">Requsition</div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" id="storeIssueDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4  h-100">
+                        <div class="fs-3 fw-bold text-info" id="storeIssueQty"></div>
+                        <div class=" mt-2">
+                            Material Issue
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" id="storeReceiveDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4  h-100">
+                        <div class="fs-3 fw-bold text-success" id="storeRecvQty"></div>
+                        <div class=" mt-2">
+                            Issue Approve
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2" id="mattTransferedDiv">
+                    <div class="dashboard-card card border-0 shadow-sm rounded-4  h-100">
+                        <div class="fs-3 fw-bold text-danger" id="mattTransQty"></div>
+                        <div class=" mt-2">Process</div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Table Section -->
+            <div class="row mt-1">
+                <div id="tableContainerReq"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1300px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Budget Name</th>
+                                <th style="width:120px;">Date</th>
+                                <th style="width:120px;">Product Name</th>
+                                <th style="width:240px;">Item Count</th>
+                                <th style="width:240px;">Budgeted Qty</th>
+                                <th style="width:240px;">Budgeted Amount</th>
+                                <th style="width:200px;">Start Date</th>
+                                <th style="width:100px;">End Date</th>
+                                <th style="width:120px;">Current Status</th>
+                                <th style="width:100px;">WIP Name</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledataReq"></tbody>
+                    </table>
+                </div>
+
+
+                <div id="tableContainerReqApp"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1300px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:120px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:200px;">Note</th>
+                                <th style="width:100px;">Req. Qty</th>
+                                <th style="width:120px;">Total Amount</th>
+                                <th style="width:100px;">Posted By</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledataReqApp"></tbody>
+                    </table>
+                </div>
+
+
+                <div id="tableContainerstoreissue"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1400px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:120px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:200px;">Note</th>
+                                <th style="width:100px;">Req. Qty</th>
+                                <th style="width:120px;">Req. Amount</th>
+                                <th style="width:120px;">Gate Pass Bal</th>
+                                <th style="width:100px;">Posted By</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledatastoreissue"></tbody>
+                    </table>
+                </div>
+
+
+                <div id="tableContainerstorereceive"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1500px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:150px;">Get Pass. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:100px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:180px;">Note</th>
+                                <th style="width:100px;">Req. Qty</th>
+                                <th style="width:120px;">Req. Amount</th>
+                                <th style="width:120px;">Gate Pass Qty</th>
+                                <th style="width:120px;">Transfer Bal</th>
+                                <th style="width:100px;">Posted By</th>
+                                <th style="width:120px;"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledatastorereceive"></tbody>
+                    </table>
+                </div>
+
+
+                <div id="tableContainermatttransfer"
+                     class="table-responsive w-100 border rounded-4 shadow-sm overflow-auto"
+                     style="display:none;">
+
+                    <table class="table table-hover table-striped align-middle mb-0 text-nowrap"
+                           style="min-width:1600px;">
+
+                        <thead class="table-primary">
+                            <tr>
+                                <th style="width:50px;">#</th>
+                                <th style="width:140px;">Req. No</th>
+                                <th style="width:150px;">GPN. No</th>
+                                <th style="width:150px;">TRN. No</th>
+                                <th style="width:120px;">Req. Date</th>
+                                <th style="width:100px;">Matt. Ref</th>
+                                <th style="width:240px;">Trans. From</th>
+                                <th style="width:240px;">Trans. To</th>
+                                <th style="width:100px;">Note</th>
+                                <th style="width:100px;">Req. Qty</th>
+                                <th style="width:100px;">Req. Amount</th>
+                                <th style="width:100px;">Transfer Qty</th>
+                                <th style="width:100px;">Posted By</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="selectedtabledatamatttransfer"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/j_13_prodmon/jproductioninterface.js" asp-append-version="true"></script>
+    <style>
+        .dashboard-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fff;
+        }
+
+        
+        .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.12) !important;
+        background: #E3E1E1;
+        }
+
+    </style>
+}
