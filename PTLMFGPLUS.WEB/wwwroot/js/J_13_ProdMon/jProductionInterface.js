@@ -298,11 +298,11 @@ var MatInterfacePage = (function () {
         document.getElementById("tableContainerReq").style.display = "none";
     }
     async function loadQtyInterface() {
-        ui.setValue("reqQty", state.interfacedata.item7[0].reqqty);
-        ui.setValue("reqApprQty", state.interfacedata.item7[0].proreqqty);
-        ui.setValue("storeIssueQty", state.interfacedata.item7[0].issueqty);
-        ui.setValue("storeRecvQty", state.interfacedata.item7[0].isuapqty);
-        ui.setValue("mattTransQty", state.interfacedata.item7[0].procsqty);
+        ui.setValue("reqQty", Number(state.interfacedata.item7[0].reqqty));
+        ui.setValue("reqApprQty", Number(state.interfacedata.item7[0].proreqqty));
+        ui.setValue("storeIssueQty", Number(state.interfacedata.item7[0].issueqty));
+        ui.setValue("storeRecvQty", Number(state.interfacedata.item7[0].isuapqty));
+        ui.setValue("mattTransQty", Number(state.interfacedata.item7[0].procsqty));
     }
     async function loadTableInterface() {
         if (!state.interfacedata.item0 || state.interfacedata.item0.length === 0) {

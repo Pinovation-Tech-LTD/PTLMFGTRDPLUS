@@ -4,11 +4,17 @@
 const sidebarToggle = document.getElementById("sidebarToggle");
 const sidebar = document.getElementById("sidebar");
 
+function syncSidebarState() {
+    document.body.classList.toggle("sidebar-collapsed", sidebar.classList.contains("collapsed"));
+}
+
+syncSidebarState();
+
 sidebarToggle.addEventListener("click", () => {
 
     sidebar.classList.toggle("collapsed");
 
-    document.body.classList.toggle("sidebar-collapsed");
+    syncSidebarState();
 });
 
 
