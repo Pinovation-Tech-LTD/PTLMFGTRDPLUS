@@ -1,7 +1,7 @@
 ﻿/*Area/Controller/*/
 const commonPath = "/F_13_ProdMon/ProductionInterface/";
 const urlParams = new URLSearchParams(window.location.search);
-var MatInterfacePage = (function () {
+var ProductionInterfacePage = (function () {
     var state =
     {
         interfacedata: [],
@@ -244,12 +244,12 @@ var MatInterfacePage = (function () {
             }
             else if (checkinterface === 'storerecive') {
 
-                window.open(`/F_07_RM/MaterialsTransfer/MaterialTransferIndex?type=entry&getpno=${getpno}`, '_blank');
+                window.open(`/F_13_ProdMon/MaterialsTransfer/MaterialTransferIndex?type=entry&getpno=${getpno}`, '_blank');
             }
 
         });
         $("#requisitionEntry").on("click", async function () {
-            window.open(`/F_07_RM/PurMTReq/PurMTReqIndex?type=entry`, '_blank');
+            window.open(`/F_13_ProdMon/ProdBudget/ProdBudgetIndex?type=entry`, '_blank');
         });
     }
     async function loadGpassData() {
@@ -325,4 +325,4 @@ var MatInterfacePage = (function () {
     };
 })();
 
-document.addEventListener('DOMContentLoaded', MatInterfacePage.init);
+document.addEventListener('DOMContentLoaded', ProductionInterfacePage.init);
