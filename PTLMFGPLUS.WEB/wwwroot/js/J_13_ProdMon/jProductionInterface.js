@@ -195,21 +195,13 @@ var ProductionInterfacePage = (function () {
     function init() {
         bindEvents();
         loadInitialData();
+        loadInterfaceQtyData();
 
     }
     async function bindEvents() {
         $("#btnOk").on("click", async function () {
-            let frmdate = ui.getValue("txtfrmdate");
-            let todate = ui.getValue("txttodate");
-            const formatfrmdate = (frmdate);
-            const formattodate = (todate);
-
-            const result = await service.loadInterfaceData(formatfrmdate, formattodate);
-            if (result === null) {
-                alert("Data Not Found");
-            }
-            state.interfacedata = result;
-            loadQtyInterface();
+            loadInterfaceQtyData();
+            
         });
         $("#btnFooterSave").on("click", async function () {
         });
@@ -251,6 +243,19 @@ var ProductionInterfacePage = (function () {
         $("#requisitionEntry").on("click", async function () {
             window.open(`/F_13_ProdMon/ProdBudget/ProdBudgetIndex?type=entry`, '_blank');
         });
+    }
+    async function loadInterfaceQtyData() {
+        let frmdate = ui.getValue("txtfrmdate");
+        let todate = ui.getValue("txttodate");
+        const formatfrmdate = (frmdate);
+        const formattodate = (todate);
+
+        const result = await service.loadInterfaceData(formatfrmdate, formattodate);
+        if (result === null) {
+            alert("Data Not Found");
+        }
+        state.interfacedata = result;
+        loadQtyInterface();
     }
     async function loadGpassData() {
         if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
