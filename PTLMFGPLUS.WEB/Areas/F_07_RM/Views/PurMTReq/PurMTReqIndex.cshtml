@@ -1,4 +1,6 @@
-﻿
+﻿<link rel="stylesheet" href="~/css/common_design/production-dashboard.css" asp-append-version="true" />
+
+<div class="container-fluid production-dashboard">
 <div class="card shadow-xl border-0 rounded-4 overflow-hidden">
     <div class="card-body px-3">
         <div class="row g-3 align-items-end header-wrapper rounded-3 shadow-sm">
@@ -6,39 +8,39 @@
                 <label for="lbldate" class="form-label fw-bold fs-6 mb-2">
                     <i class="bi bi-calendar3 me-1 text-primary"></i>Date
                 </label>
-                <input id="txtdate" type="text" class="form-control form-control-sm shadow-sm border-0 rounded-3 datepicker datepicker-current" />
+                <input id="txtdate" type="text" class="form-control form-control-sm datepicker datepicker-current rm-header-control" />
             </div>
             <div class="col-md-2">
                 <label for="lblCurTransNo" class="form-label fw-bold fs-6 mb-2">
                     <i class="bi bi-receipt me-1 text-info"></i>Transaction ID
                 </label>
-                <input id="txtCurTransNo" type="text" class="form-control form-control-sm shadow-sm border-0 rounded-3" />
+                <input id="txtCurTransNo" type="text" class="form-control form-control-sm rm-header-control" />
             </div>
             <div class="col-md-1">
                 <label for="lblRefNo" class="form-label fw-bold fs-6 mb-2">MTRF No</label>
-                <input id="txtRefNo" type="text" class="form-control form-control-sm shadow-sm border-0 rounded-3" placeholder="Enter MTRF No....." required />
+                <input id="txtRefNo" type="text" class="form-control form-control-sm rm-header-control" placeholder="Enter MTRF No....." required />
             </div>
             <div class="col-md-1">
-                <button id="btnOk" class="btn btn-primary btn-sm fw-bold shadow-sm lift-hover rounded-pill w-100 h-100">
+                <button id="btnOk" class="btn btn-primary btn-sm fw-bold w-100 rm-header-btn">
                     <i class="bi bi-check-lg"></i> OK
                 </button>
             </div>
-            <div class="col-md-3">
+                        <div class="col-md-3">
                 <label for="lblProjectFromList" class="form-label fw-bold fs-6 mb-2 d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-arrow-left-circle me-1 text-success"></i>From</span>
+                    <span>From</span>
                     <div class="form-check m-0 p-0">
                         <input class="form-check-input shadow-sm" type="checkbox" id="chkStock">
                     </div>
                 </label>
-                <select id="txtProjectFromList" class="form-select form-select-sm shadow-sm border-0 rounded-3">
+                <select id="txtProjectFromList" class="form-select form-select-sm rm-header-control">
                     <option value="">Select From...</option>
                 </select>
             </div>
             <div class="col-md-3">
                 <label for="lblProjectToList" class="form-label fw-bold fs-6 mb-2">
-                    <i class="bi bi-arrow-right-circle me-1 text-warning"></i>To
+                    To
                 </label>
-                <select id="txtProjectToList" class="form-select form-select-sm shadow-sm border-0 rounded-3">
+                <select id="txtProjectToList" class="form-select form-select-sm rm-header-control">
                     <option value="">Select To...</option>
                 </select>
             </div>
@@ -46,7 +48,7 @@
                 <label id="lblPreviousOrder" class="form-label fw-bold text-primary fs-6 mb-2 search-label">
                     <i class="bi bi-clock-history me-1"></i> Previous Order
                 </label>
-                <select id="txtPreviousOrder" class="form-select form-select-sm shadow-sm border-0 rounded-3">
+                <select id="txtPreviousOrder" class="form-select form-select-sm rm-header-control">
                     <option value="">Select Previous...</option>
                 </select>
             </div>
@@ -57,7 +59,7 @@
                 <label for="lblProjectResourceList" class="form-label fw-bold fs-6 mb-2">
                     <i class="bi bi-list-ul me-1 text-secondary"></i>Resource List
                 </label>
-                <select id="txtProjectResourceList" class="form-select form-select-sm shadow-sm border-0 rounded-3">
+                <select id="txtProjectResourceList" class="form-select form-select-sm rm-header-control">
                     <option value="">Select Resource...</option>
                 </select>
             </div>
@@ -65,19 +67,19 @@
                 <label for="lblProjectSpecification" class="form-label fw-bold fs-6 mb-2">
                     <i class="bi bi-gear me-1 text-info"></i>Specification
                 </label>
-                <select id="txtProjectSpecification" class="form-select form-select-sm shadow-sm border-0 rounded-3">
+                <select id="txtProjectSpecification" class="form-select form-select-sm rm-header-control">
                     <option value="">Select Spec...</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <button id="btnSelect" class="btn btn-success btn-sm px-4 fw-bold shadow-sm lift-hover rounded-pill w-100 h-100">
+                <button id="btnSelect" class="btn btn-success btn-sm px-4 fw-bold w-100 rm-header-btn">
                     <i class="bi bi-plus-circle"></i> Select
                 </button>
             </div>
             <div class="row my-2 mb-3">
-                <div id="tableContainer" class="table-responsive border p-2 rounded-3 overflow-hidden ">
-                    <table class="table table-hover mb-0 align-middle" style="table-layout:fixed; width:100%;">
-                        <thead class="table-light sticky-top border-bottom">
+                <div id="tableContainer" class="table-responsive border p-2 rounded-3">
+                    <table class="table table-hover mb-0 align-middle pm-data-table" style="table-layout:fixed; width:100%;">
+                        <thead class="sticky-top border-bottom">
                             <tr>
                                 <th style="width: 5%;">#</th>
                                 <th style="width: 30%;">Resource Description</th>
@@ -93,19 +95,20 @@
                     </table>
                 </div>
             </div>
-            <div class="narration-wrapper p-1 mt-1 rounded-3 shadow-sm border-start border-primary border-4">
+            <div class="narration-wrapper p-1 mt-1 rounded-3 shadow-sm border-start border-end border-primary border-4">
                 <label class="form-label fw-bold fs-6 mb-2" for="txtReqNarr">
                     <i class="bi bi-chat-text-fill me-2"></i>Narration
                 </label>
                 <textarea id="txtReqNarr" name="txtReqNarr" class="form-control shadow-sm border-0 rounded-3" rows="3" placeholder="Enter detailed narration for this request..."></textarea>
             </div>
         </div>
-    </div>    
+    </div> 
+    </div>
 </div>
 @section Scripts {
     <script src="~/js/j_07_rm/jspurmtreq.js" asp-append-version="true"></script>
     <script>
-        $("#txtDate").datepicker('setDate', new Date());
+        $("#txtdate").datepicker('setDate', new Date());
     </script>
     <style>
         .shadow-xl {
@@ -136,7 +139,6 @@
             }
 
         .header-wrapper {
-            border-left: 5px solid #0d6efd;
             padding: 6px 7px;
         }
             .header-wrapper #previousOrder {
