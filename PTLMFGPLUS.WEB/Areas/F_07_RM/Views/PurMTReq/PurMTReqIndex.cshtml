@@ -1,83 +1,100 @@
-﻿
-<div class="card shadow-xl border-0 rounded-4 overflow-hidden">
-    <div class="card-body px-3">
-        <div class="row g-3 align-items-end header-wrapper rounded-3 shadow-sm">
-            <div class="col-md-2">
-                <label for="lbldate" class="form-label fw-bold fs-6 mb-2">
-                    <i class="bi bi-calendar3 me-1 text-primary"></i>Date
-                </label>
-                <input id="txtdate" type="text" class="form-control form-control-sm shadow-sm border-0 rounded-3 datepicker datepicker-current" />
-            </div>
-            <div class="col-md-2">
-                <label for="lblCurTransNo" class="form-label fw-bold fs-6 mb-2">
-                    <i class="bi bi-receipt me-1 text-info"></i>Transaction ID
-                </label>
-                <input id="txtCurTransNo" type="text" class="form-control form-control-sm shadow-sm border-0 rounded-3" />
-            </div>
-            <div class="col-md-1">
-                <label for="lblRefNo" class="form-label fw-bold fs-6 mb-2">MTRF No</label>
-                <input id="txtRefNo" type="text" class="form-control form-control-sm shadow-sm border-0 rounded-3" placeholder="Enter MTRF No....." required />
-            </div>
-            <div class="col-md-1">
-                <button id="btnOk" class="btn btn-primary btn-sm fw-bold shadow-sm lift-hover rounded-pill w-100 h-100">
-                    <i class="bi bi-check-lg"></i> OK
-                </button>
-            </div>
-            <div class="col-md-3">
-                <label for="lblProjectFromList" class="form-label fw-bold fs-6 mb-2 d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-arrow-left-circle me-1 text-success"></i>From</span>
-                    <div class="form-check m-0 p-0">
-                        <input class="form-check-input shadow-sm" type="checkbox" id="chkStock">
-                    </div>
-                </label>
-                <select id="txtProjectFromList" class="form-select form-select-sm shadow-sm border-0 rounded-3">
-                    <option value="">Select From...</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="lblProjectToList" class="form-label fw-bold fs-6 mb-2">
-                    <i class="bi bi-arrow-right-circle me-1 text-warning"></i>To
-                </label>
-                <select id="txtProjectToList" class="form-select form-select-sm shadow-sm border-0 rounded-3">
-                    <option value="">Select To...</option>
-                </select>
-            </div>
-            <div class="col-md-4" id="previousOrder">
-                <label id="lblPreviousOrder" class="form-label fw-bold text-primary fs-6 mb-2 search-label">
-                    <i class="bi bi-clock-history me-1"></i> Previous Order
-                </label>
-                <select id="txtPreviousOrder" class="form-select form-select-sm shadow-sm border-0 rounded-3">
-                    <option value="">Select Previous...</option>
-                </select>
-            </div>
-        </div>
+﻿<link rel="stylesheet" href="~/css/common_design/production-dashboard.css" asp-append-version="true" />
 
-        <div id="btnOkClick" class="row g-3 align-items-end border-top border-light mt-1" style="display:none;">
-            <div class="col-md-3">
-                <label for="lblProjectResourceList" class="form-label fw-bold fs-6 mb-2">
-                    <i class="bi bi-list-ul me-1 text-secondary"></i>Resource List
-                </label>
-                <select id="txtProjectResourceList" class="form-select form-select-sm shadow-sm border-0 rounded-3">
-                    <option value="">Select Resource...</option>
-                </select>
+<div class="container-fluid production-dashboard">
+    <div class="card shadow-xl border-0 rounded-4 overflow-hidden">
+        <div class="card-body px-3">
+
+            <div class="entry-panel">
+                <div class="row g-3 align-items-end header-wrapper">
+                    <div class="col-md-2">
+                        <label for="lbldate" class="form-label fw-bold fs-6 mb-2">
+                            <i class="bi bi-calendar3 me-1 text-primary"></i>Date
+                        </label>
+                        <input id="txtdate" type="text" class="form-control form-control-sm datepicker datepicker-current rm-header-control" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="lblCurTransNo" class="form-label fw-bold fs-6 mb-2">
+                            <i class="bi bi-receipt me-1 text-info"></i>Transaction ID
+                        </label>
+                        <input id="txtCurTransNo" type="text" class="form-control form-control-sm rm-header-control" />
+                    </div>
+
+                    <div class="col-md-1">
+                        <label for="lblRefNo" class="form-label fw-bold fs-6 mb-2">MTRF No</label>
+                        <input id="txtRefNo" type="text" class="form-control form-control-sm rm-header-control" placeholder="Enter MTRF No....." required />
+                    </div>
+
+                    <div class="col-md-1">
+                        <button id="btnOk" class="btn btn-primary btn-sm fw-bold w-100 rm-header-btn">
+                            <i class="bi bi-check-lg"></i> OK
+                        </button>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="lblProjectFromList" class="form-label fw-bold fs-6 mb-2 d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-arrow-left-circle me-1 text-success"></i>From</span>
+                            <div class="form-check m-0 p-0">
+                                <input class="form-check-input shadow-sm" type="checkbox" id="chkStock">
+                            </div>
+                        </label>
+                        <select id="txtProjectFromList" class="form-select form-select-sm rm-header-control">
+                            <option value="">Select From...</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="lblProjectToList" class="form-label fw-bold fs-6 mb-2">
+                            <i class="bi bi-arrow-right-circle me-1 text-warning"></i>To
+                        </label>
+                        <select id="txtProjectToList" class="form-select form-select-sm rm-header-control">
+                            <option value="">Select To...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="btnOkClick" class="resource-row" style="display:none;">
+                    <div class="resource-field">
+                        <label for="lblProjectResourceList" class="form-label fw-bold fs-6 mb-2">
+                            <i class="bi bi-list-ul me-1 text-secondary"></i>Resource List
+                        </label>
+                        <select id="txtProjectResourceList" class="form-select form-select-sm rm-header-control">
+                            <option value="">Select Resource...</option>
+                        </select>
+                    </div>
+
+                    <div class="resource-field">
+                        <label for="lblProjectSpecification" class="form-label fw-bold fs-6 mb-2">
+                            <i class="bi bi-gear me-1 text-info"></i>Specification
+                        </label>
+                        <select id="txtProjectSpecification" class="form-select form-select-sm rm-header-control">
+                            <option value="">Select Spec...</option>
+                        </select>
+                    </div>
+
+                    <div class="resource-action">
+                        <button id="btnSelect" class="btn btn-success btn-sm px-4 fw-bold w-100 rm-header-btn">
+                            <i class="bi bi-plus-circle"></i> Select
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-3 previous-order-row">
+                    <div class="col-md-4" id="previousOrder">
+                        <label id="lblPreviousOrder" class="form-label fw-bold text-primary fs-6 mb-2 search-label">
+                            <i class="bi bi-clock-history me-1"></i> Previous Order
+                        </label>
+                        <select id="txtPreviousOrder" class="form-select form-select-sm rm-header-control">
+                            <option value="">Select Previous...</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-3">
-                <label for="lblProjectSpecification" class="form-label fw-bold fs-6 mb-2">
-                    <i class="bi bi-gear me-1 text-info"></i>Specification
-                </label>
-                <select id="txtProjectSpecification" class="form-select form-select-sm shadow-sm border-0 rounded-3">
-                    <option value="">Select Spec...</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button id="btnSelect" class="btn btn-success btn-sm px-4 fw-bold shadow-sm lift-hover rounded-pill w-100 h-100">
-                    <i class="bi bi-plus-circle"></i> Select
-                </button>
-            </div>
-            <div class="row my-2 mb-3">
-                <div id="tableContainer" class="table-responsive border p-2 rounded-3 overflow-hidden ">
-                    <table class="table table-hover mb-0 align-middle" style="table-layout:fixed; width:100%;">
-                        <thead class="table-light sticky-top border-bottom">
+
+            <div id="gridPanel" class="grid-panel">
+                <div id="tableContainer" class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle pm-data-table" style="table-layout:fixed; width:100%;">
+                        <thead class="sticky-top border-bottom">
                             <tr>
                                 <th style="width: 5%;">#</th>
                                 <th style="width: 30%;">Resource Description</th>
@@ -88,89 +105,247 @@
                                 <th style="width: 15%;">Amount</th>
                             </tr>
                         </thead>
-                        <tbody id="selectedtabledata">
-                        </tbody>
+                        <tbody id="selectedtabledata"></tbody>
                     </table>
                 </div>
             </div>
-            <div class="narration-wrapper p-1 mt-1 rounded-3 shadow-sm border-start border-primary border-4">
+
+            <div id="narrationPanel" class="narration-wrapper">
                 <label class="form-label fw-bold fs-6 mb-2" for="txtReqNarr">
                     <i class="bi bi-chat-text-fill me-2"></i>Narration
                 </label>
-                <textarea id="txtReqNarr" name="txtReqNarr" class="form-control shadow-sm border-0 rounded-3" rows="3" placeholder="Enter detailed narration for this request..."></textarea>
+                <textarea id="txtReqNarr"
+                          name="txtReqNarr"
+                          class="form-control shadow-sm border-0 rounded-3"
+                          rows="3"
+                          placeholder="Enter detailed narration for this request..."></textarea>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
+
 @section Scripts {
     <script src="~/js/j_07_rm/jspurmtreq.js" asp-append-version="true"></script>
     <script>
-        $("#txtDate").datepicker('setDate', new Date());
+        $("#txtdate").datepicker('setDate', new Date());
     </script>
     <style>
         .shadow-xl {
             box-shadow: 0 1.5rem 4rem rgba(0,0,0,0.2) !important;
         }
 
-        .bg-gradient-light {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,249,250,0.9)) !important;
-        }
-
         .lift-hover {
             transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         }
 
-            .lift-hover:hover {
-                transform: translateY(-4px) !important;
-                box-shadow: 0 12px 30px rgba(0,0,0,0.25) !important;
-            }
+        .lift-hover:hover {
+            transform: translateY(-4px) !important;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25) !important;
+        }
 
         .search-label {
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-            .search-label:hover {
-                color: #0d6efd !important;
-                text-shadow: 0 0 10px rgba(13,110,253,0.4);
-            }
+        .search-label:hover {
+            color: #0d6efd !important;
+            text-shadow: 0 0 10px rgba(13,110,253,0.4);
+        }
+
+        .entry-panel {
+            background: #ffffff;
+            border: 1px solid #dfe7f3;
+            border-radius: 14px;
+            padding: 18px 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        }
 
         .header-wrapper {
-            border-left: 5px solid #0d6efd;
-            padding: 6px 7px;
+            padding: 0;
         }
-            .header-wrapper #previousOrder {
-                transition: all 0.4s ease;
-                min-width: 0;
-            }
 
-                .header-wrapper #previousOrder[style*="display: none"],
-                .header-wrapper #previousOrder.d-none,
-                .header-wrapper #previousOrder.hidden {
-                    display: none !important;
-                    width: 0 !important;
-                    min-width: 0 !important;
-                    max-width: 0 !important;
-                    flex: 0 0 0% !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    height: 0 !important;
-                    overflow: hidden;
-                }
-        
-      
+        .header-wrapper #previousOrder {
+            transition: all 0.4s ease;
+            min-width: 0;
+        }
+
+        .header-wrapper #previousOrder[style*="display: none"],
+        .header-wrapper #previousOrder.d-none,
+        .header-wrapper #previousOrder.hidden {
+            display: none !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            flex: 0 0 0% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            height: 0 !important;
+            overflow: hidden;
+        }
+
+        .resource-row {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eef2f7;
+            grid-template-columns: minmax(260px, 1fr) minmax(240px, 1fr) minmax(160px, 240px);
+            gap: 16px;
+            align-items: end;
+        }
+
+        #btnOkClick[style*="display: flex"],
+        #btnOkClick[style*="display: block"] {
+            display: grid !important;
+        }
+
+        .resource-field,
+        .resource-action {
+            min-width: 0;
+        }
+
+        .previous-order-row {
+            margin-top: 12px;
+        }
+
+        .grid-panel,
+        .narration-wrapper {
+            display: none;
+        }
+
+        .entry-panel:has(#btnOkClick[style*="display: flex"]) + .grid-panel {
+            display: block;
+        }
+
+        .entry-panel:has(#btnOkClick[style*="display: flex"]) + .grid-panel + .narration-wrapper {
+            display: block;
+        }
+
+        .grid-panel {
+            background: #ffffff;
+            border: 1px solid #d7e2f0;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+        }
+
+        #tableContainer {
+            border: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .narration-wrapper {
+            background: #ffffff;
+            border: 1px solid #dfe7f3 !important;
+            border-left: 4px solid #0d6efd !important;
+            border-right: 4px solid #0d6efd !important;
+            border-radius: 14px;
+            padding: 14px !important;
+            margin-top: 0 !important;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+        }
+
+        [data-theme="dark"] .entry-panel,
+        [data-theme="dark"] .grid-panel,
+        [data-theme="dark"] .narration-wrapper {
+            background: #111827;
+            border-color: #334155 !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+        }
+
+        [data-theme="dark"] .entry-panel label,
+        [data-theme="dark"] .narration-wrapper label {
+            color: #f8fafc !important;
+        }
+
+        [data-theme="dark"] .resource-row {
+            border-top-color: #263449;
+        }
+
+        [data-theme="dark"] .rm-header-control,
+        [data-theme="dark"] .entry-panel .form-control,
+        [data-theme="dark"] .entry-panel .form-select,
+        [data-theme="dark"] .narration-wrapper .form-control {
+            background-color: #0f172a !important;
+            border: 1px solid #334155 !important;
+            color: #f8fafc !important;
+        }
+
+        [data-theme="dark"] .rm-header-control::placeholder,
+        [data-theme="dark"] .narration-wrapper .form-control::placeholder {
+            color: #94a3b8 !important;
+        }
+
+        [data-theme="dark"] .rm-header-control:disabled,
+        [data-theme="dark"] .rm-header-control[disabled],
+        [data-theme="dark"] .entry-panel .form-control:disabled,
+        [data-theme="dark"] .entry-panel .form-select:disabled {
+            background-color: #1e293b !important;
+            color: #cbd5e1 !important;
+            opacity: 1;
+        }
+
+        [data-theme="dark"] .entry-panel .select2-container--default .select2-selection--single {
+            background-color: #0f172a !important;
+            border-color: #334155 !important;
+            color: #f8fafc !important;
+        }
+
+        [data-theme="dark"] .entry-panel .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #f8fafc !important;
+        }
+
+        [data-theme="dark"] .entry-panel .select2-container--default.select2-container--disabled .select2-selection--single {
+            background-color: #1e293b !important;
+        }
+
+        [data-theme="dark"] .select2-dropdown {
+            background-color: #111827 !important;
+            border-color: #334155 !important;
+            color: #f8fafc !important;
+        }
+
+        [data-theme="dark"] .select2-search--dropdown .select2-search__field {
+            background-color: #0f172a !important;
+            border-color: #64748b !important;
+            color: #f8fafc !important;
+        }
+
+        [data-theme="dark"] .select2-results__option {
+            background-color: #111827 !important;
+            color: #f8fafc !important;
+        }
+
+        [data-theme="dark"] .select2-results__option--highlighted[aria-selected],
+        [data-theme="dark"] .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .select2-container--default .select2-results__option--selected {
+            background-color: #334155 !important;
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .select2-results__option[aria-disabled="true"] {
+            color: #94a3b8 !important;
+        }
 
         .card {
             min-height: calc(100vh - 120px);
         }
+
         body {
             overflow-x: hidden;
         }
+
         @@media (max-width: 768px) {
-            .header-wrapper {
+            .entry-panel {
                 padding: 1rem 0.5rem;
             }
-            
         }
     </style>
 }

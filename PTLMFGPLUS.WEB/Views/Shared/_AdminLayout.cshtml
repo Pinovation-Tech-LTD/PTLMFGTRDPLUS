@@ -1,4 +1,18 @@
 ﻿@{
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    bool IsActive(string area, string controller, string action)
+    {
+        return string.Equals(currentArea, area, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(currentAction, action, StringComparison.OrdinalIgnoreCase);
+    }
+
+    bool interfaceOpen =
+        IsActive("F_07_RM", "RawMattInterface", "InterfaceIndex")
+        || IsActive("F_13_ProdMon", "ProductionInterface", "ProductionInterfaceIndex");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +97,7 @@
                 <ul class="sidebar-menu">
 
                     <li>
-                        <a href="#" class="active">
+                        <a href="#">
                             <div class="menu-left">
                                 <i class="bi bi-house-door"></i>
                                 <span class="sidebar-text">Home</span>
@@ -115,9 +129,9 @@
                     </li>
 
                     <!-- INTERFACE -->
-                    <li class="has-submenu">
+                    <li class="has-submenu @(interfaceOpen ? "open" : "")">
 
-                        <a href="javascript:void(0)" class="submenu-toggle">
+                       <a href="javascript:void(0)" class="submenu-toggle">
                             <div class="menu-left">
                                 <i class="bi bi-grid"></i>
                                 <span class="sidebar-text">Interface</span>
@@ -127,23 +141,29 @@
                         </a>
 
                         <ul class="submenu">
-                            <li >
-                                <a asp-area="F_07_RM"
-                                   asp-controller="RawMattInterface"
-                                   asp-action="InterfaceIndex">MATERIALS TRANSFER INTERFACE</a>
-                            </li>
                             <li>
-                            <a asp-area="F_13_ProdMon"
-                               asp-controller="ProductionInterface"
-                               asp-action="ProductionInterfaceIndex"> PRODUCTION INTERFACE- FG</a>
-                        </li>
+                                <a asp-area="F_07_RM"
+                                    asp-controller="RawMattInterface"
+                                    asp-action="InterfaceIndex"
+                                    class="@(IsActive("F_07_RM", "RawMattInterface", "InterfaceIndex") ? "active" : "")">
+                                    MATERIALS TRANSFER INTERFACE
+                                </a>
+                            </li>
 
-                            <li><a href="#">Dashboard</a></li>
+                            <li>
+                                <a asp-area="F_13_ProdMon"
+                                    asp-controller="ProductionInterface"
+                                    asp-action="ProductionInterfaceIndex"
+                                    class="@(IsActive("F_13_ProdMon", "ProductionInterface", "ProductionInterfaceIndex") ? "active" : "")">
+                                    PRODUCTION INTERFACE- FG
+                                </a>
+                            </li>
+
+                             <li><a href="#">Dashboard</a></li>
                             <li><a href="#">Widgets</a></li>
                             <li><a href="#">Reports</a></li>
-                            <li><a href="#">Analytics</a></li>                            
+                            <li><a href="#">Analytics</a></li>    
                         </ul>
-
                     </li>
 
                 </ul>
