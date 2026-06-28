@@ -70,6 +70,13 @@
         background: var(--primary-color);
         color: white;
     }
+    
+
+.submenu li a.active {
+    background: var(--primary-color);
+    color: #ffffff;
+    font-weight: 600;
+}
 
 .menu-left {
     display: flex;
@@ -84,6 +91,10 @@
     border-radius: 50%;
 }
 
+.sidebar-menu a:not(.active) .menu-dot {
+    opacity: 0;
+}
+
 .submenu {
     padding-left: 20px;
     display: none;
@@ -92,6 +103,8 @@
     .submenu li a {
         padding: 12px 18px;
         font-size: 13px;
+        border-radius: 12px;
+        color: #8f96b2;
     }
 
 .has-submenu.open .submenu {

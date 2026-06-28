@@ -223,8 +223,21 @@ var PurMtReqPage = (function () {
             <i class="bi bi-check-lg"></i> New
         `);
                 var div = document.getElementById("btnOkClick");
+                var gridPanel = document.getElementById("gridPanel");
+                var narrationPanel = document.getElementById("narrationPanel");
+
                 if (div) {
-                    div.style.display = (div.style.display === "none") ? "flex" : "none";
+                    var shouldShow = div.style.display === "none";
+
+                    div.style.display = shouldShow ? "block" : "none";
+
+                    if (gridPanel) {
+                        gridPanel.style.display = shouldShow ? "block" : "none";
+                    }
+
+                    if (narrationPanel) {
+                        narrationPanel.style.display = shouldShow ? "block" : "none";
+                    }
                 }
                 $("#txtdate").prop("disabled", true);
             }
@@ -430,10 +443,23 @@ var PurMtReqPage = (function () {
         } else if (qparam === 'approved') {
             ApprovedDataLoad(mtreqnoApproved);
            
-                var div = document.getElementById("btnOkClick");
-                if (div) {
-                    div.style.display = (div.style.display === "none") ? "flex" : "none";
+            var div = document.getElementById("btnOkClick");
+            var gridPanel = document.getElementById("gridPanel");
+            var narrationPanel = document.getElementById("narrationPanel");
+
+            if (div) {
+                var shouldShow = div.style.display === "none";
+
+                div.style.display = shouldShow ? "block" : "none";
+
+                if (gridPanel) {
+                    gridPanel.style.display = shouldShow ? "block" : "none";
                 }
+
+                if (narrationPanel) {
+                    narrationPanel.style.display = shouldShow ? "block" : "none";
+                }
+            }
             
         }
     }
