@@ -15,13 +15,17 @@
             <button id="btnOk" class="btn btn-primary btn-sm">
                 Load Data
             </button>
-        </div>
-
-       
+            </div>
+            <div class="pm-toolbar-actions">
+                <button id="requisitionEntry" class="btn btn-success btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i> New Budget
+                </button>
+            </div>
+        </div>       
     </div>
 
     <div class="pm-kpi-grid" id="interfacevalue">
-        <div class="pm-kpi-card" id="requisitionDiv">
+        <div class="pm-kpi-card" id="requestsDiv">
             <div class="pm-kpi-title">Requests</div>
             <div class="pm-kpi-value text-primary" id="reqQty"></div>
             <div class="pm-kpi-bar bg-primary"></div>
@@ -33,44 +37,44 @@
             <div class="pm-kpi-bar bg-warning"></div>
         </div>
 
-        <div class="pm-kpi-card" id="storeIssueDiv">
+        <div class="pm-kpi-card" id="materialIssueDiv">
             <div class="pm-kpi-title">Material Issues</div>
-            <div class="pm-kpi-value text-info" id="storeIssueQty"></div>
+            <div class="pm-kpi-value text-info" id="materialIssueQty"></div>
             <div class="pm-kpi-bar bg-info"></div>
         </div>
 
-        <div class="pm-kpi-card" id="storeReceiveDiv">
+        <div class="pm-kpi-card" id="issueAppDiv">
             <div class="pm-kpi-title">Issue Approved</div>
-            <div class="pm-kpi-value text-success" id="storeRecvQty"></div>
+            <div class="pm-kpi-value text-success" id="issueApprQty"></div>
             <div class="pm-kpi-bar bg-success"></div>
         </div>
 
-        <div class="pm-kpi-card" id="mattTransferedDiv">
+        <div class="pm-kpi-card" id="matTransferedDiv">
             <div class="pm-kpi-title">In Process</div>
             <div class="pm-kpi-value text-danger" id="mattTransQty"></div>
             <div class="pm-kpi-bar bg-danger"></div>
         </div>  
-        <div class="pm-kpi-card" id="ProEntryProdIntDiv">
+        <div class="pm-kpi-card" id="ProEntryProdDiv">
             <div class="pm-kpi-title">Pro. Entry</div>
             <div class="pm-kpi-value text-danger" id="ProEntryProdIntQty"></div>
             <div class="pm-kpi-bar bg-danger"></div>
         </div>  
-        <div class="pm-kpi-card" id="QcProdIntDiv">
+        <div class="pm-kpi-card" id="QcEntryDiv">
             <div class="pm-kpi-title">QC</div>
             <div class="pm-kpi-value text-danger" id="QcProdIntQty"></div>
             <div class="pm-kpi-bar bg-danger"></div>
         </div>  
-        <div class="pm-kpi-card" id="FgReceiveProdIntDiv">
+        <div class="pm-kpi-card" id="FgReceiveProdDiv">
             <div class="pm-kpi-title">FG Receive</div>
             <div class="pm-kpi-value text-danger" id="FgReceiveProdIntQty"></div>
             <div class="pm-kpi-bar bg-danger"></div>
         </div>  
-        <div class="pm-kpi-card" id="WhReceiveProdIntDiv">
+        <div class="pm-kpi-card" id="WhReceiveProdDiv">
             <div class="pm-kpi-title">WH Receive</div>
             <div class="pm-kpi-value text-danger" id="WhReceiveProdIntQty"></div>
             <div class="pm-kpi-bar bg-danger"></div>
         </div>  
-        <div class="pm-kpi-card" id="CompletedProdIntDiv">
+        <div class="pm-kpi-card" id="CompletedProdDiv">
             <div class="pm-kpi-title">Completed</div>
             <div class="pm-kpi-value text-danger" id="CompletedProdIntQty"></div>
             <div class="pm-kpi-bar bg-danger"></div>
@@ -114,16 +118,15 @@
 
                 <thead>
                     <tr>
-                        <th style="width:50px;">#</th>
-                        <th style="width:140px;">Req. No</th>
-                        <th style="width:120px;">Req. Date</th>
-                        <th style="width:120px;">Matt. Ref</th>
-                        <th style="width:240px;">Trans. From</th>
-                        <th style="width:240px;">Trans. To</th>
-                        <th style="width:200px;">Note</th>
-                        <th style="width:100px;">Req. Qty</th>
-                        <th style="width:120px;">Total Amount</th>
-                        <th style="width:100px;">Posted By</th>
+                    <th>#</th>
+                    <th>Budget Number</th>
+                    <th>Date</th>
+                    <th>Product Name</th>
+                    <th>Item Count</th>
+                    <th>Budgeted Qty</th>
+                    <th>Budgeted Amount</th>
+                    <th>Budget Balance</th>
+                    <th>WIP Name</th>
                     </tr>
                 </thead>
 
@@ -131,7 +134,7 @@
             </table>
         </div>
 
-        <div id="tableContainerstoreissue"
+        <div id="tableContainerMaterialissue"
              class="table-responsive w-100"
              style="display:none;">
 
@@ -141,24 +144,22 @@
                 <thead>
                     <tr>
                         <th style="width:50px;">#</th>
-                        <th style="width:140px;">Req. No</th>
-                        <th style="width:120px;">Req. Date</th>
-                        <th style="width:120px;">Matt. Ref</th>
-                        <th style="width:240px;">Trans. From</th>
-                        <th style="width:240px;">Trans. To</th>
-                        <th style="width:200px;">Note</th>
-                        <th style="width:100px;">Req. Qty</th>
-                        <th style="width:120px;">Req. Amount</th>
-                        <th style="width:120px;">Gate Pass Bal</th>
-                        <th style="width:100px;">Posted By</th>
+                        <th style="width:140px;">Budget No</th>
+                        <th style="width:120px;">Req. No</th>
+                        <th style="width:120px;">Date</th>
+                        <th style="width:240px;">Batch No</th>
+                        <th style="width:240px;">Req. Qty</th>
+                        <th style="width:200px;">Item Count</th>
+                        <th style="width:100px;">Bal. Issue Item</th>
+                        <th style="width:120px;">Current Status</th>                        
                     </tr>
                 </thead>
 
-                <tbody id="selectedtabledatastoreissue"></tbody>
+                <tbody id="selectedtabledataMaterialissue"></tbody>
             </table>
         </div>
 
-        <div id="tableContainerstorereceive"
+        <div id="tableContainerIssueAppr"
              class="table-responsive w-100"
              style="display:none;">
 
@@ -168,23 +169,44 @@
                 <thead>
                     <tr>
                         <th style="width:50px;">#</th>
-                        <th style="width:140px;">Req. No</th>
-                        <th style="width:150px;">Get Pass. No</th>
-                        <th style="width:120px;">Req. Date</th>
-                        <th style="width:100px;">Matt. Ref</th>
-                        <th style="width:240px;">Trans. From</th>
-                        <th style="width:240px;">Trans. To</th>
-                        <th style="width:180px;">Note</th>
-                        <th style="width:100px;">Req. Qty</th>
-                        <th style="width:120px;">Req. Amount</th>
-                        <th style="width:120px;">Gate Pass Qty</th>
-                        <th style="width:120px;">Transfer Bal</th>
-                        <th style="width:100px;">Posted By</th>
-                        <th style="width:120px;"></th>
+                        <th style="width:140px;">Issue No</th>
+                        <th style="width:150px;">Issue Date</th>
+                        <th style="width:120px;">Req. No</th>
+                        <th style="width:100px;">Store Name</th>
+                        <th style="width:240px;">Batch</th>
+                        <th style="width:240px;">Req. Qty</th>
+                        <th style="width:180px;">Issue Qty</th>
+                        <th style="width:100px;">Mat. Issue Qty</th>
+
                     </tr>
                 </thead>
 
-                <tbody id="selectedtabledatastorereceive"></tbody>
+            <tbody id="selectedtabledataIssueAppr"></tbody>
+            </table>
+        </div>
+    <div id="tableContainermatTransfered"
+             class="table-responsive w-100"
+             style="display:none;">
+
+            <table class="table table-hover align-middle mb-0 text-nowrap"
+                   style="min-width:1500px;">
+
+                <thead>
+                    <tr>
+                        <th style="width:50px;">#</th>
+                    <th style="width:140px;">Budget No</th>
+                    <th style="width:150px;">Req. No</th>
+                        <th style="width:120px;">Date</th>
+                    <th style="width:100px;">Batch No</th>
+                    <th style="width:240px;">Item Name</th>
+                        <th style="width:240px;">Item Count</th>
+                        <th style="width:180px;">Req. Qty</th>
+                    <th style="width:100px;"> Bal. Item</th>
+
+                    </tr>
+                </thead>
+
+            <tbody id="selectedtabledatamattransfered"></tbody>
             </table>
         </div>
 
@@ -216,7 +238,126 @@
                 <tbody id="selectedtabledatamatttransfer"></tbody>
             </table>
         </div>
-    </div>
+        <div id="tableContainerProentry"
+             class="table-responsive w-100"
+             style="display:none;">
+
+            <table class="table table-hover align-middle mb-0 text-nowrap"
+                   style="min-width:1600px;">
+
+                <thead>
+                    <tr>
+                        <th style="width:50px;">#</th>
+                        <th style="width:140px;">Budget No</th>
+                        <th style="width:150px;">Date</th>
+                        <th style="width:100px;">Product Name</th>
+                        <th style="width:120px;">Batch Name</th>
+                        <th style="width:100px;">Item Count</th>
+                        <th style="width:240px;">Budget Qty</th>
+                        <th style="width:240px;">Prod. Bal Qty</th>
+                        <th style="width:100px;">Production Amount</th>
+                        <th style="width:100px;">Current Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="selectedtabledataproentry"></tbody>
+            </table>
+        </div>
+        <div id="tableContainerQcEntry"
+             class="table-responsive w-100"
+             style="display:none;">
+
+            <table class="table table-hover align-middle mb-0 text-nowrap"
+                   style="min-width:1600px;">
+
+                <thead>
+                    <tr>
+                        <th style="width:50px;">#</th>
+                        <th style="width:140px;">Budget No</th>
+                        <th style="width:150px;">Production No</th>
+                        <th style="width:150px;">Date</th>
+                        <th style="width:120px;">Batch Name</th>
+                        <th style="width:100px;">Item Count</th>
+                        <th style="width:240px;">Production Qty</th>
+                        <th style="width:100px;">Production Amount</th>
+                        <th style="width:100px;">Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="selectedtabledataqcentry"></tbody>
+            </table>
+        </div>
+        <div id="tableContainerFgReceive"
+             class="table-responsive w-100"
+             style="display:none;">
+
+            <table class="table table-hover align-middle mb-0 text-nowrap"
+                   style="min-width:1600px;">
+
+                <thead>
+                    <tr>
+                        <th style="width:50px;">#</th>
+                        <th style="width:140px;">Receive No</th>
+                        <th style="width:150px;">Receive Date</th>
+                        <th style="width:150px;">Qc Number</th>
+                        <th style="width:120px;">Batch Name</th>
+                        <th style="width:100px;">Item Count</th>
+                        <th style="width:240px;">Receive Qty</th>
+                        <th style="width:100px;">Receive Amount</th>
+                        <th style="width:100px;">type</th>
+                    </tr>
+                </thead>
+
+                <tbody id="selectedtabledatafgreceive"></tbody>
+            </table>
+        </div>
+
+        <div id="tableContainerWhReceive"
+             class="table-responsive w-100"
+             style="display:none;">
+
+            <table class="table table-hover align-middle mb-0 text-nowrap"
+                   style="min-width:1600px;">
+
+                <thead>
+                    <tr>
+                    <th style="width:50px;">#</th>
+                    <th style="width:140px;">Receive No</th>
+                    <th style="width:150px;">Receive Date</th>
+                    <th style="width:150px;">Qc Number</th>
+                    <th style="width:120px;">Batch Name</th>
+                    <th style="width:100px;">Item Count</th>
+                    <th style="width:240px;">Receive Qty</th>
+                    <th style="width:100px;">Receive Amount</th>
+                    <th style="width:100px;">type</th>
+                    </tr>
+                </thead>
+
+                <tbody id="selectedtabledatawhreceive"></tbody>
+            </table>
+        </div>
+    <div id="tableContainerCompletedProd"
+             class="table-responsive w-100"
+             style="display:none;">
+
+            <table class="table table-hover align-middle mb-0 text-nowrap"
+                   style="min-width:1600px;">
+
+                <thead>
+                    <tr>
+                    <th style="width:50px;">#</th>
+                    <th style="width:140px;">Budget No</th>
+                    <th style="width:150px;">Date</th>
+                    <th style="width:150px;">Item Count</th>
+                    <th style="width:120px;">budgeted Qty</th>
+                    <th style="width:100px;">budgeted Amount</th>
+                    <th style="width:240px;">Current Status</th>
+                    </tr>
+                </thead>
+
+            <tbody id="selectedtabledatacompletedprod"></tbody>
+            </table>
+        </div>
 
 </div>
 

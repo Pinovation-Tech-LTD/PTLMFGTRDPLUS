@@ -78,32 +78,31 @@ var ProductionInterfacePage = (function () {
                 tbody.innerHTML += `
             <tr>
                 <td class="fs-6">${index + 1}</td>
-                <td class="fs-6">${item.mtreqno}</td>                
+                <td class="fs-6">${item.pbmno1}</td>                
                 <td class="fs-6">
-    ${new Date(item.mtrdat).toLocaleDateString('en-GB', {
+    ${new Date(item.bgddat).toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: 'short',
                     year: 'numeric'
                 })}
 </td>
-                <td class="fs-6">${item.mtrref}</td> 
-                <td class="fs-6">${item.tfpactdesc}</td> 
-                <td class="fs-6">${item.ttpactdesc}</td> 
-                <td class="fs-6">${item.mtrnar}</td> 
-                <td class="fs-6">${item.tqty}</td> 
-                <td class="fs-6">${item.tamt}</td>                
-                <td class="fs-6">${item.postedusr}</td>   
+                <td class="fs-6">${item.prodesc}</td> 
+                <td class="fs-6">${item.itemcount}</td> 
+                <td class="fs-6">${item.bgdwqty}</td> 
+                <td class="fs-6">${item.bgdamt}</td> 
+                <td class="fs-6">${item.bgdbal}</td> 
+                <td class="fs-6">${item.actdesc}</td>               
                 <td>
                     <div class="btn-group btn-group-sm">
-                        <button class="btn btn-success btn-confirm" data-mtreqno="${item.mtreqno}"  title="Confirm">
+                        <button class="btn btn-success btn-confirm" data-mtreqno="${item.pbmno}"  title="Confirm">
                             <i class="bi bi-check-lg"></i>
                         </button>
 
-                        <button class="btn btn-primary btn-edit" data-mtreqno="${item.mtreqno}"  title="Edit">
+                        <button class="btn btn-primary btn-edit" data-mtreqno="${item.pbmno}"  title="Edit">
                             <i class="bi bi-pencil-square"></i>
                         </button>
 
-                        <button class="btn btn-danger btn-delete" data-mtreqno="${item.mtreqno}"  title="Delete">
+                        <button class="btn btn-danger btn-delete" data-mtreqno="${item.pbmno}"  title="Delete">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -113,29 +112,27 @@ var ProductionInterfacePage = (function () {
             });
         },
         renderRequisitionStoreIssue(items) {
-            const tbody = document.getElementById('selectedtabledatastoreissue');
+            const tbody = document.getElementById('selectedtabledataMaterialissue');
             tbody.innerHTML = '';
             console.log(items);
             items.forEach((item, index) => {
                 tbody.innerHTML += `
             <tr>
                 <td class="fs-6">${index + 1}</td>
-                <td class="fs-6">${item.mtreqno}</td>                
-                <td class="fs-6">
-    ${new Date(item.mtrdat).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                })}
+                <td class="fs-6">${item.pbmno1}</td>               
+                <td class="fs-6">${item.preqno1}</td> 
+                 <td class="fs-6">
+    ${new Date(item.pbdate).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    })}
 </td>
-                <td class="fs-6">${item.mtrref}</td> 
-                <td class="fs-6">${item.tfpactdesc}</td> 
-                <td class="fs-6">${item.ttpactdesc}</td> 
-                <td class="fs-6">${item.mtrnar}</td> 
-                <td class="fs-6">${item.tqty}</td> 
-                <td class="fs-6">${item.tamt}</td>                
-                <td class="fs-6">${item.gatpbal}</td>                
-                <td class="fs-6">${item.postedusr}</td>   
+                <td class="fs-6">${item.batchdesc}</td> 
+                <td class="fs-6">${item.fgreqqty}</td> 
+                <td class="fs-6">${item.trescount}</td> 
+                <td class="fs-6">${item.rcount}</td> 
+                <td class="fs-6">${item.isstatus}</td>               
                 <td>
                     <div class="btn-group btn-group-sm">
                         <button class="btn btn-success btn-confirm" data-mtreqno="${item.mtreqno}"  title="Confirm">
@@ -150,38 +147,253 @@ var ProductionInterfacePage = (function () {
         `;
             });
         },
-        renderRequisitionStoreReceive(items) {
-            const tbody = document.getElementById('selectedtabledatastorereceive');
+        renderRequisitionIssueApprove(items) {
+            const tbody = document.getElementById('selectedtabledataIssueAppr');
             tbody.innerHTML = '';
             console.log(items);
             items.forEach((item, index) => {
                 tbody.innerHTML += `
             <tr>
                 <td class="fs-6">${index + 1}</td>
-                <td class="fs-6">${item.mtreqno}</td>                
-                <td class="fs-6">${item.getpno}</td>                
+                <td class="fs-6">${item.misuno1}</td>                            
                <td class="fs-6">
-    ${new Date(item.mtrdat).toLocaleDateString('en-GB', {
+    ${new Date(item.misudate).toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: 'short',
                     year: 'numeric'
                 })}
 </td>
-                <td class="fs-6">${item.mtrref}</td> 
-                <td class="fs-6">${item.tfpactdesc}</td> 
-                <td class="fs-6">${item.ttpactdesc}</td> 
-                <td class="fs-6">${item.mtrnar}</td> 
-                <td class="fs-6">${item.tqty}</td> 
-                <td class="fs-6">${item.tamt}</td>                
-                <td class="fs-6">${item.gatpqty}</td>                
-                <td class="fs-6">${item.trnbal}</td>                
-                <td class="fs-6">${item.postedusr}</td>   
+                <td class="fs-6">${item.preqno1}</td> 
+                <td class="fs-6">${item.actdesc}</td> 
+                <td class="fs-6">${item.batchdesc}</td> 
+                <td class="fs-6">${item.fgreqqty}</td> 
+                <td class="fs-6">${item.fgisuqty}</td> 
+                <td class="fs-6">${item.isuqty}</td>                
                 <td>
                     <div class="btn-group btn-group-sm">
                         <button class="btn btn-success btn-confirm" data-getpno="${item.getpno}"  title="Confirm">
                             <i class="bi bi-check-lg"></i>
                         </button>
                         <button class="btn btn-danger btn-delete" data-getpno="${item.getpno}"  title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            });
+        },
+        renderRequisitionProEntry(items) {
+            const tbody = document.getElementById('selectedtabledataproentry');
+            tbody.innerHTML = '';
+            console.log(items);
+            items.forEach((item, index) => {
+                tbody.innerHTML += `
+            <tr>
+                <td class="fs-6">${index + 1}</td>
+                <td class="fs-6">${item.pbmno1}</td>                            
+               <td class="fs-6">
+    ${new Date(item.pbdate).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                })}
+</td>
+                <td class="fs-6">${item.prodesc}</td> 
+                <td class="fs-6">${item.batchdesc}</td> 
+                <td class="fs-6">${item.itemcount}</td> 
+                <td class="fs-6">${item.acqty}</td> 
+                <td class="fs-6">${item.balqty}</td> 
+                <td class="fs-6">${item.proamt}</td>                
+                <td class="fs-6">${item.proatatus}</td>                
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success btn-confirm" data-getpno="${item.getpno}"  title="Confirm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-danger btn-delete" data-getpno="${item.getpno}"  title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            });
+        },
+        renderRequisitionQcEntry(items) {
+            const tbody = document.getElementById('selectedtabledataqcentry');
+            tbody.innerHTML = '';
+            console.log(items);
+            items.forEach((item, index) => {
+                tbody.innerHTML += `
+            <tr>
+                <td class="fs-6">${index + 1}</td>
+                <td class="fs-6">${item.pbmno1}</td>                           
+                <td class="fs-6">${item.prodid}</td> 
+                <td class="fs-6">
+                    ${new Date(item.prodate).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    })}
+                </td>
+                <td class="fs-6">${item.prodesc}</td> 
+                <td class="fs-6">${item.batchdesc}</td> 
+                <td class="fs-6">${item.itemcount}</td> 
+                <td class="fs-6">${item.balqty}</td> 
+                <td class="fs-6">${item.proamt}</td>                
+                <td class="fs-6">${item.pstatus}</td>                
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success btn-confirm" data-getpno="${item.pbmno}"  title="Confirm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-danger btn-delete" data-getpno="${item.pbmno}"  title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            });
+        },
+        renderRequisitionFgReceive(items) {
+            const tbody = document.getElementById('selectedtabledatafgreceive');
+            tbody.innerHTML = '';
+            console.log(items);
+            items.forEach((item, index) => {
+                tbody.innerHTML += `
+            <tr>
+                <td class="fs-6">${index + 1}</td>
+                <td class="fs-6">${item.prodid}</td>                           
+                <td class="fs-6">
+                    ${new Date(item.prodate).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    })}
+                </td>
+                <td class="fs-6">${item.grrno}</td> 
+                <td class="fs-6">${item.batchdesc}</td> 
+                <td class="fs-6">${item.itemcount}</td> 
+                <td class="fs-6">${item.proqty}</td> 
+                <td class="fs-6">${item.proamt}</td>                
+                <td class="fs-6">${item.rcvtype}</td>                
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success btn-confirm" data-getpno="${item.pbmno}"  title="Confirm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-danger btn-delete" data-getpno="${item.pbmno}"  title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            });
+        }
+        ,
+        renderRequisitionWhReceive(items) {
+            const tbody = document.getElementById('selectedtabledatawhreceive');
+            tbody.innerHTML = '';
+            console.log(items);
+            items.forEach((item, index) => {
+                tbody.innerHTML += `
+            <tr>
+                <td class="fs-6">${index + 1}</td>
+                <td class="fs-6">${item.prodid}</td>                           
+                <td class="fs-6">
+                    ${new Date(item.prodate).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    })}
+                </td>
+                <td class="fs-6">${item.grrno}</td> 
+                <td class="fs-6">${item.batchdesc}</td> 
+                <td class="fs-6">${item.itemcount}</td> 
+                <td class="fs-6">${item.proqty}</td> 
+                <td class="fs-6">${item.proamt}</td>                
+                <td class="fs-6">${item.rcvtype}</td> 
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success btn-confirm" data-getpno="${item.pbmno}"  title="Confirm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-danger btn-delete" data-getpno="${item.pbmno}"  title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            });
+        }
+        ,
+        renderRequisitionmatTransfered(items) {
+            const tbody = document.getElementById('selectedtabledatamattransfered');
+            tbody.innerHTML = '';
+            console.log(items);
+            items.forEach((item, index) => {
+                tbody.innerHTML += `
+            <tr>
+                <td class="fs-6">${index + 1}</td>
+                <td class="fs-6">${item.pbno}</td>                           
+                <td class="fs-6">${item.preqno}</td> 
+                <td class="fs-6">
+                    ${new Date(item.pbdate).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    })}
+                </td>
+                <td class="fs-6">${item.batchdesc}</td> 
+                <td class="fs-6">${item.rsirdesc}</td> 
+                <td class="fs-6">${item.itemcount}</td> 
+                <td class="fs-6">${item.acqty}</td>                
+                <td class="fs-6">${item.processbal}</td> 
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success btn-confirm" data-getpno="${item.pbmno}"  title="Confirm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-danger btn-delete" data-getpno="${item.pbmno}"  title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+            });
+        }
+        ,
+        renderRequisitionCompletedProd(items) {
+            const tbody = document.getElementById('selectedtabledatacompletedprod');
+            tbody.innerHTML = '';
+            console.log(items);
+            items.forEach((item, index) => {
+                tbody.innerHTML += `
+            <tr>
+                <td class="fs-6">${index + 1}</td>
+                <td class="fs-6">${item.pbmno1}</td>                           
+                <td class="fs-6">
+                    ${new Date(item.bgddat).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    })}
+                </td>
+                <td class="fs-6">${item.itemcount}</td> 
+                <td class="fs-6">${item.bgdwqty}</td> 
+                <td class="fs-6">${item.bgdamt}</td> 
+                <td class="fs-6">${item.pbmststus}</td>                
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success btn-confirm" data-getpno="${item.pbmno}"  title="Confirm">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-danger btn-delete" data-getpno="${item.pbmno}"  title="Delete">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -205,7 +417,7 @@ var ProductionInterfacePage = (function () {
         });
         $("#btnFooterSave").on("click", async function () {
         });
-        $("#requisitionDiv").on("click", async function () {
+        $("#requestsDiv").on("click", async function () {
             state.selectedInterface = "requisition";
             loadTableInterface();
         });
@@ -213,16 +425,39 @@ var ProductionInterfacePage = (function () {
             state.selectedInterface = "reqApproved";
             loadReqApprovedData();
         });
-        $("#storeIssueDiv").on("click", async function () {
-            state.selectedInterface = "storeissue";
-            loadGpassData();
-
+        $("#materialIssueDiv").on("click", async function () {
+            state.selectedInterface = "materialissue";
+            loadMateIssueData();
         });
-        $("#storeReceiveDiv").on("click", async function () {
-            state.selectedInterface = "storerecive";
-            loadStoreReceiveData();
-
+        $("#issueAppDiv").on("click", async function () {
+            state.selectedInterface = "issueapprove";
+            loadIssueApprData();
         });
+        $("#matTransferedDiv").on("click", async function () {
+            state.selectedInterface = "mattransfered";
+            loadmatTransferedData();
+        });
+        $("#ProEntryProdDiv").on("click", async function () {
+            state.selectedInterface = "proentry";
+            loadProEntryData();
+        });
+        $("#QcEntryDiv").on("click", async function () {
+            state.selectedInterface = "qcproduction";
+            loadQcEntryData();
+        });
+        $("#FgReceiveProdDiv").on("click", async function () {
+            state.selectedInterface = "fgreceive";
+            loadFgReceiveData();
+        });
+        $("#WhReceiveProdDiv").on("click", async function () {
+            state.selectedInterface = "whreceive";
+            loadWhReceiveData();
+        });
+        $("#CompletedProdDiv").on("click", async function () {
+            state.selectedInterface = "completedprod";
+            loadCompletedProdData();
+        });
+
 
         $(document).on("click", ".btn-confirm", function () {
             let mtreqno = $(this).data("mtreqno");
@@ -257,57 +492,203 @@ var ProductionInterfacePage = (function () {
         state.interfacedata = result;
         loadQtyInterface();
     }
-    async function loadGpassData() {
+    async function loadMateIssueData() {
         if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
             alert("No data found");
             return;
         }
         let data = state.interfacedata.item1 || [];
-        let filterdata = data.filter(x =>
-            Number(x.gatpbal) !== 0 &&
-            x.approved &&
-            x.approved.trim().toUpperCase() === "OK"
-        );
-        ui.renderRequisitionStoreIssue(filterdata);
-        document.getElementById("tableContainerstorereceive").style.display = "none";
-        document.getElementById("tableContainerstoreissue").style.display = "table";
+        // let filterdata = data.filter(x =>
+        //     Number(x.gatpbal) !== 0 &&
+        //     x.approved &&
+        //     x.approved.trim().toUpperCase() === "OK"
+        // );
+        ui.renderRequisitionStoreIssue(data);
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "table";
         document.getElementById("tableContainerReqApp").style.display = "none";
         document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "none";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
+
     }
-    async function loadStoreReceiveData() {
-        if (!state.interfacedata.item2 || state.interfacedata.item1.length === 0) {
+    async function loadIssueApprData() {
+        if (!state.interfacedata.item6 || state.interfacedata.item6.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item6 || [];
+       
+        ui.renderRequisitionIssueApprove(data);
+        document.getElementById("tableContainerIssueAppr").style.display = "table";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "none";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
+
+    }
+    async function loadmatTransferedData() {
+        if (!state.interfacedata.item5 || state.interfacedata.item5.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item5 || [];
+       
+        ui.renderRequisitionmatTransfered(data);
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "none";
+        document.getElementById("tableContainermatTransfered").style.display = "table";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
+
+    }
+    async function loadProEntryData() {
+        if (!state.interfacedata.item2 || state.interfacedata.item2.length === 0) {
             alert("No data found");
             return;
         }
         let data = state.interfacedata.item2 || [];
-        let filterdata = data.filter(x =>
-            Number(x.gatpqty) > 0 && Number(x.trnbal) > 0
-        );
-        ui.renderRequisitionStoreReceive(filterdata);
-        document.getElementById("tableContainerstorereceive").style.display = "table";
-        document.getElementById("tableContainerstoreissue").style.display = "none";
+       
+        ui.renderRequisitionProEntry(data);
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
         document.getElementById("tableContainerReqApp").style.display = "none";
         document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "table";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "none";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
+
     }
-    async function loadReqApprovedData() {
-        if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
+    async function loadQcEntryData() {
+        if (!state.interfacedata.item3 || state.interfacedata.item3.length === 0) {
             alert("No data found");
             return;
         }
-        let data = state.interfacedata.item1 || [];
-        let filterdata = data.filter(x => x.approved.trim().toUpperCase() !== "OK");
+        let data = state.interfacedata.item3 || [];
+       
+        ui.renderRequisitionQcEntry(data);
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "table";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "none";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
+
+    }
+    async function loadFgReceiveData() {
+        if (!state.interfacedata.item4 || state.interfacedata.item4.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item4 || [];
+        let filterdata = data.filter(x => x.qcapprove === '');
+        ui.renderRequisitionFgReceive(filterdata);
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "table";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
+
+    }
+    async function loadWhReceiveData() {
+        if (!state.interfacedata.item4 || state.interfacedata.item4.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item4 || [];
+        let filterdata = data.filter(x => x.qcapprove !== '');
+        ui.renderRequisitionWhReceive(filterdata);
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "table";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
+
+    }
+    async function loadCompletedProdData() {
+        if (!state.interfacedata.item0 || state.interfacedata.item0.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item0 || [];
+        let filterdata = data.filter(x => x.pbmststus === "Complete");   
+        if (!filterdata || filterdata.length === 0) {
+            alert("No data found");
+            return;
+        }
+        ui.renderRequisitionCompletedProd(filterdata);
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
+        document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "none";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "table";
+    }
+    async function loadReqApprovedData() {
+        if (!state.interfacedata.item0 || state.interfacedata.item0.length === 0) {
+            alert("No data found");
+            return;
+        }
+        let data = state.interfacedata.item0 || [];
+        let filterdata = data.filter(x => x.pbmststus === "Requsition");
         ui.renderRequisitionApprovedTable(filterdata);
-        document.getElementById("tableContainerstorereceive").style.display = "none";
-        document.getElementById("tableContainerstoreissue").style.display = "none";
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
         document.getElementById("tableContainerReqApp").style.display = "table";
         document.getElementById("tableContainerReq").style.display = "none";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "none";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
+
     }
     async function loadQtyInterface() {
         ui.setValue("reqQty", Number(state.interfacedata.item7[0].reqqty));
         ui.setValue("reqApprQty", Number(state.interfacedata.item7[0].proreqqty));
-        ui.setValue("storeIssueQty", Number(state.interfacedata.item7[0].issueqty));
-        ui.setValue("storeRecvQty", Number(state.interfacedata.item7[0].isuapqty));
+        ui.setValue("materialIssueQty", Number(state.interfacedata.item7[0].issueqty));
+        ui.setValue("issueApprQty", Number(state.interfacedata.item7[0].isuapqty));
         ui.setValue("mattTransQty", Number(state.interfacedata.item7[0].procsqty));
+        ui.setValue("ProEntryProdIntQty",Number(state.interfacedata.item7[0].prodqty))
+        ui.setValue("QcProdIntQty",Number(state.interfacedata.item7[0].qcqty))
+        ui.setValue("FgReceiveProdIntQty",Number(state.interfacedata.item7[0].florcv))
+        ui.setValue("WhReceiveProdIntQty", Number(state.interfacedata.item7[0].strecqty))
+        ui.setValue("CompletedProdIntQty", Number(state.interfacedata.item7[0].compqty))
     }
     async function loadTableInterface() {
         if (!state.interfacedata.item0 || state.interfacedata.item0.length === 0) {
@@ -315,10 +696,16 @@ var ProductionInterfacePage = (function () {
             return;
         }
         ui.renderRequisitionTable(state.interfacedata.item0);
-        document.getElementById("tableContainerstorereceive").style.display = "none";
-        document.getElementById("tableContainerReq").style.display = "table";
-        document.getElementById("tableContainerstoreissue").style.display = "none";
+        document.getElementById("tableContainerIssueAppr").style.display = "none";
+        document.getElementById("tableContainerMaterialissue").style.display = "none";
         document.getElementById("tableContainerReqApp").style.display = "none";
+        document.getElementById("tableContainerReq").style.display = "table";
+        document.getElementById("tableContainerProentry").style.display = "none";
+        document.getElementById("tableContainerQcEntry").style.display = "none";
+        document.getElementById("tableContainerFgReceive").style.display = "none";
+        document.getElementById("tableContainerWhReceive").style.display = "none";
+        document.getElementById("tableContainermatTransfered").style.display = "none";
+        document.getElementById("tableContainerCompletedProd").style.display = "none";
 
 
     }
