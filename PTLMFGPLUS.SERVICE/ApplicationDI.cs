@@ -15,11 +15,18 @@ namespace PTLMFGPLUS.SERVICE
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<Icomperm, compermService>();
+            
+            //MATERIAL TRANSFER INTERFACE
             services.AddScoped<IPurMTReqService, PurMTReqService>();
             services.AddScoped<IRawMattInterfaceService, RawMattInterfaceService>();
             services.AddScoped< IPurMTReqGatePassService, PurMTReqGatePassService>();
             services.AddScoped<IMaterialsTransferService, MaterialsTransferService>();
+
+            //PRODUCTION INTERFACE
             services.AddScoped<IProductionInterfaceService, ProductionInterfaceService>();
+            services.AddScoped<IProdBudgetService, ProdBudgetService>();
+
+
             return services;
         }
     }
