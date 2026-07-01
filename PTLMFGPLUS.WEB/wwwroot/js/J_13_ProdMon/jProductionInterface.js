@@ -476,7 +476,7 @@ var ProductionInterfacePage = (function () {
 
         });
         $("#requisitionEntry").on("click", async function () {
-            window.open(`/F_13_ProdMon/ProdBudget/ProdBudgetIndex?type=entry`, '_blank');
+            window.open(`/F_13_ProdMon/ProdBudget/ProdBudgetIndex?type=Entry`, '_blank');
         });
     }
     async function loadInterfaceQtyData() {
