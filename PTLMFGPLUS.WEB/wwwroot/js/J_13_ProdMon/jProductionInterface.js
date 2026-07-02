@@ -487,14 +487,14 @@ var ProductionInterfacePage = (function () {
 
         const result = await service.loadInterfaceData(formatfrmdate, formattodate);
         if (result === null) {
-            alert("Data Not Found");
+            Notifications.Toastr.error("No data Found");
         }
         state.interfacedata = result;
         loadQtyInterface();
     }
     async function loadMateIssueData() {
         if (!state.interfacedata.item1 || state.interfacedata.item1.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item1 || [];
@@ -518,7 +518,7 @@ var ProductionInterfacePage = (function () {
     }
     async function loadIssueApprData() {
         if (!state.interfacedata.item6 || state.interfacedata.item6.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item6 || [];
@@ -538,7 +538,7 @@ var ProductionInterfacePage = (function () {
     }
     async function loadmatTransferedData() {
         if (!state.interfacedata.item5 || state.interfacedata.item5.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item5 || [];
@@ -558,7 +558,7 @@ var ProductionInterfacePage = (function () {
     }
     async function loadProEntryData() {
         if (!state.interfacedata.item2 || state.interfacedata.item2.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item2 || [];
@@ -578,7 +578,7 @@ var ProductionInterfacePage = (function () {
     }
     async function loadQcEntryData() {
         if (!state.interfacedata.item3 || state.interfacedata.item3.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item3 || [];
@@ -598,7 +598,7 @@ var ProductionInterfacePage = (function () {
     }
     async function loadFgReceiveData() {
         if (!state.interfacedata.item4 || state.interfacedata.item4.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item4 || [];
@@ -617,7 +617,7 @@ var ProductionInterfacePage = (function () {
     }
     async function loadWhReceiveData() {
         if (!state.interfacedata.item4 || state.interfacedata.item4.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item4 || [];
@@ -637,13 +637,13 @@ var ProductionInterfacePage = (function () {
     }
     async function loadCompletedProdData() {
         if (!state.interfacedata.item0 || state.interfacedata.item0.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item0 || [];
         let filterdata = data.filter(x => x.pbmststus === "Complete");   
         if (!filterdata || filterdata.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         ui.renderRequisitionCompletedProd(filterdata);
@@ -660,7 +660,7 @@ var ProductionInterfacePage = (function () {
     }
     async function loadReqApprovedData() {
         if (!state.interfacedata.item0 || state.interfacedata.item0.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         let data = state.interfacedata.item0 || [];
@@ -692,7 +692,7 @@ var ProductionInterfacePage = (function () {
     }
     async function loadTableInterface() {
         if (!state.interfacedata.item0 || state.interfacedata.item0.length === 0) {
-            alert("No data found");
+            Notifications.Toastr.error("No data Found");
             return;
         }
         ui.renderRequisitionTable(state.interfacedata.item0);
