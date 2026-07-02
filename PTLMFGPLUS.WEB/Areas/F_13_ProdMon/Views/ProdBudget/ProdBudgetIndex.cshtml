@@ -10,10 +10,10 @@
                        class="form-control form-control-sm datepicker datepicker-current rounded-1 shadow-sm px-0" />
             </div>
             <div class="col-md-2">
-                <label for="lblBpn" class="form-label fw-bold fs-6 mb-2">
+                <label for="txtBpn" class="form-label fw-bold fs-6 mb-2">
                     Budget No.
                 </label>
-                <input id="lblBpn" type="text" class="form-control form-control-sm shadow-sm border-0 rounded-3" placeholder="PBM-00001" readonly />
+                <input id="txtBpn" type="text" class="form-control form-control-sm shadow-sm border-0 rounded-3" placeholder="PBM-00001" readonly />
             </div>
             <div class="col-md-1">
                 <label for="txtfrmdate" class="form-label fw-semibold">
@@ -98,9 +98,46 @@
                 <label id="lblBatchName" class="form-label fw-semibold fs-6 mb-2">
                     Batch Name
                 </label>
-                <input type="text" class="form-control form-control-sm shadow-sm rounded-3" />
+                <input id="txtBatchName" type="text" class="form-control form-control-sm shadow-sm rounded-3" />
             </div>
+        </div>
+        <div class="pm-table-card table-section p-3" style="width:500px;">
+            <div id="tableProdBudget"
+                 class="table-responsive w-100"
+                 style="display:none;">
 
+                <table class="table table-hover align-middle mb-0 fit-grid">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Group</th>
+                            <th>Description of Item</th>
+                            <th>Unit</th>
+                            <th>Sales Target</th>
+                            <th>Closing Stock</th>
+                            <th>Production Requirments</th>
+                            <th>Budgeted Qty</th>                            
+                        </tr>
+                    </thead>
+
+                    <tbody id="selectedtabledataprodbudget"></tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="7" class="text-end">Total</th>
+                            <th id="bgdwqtyTotal">0</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="d-flex justify-content-end gap-3 mt-2">
+                    <button id="btnTotal" class="btn btn-primary btn-sm rounded-3">
+                        Total
+                    </button>
+
+                    <button id="btnFinalUpdate" class="btn btn-outline-danger btn-sm rounded-3">
+                        Final Update
+                    </button>
+                </div>
+            </div>           
         </div>
     </div>
 </div>

@@ -7,17 +7,29 @@ var ProdBudgetPage = (function () {
     {
         ProductList: [],
         tblbbudget: [],
+        tblbbudgetlog:[],
     };
-    var service = {        
+    var service = {
         async loadProdBudgetNoData(date) {
-            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetProdBudgetNo`), { date:date }));
+            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetProdBudgetNo`), { date: date }));
         },
         async loadPreviousBudgetListData(type) {
-            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetPreviousBudgetList`), { type:type }));
+            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetPreviousBudgetList`), { type: type }));
         },
-        async loadProductListData(type,date) {
-            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetProductList`), { type:type,date:date }));
+        async loadProductListData(type, date) {
+            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetProductList`), { type: type, date: date }));
         },
+        async loadShowProductListData(type,batchno, date) {
+            return Helpers.withLoader(() => FetchHelpers.getForm(FetchHelpers.urlconfig(`${commonPath}GetShowProductList`), { type: type,batchno:batchno, date: date }));
+        },
+        async Final_Update_Button(type, date, pbnno, sDate, tDate, BatchNameText, selectedItem, dtuser) {
+
+            return Helpers.withLoader(() => FetchHelpers.postForm(FetchHelpers.urlconfig(`${commonPath}FinalUpdateButtonClick`),
+                {
+                    type: type, date: date, pbnno: pbnno, sDate: sDate, tDate: tDate, BatchNameText: BatchNameText, selectedItem: JSON.stringify(selectedItem),
+                    dtuser: JSON.stringify(dtuser)
+                }));
+        },        
     };
     var ui = {
         setValue(id, value) {
@@ -66,33 +78,28 @@ var ProdBudgetPage = (function () {
                 selectedValue: data[0].prodcode
             })
         },
-        renderTable(items) {
-            const tbody = document.getElementById('selectedtabledata');
+        renderSelectedBudget(items) {
+            const tbody = document.getElementById('selectedtabledataprodbudget');
             tbody.innerHTML = '';
             console.log(items);
             items.forEach((item, index) => {
                 tbody.innerHTML += `
             <tr>
                 <td class="fs-6">${index + 1}</td>
-                <td class="fs-6">${item.resdesc}</td>
-                <td class="fs-6">${item.sirunit}</td> 
-                <td class="fs-6">${item.balqty}</td> 
+                <td class="fs-6">${item.proddesc1}</td>
+                <td class="fs-6">${item.proddesc}</td> 
+                <td class="fs-6">${item.produnit}</td> 
+                <td class="fs-6">${item.targetqty}</td> 
+                <td class="fs-6">${item.stqty}</td> 
+                <td class="fs-6">${item.nproqty}</td>                        
                <td>
-                <input type="number"
-               class="form-control form-control-sm qty-input w-100"
-               data-index="${index}"
-               value="${item.qty || 0}"
-               style="max-width: 100px;"
-               min="0"
-               step="0.01">
-            </td>
-
-            <td class="rate">${parseFloat(item.rate).toFixed(2)}</td>
-
-            <td>
-                <span class="amt">${parseFloat(item.amt || 0).toFixed(2)} </span>
-            </td>                
-                
+                    <input type="number"
+                   class="form-control form-control-sm qty-input w-100"
+                   data-index="${index}"
+                   value="${item.bgdwqty || 0}"
+                   style="max-width: 100px;"
+                   >
+               </td>
             </tr>
         `;
             });
@@ -102,9 +109,11 @@ var ProdBudgetPage = (function () {
     function init() {
         bindEvents();
         loadInitialData();
-        ShowFooterWithButtons();
+        HideFooterWithButtons();
         HideRefresh();
         HideRecalculate();
+        HideSave();
+        HideCancel();
     }
     function bindEvents() {
         $("#btnOk").on("click", function () {
@@ -124,45 +133,64 @@ var ProdBudgetPage = (function () {
                 return;
             }
             else {
-                btn.innerHTML = '<i class="bi bi-check-lg"></i> Ok';  
+                btn.innerHTML = '<i class="bi bi-check-lg"></i> Ok';
                 document.getElementById("previousBudget").style.display = "inline-block";
                 document.getElementById("ProductSelection").style.display = "none";
+                document.getElementById("tableProdBudget").style.display = "none";
                 $("input[name='rbtnlist']").prop("checked", false);
                 document.querySelector(".rbtnList1").style.display = "none";
-                
+                state.tblbbudget = [];
+
             }
         });
         $("#lblPrePBNo").on("click", function () {
             PreviousBudgetList();
         });
-        $(document).on("click", "input[name='rbtnlist']", async function () {           
-            if ($(this).val() === "0")
-            {
+        $(document).on("click", "input[name='rbtnlist']", async function () {
+            if ($(this).val() === "0") {
                 await ProductSelection();
-                console.log("Product Selection");
-            }            
-            else if ($(this).val() === "1")
-            {
+                await ShowProductList();                
+            }
+            else if ($(this).val() === "1") {
                 console.log("Material Input");
-            }            
-            else if ($(this).val() === "2")
-            {
+            }
+            else if ($(this).val() === "2") {
                 console.log("Reports");
-            }            
+            }
         });
         $("#btnSelectAll").on("click", function () {
             btnSelectAllData();
         });
+        $("#btnSelect").on("click", function () {
+            btnSelectData();
+        });
+
+        $(document).on("change", ".qty-input", function () {
+            let index = $(this).data("index");
+            let qty = parseFloat($(this).val()) || 0;
+            let item = state.tblbbudget[index];
+            item.bgdwqty = qty;           
+        });
+        $("#btnTotal").on("click", function () {
+            calculateBgdwqtyTotal();
+        });
+        $("#btnFinalUpdate").on("click", async function () {
+            FinalUpdateClick();
+        });
         $("#btnFooterSave").on("click", async function () {
-           
+
         });
 
     }
-    async function ProdBudgetNo()
-    {
+    async function ProdBudgetNo() {
         let date = ui.getValue("txtbgddate");
-        const BudgetNo = await service.loadProdBudgetNoData(date);        
-        document.getElementById("lblBpn").value = BudgetNo[0].bpno;
+        const BudgetNo = await service.loadProdBudgetNoData(date);
+
+        if (BudgetNo && BudgetNo.length > 0) {
+            document.getElementById("txtBpn").value = BudgetNo[0].bpno;
+        } else {
+            document.getElementById("txtBpn").value = "";
+        }
     }
     async function btnSelectAllData() {
         const ProdCode = ui.getValue("ddlProductList");
@@ -192,11 +220,85 @@ var ProdBudgetPage = (function () {
             }
 
             state.tblbbudget = tbl1;
+            await Data_Bind_Budget();
         }
 
     }
-    async function ProductSelection()
-    {
+    async function btnSelectData() {
+        const ProdCode = ui.getValue("ddlProductList");
+        let tbl1 = state.tblbbudget || [];
+        let dtp = state.ProductList || [];
+
+        let filtertblproductlists = dtp.filter(row => row.prodcode === ProdCode);
+        if (filtertblproductlists.length === 0) {
+            Notifications.Sweet.warning("No Information found for Selected Product");
+            return;
+        }
+
+        let filtertblproduct = filtertblproductlists[0];
+
+        document.getElementById("txtBatchName").value = filtertblproduct.resdesc1 + "-XXXX";
+
+        let filtertblbbudget = tbl1.filter(row => row.prodcode === ProdCode);
+
+        if (filtertblbbudget.length === 0) {
+            
+                let newRow = {
+                    scode: filtertblproduct.sirtdes,
+                    prodcode1: filtertblproduct.prodcode1,
+                    proddesc1: filtertblproduct.proddesc1,
+                    prodcode: ProdCode,
+                    proddesc: ui.getValue("ddlProductList"),
+                    produnit: filtertblproduct.produnit,
+                    targetqty: parseFloat(filtertblproduct.targetqty) || 0,
+                    stqty: parseFloat(filtertblproduct.stqty),
+                    nproqty: parseFloat(filtertblproduct.nproqty),
+                    bgdwqty: parseFloat(filtertblproduct.stdqty) || 0
+                };
+
+                tbl1.push(newRow);           
+
+            state.tblbbudget = tbl1;
+            await Data_Bind_Budget();
+        }
+
+    }
+    async function Data_Bind_Budget() {
+        if (state.tblbbudget.length === 0) {
+            return;
+        }
+        document.getElementById("tableProdBudget").style.display = "table";
+        ui.renderSelectedBudget(state.tblbbudget);
+    }
+    async function FinalUpdateClick() {
+        let sDate = ui.getValue("txtfrmdate");
+        let tDate = ui.getValue("txttodate");
+        let date = ui.getValue("txtbgddate");
+        let tbl2 = state.tblbbudget || [];
+         let bpnText = ui.getValue("txtBpn");
+        let pbnno = bpnText.substring(0, 9) + bpnText.substring(10);
+
+        let BatchNameText = ui.getValue("txtBatchName");
+        if (BatchNameText.includes("XXXX"))
+        {
+            Notifications.Sweet.error("You Missing Batch Number");
+            return;
+        }
+        let type = qparam;
+        if (type === "EntryPreSemi") {
+            if (ui.getValue("txtBatchName") === null)
+            {
+                Notifications.Sweet.error("You Missing Batch Number");
+            }
+        }
+        const selectedItem = state.tblbbudget;
+        const dtuser = state.tblbbudgetlog;
+        let result = await service.Final_Update_Button(type, date, pbnno, sDate, tDate, BatchNameText, selectedItem,dtuser);
+
+
+    }
+
+    async function ProductSelection() {
         let date = ui.getValue("txtbgddate");
         const type = qparam;
         const productlist = await service.loadProductListData(type, date);
@@ -204,13 +306,38 @@ var ProdBudgetPage = (function () {
         document.getElementById("ProductSelection").style.display = "flex";
         ui.renderProductList(productlist);
     }
-    async function PreviousBudgetList()
-    {
+    async function PreviousBudgetList() {
         const type = qparam;
-        const PrevBudgetList = await service.loadPreviousBudgetListData(type);        
+        const PrevBudgetList = await service.loadPreviousBudgetListData(type);
         ui.renderPreviousBudgetList(PrevBudgetList);
     }
-    async function loadInitialData() {        
+    async function ShowProductList() {
+        const type = qparam;
+        let bpnText = ui.getValue("txtBpn");
+        let batchno = bpnText.substring(0, 9) + bpnText.substring(10);
+        let date = ui.getValue("txtbgddate");
+
+        const ShowProdList = await service.loadShowProductListData(type, batchno, date);
+        state.tblbbudget = ShowProdList.item1;
+        state.tblbbudgetlog = ShowProdList.item2;
+        if (state.tblbbudget.length === 0) {
+            document.getElementById("btnSelectAll").style.display = "flex";
+        }
+        else {
+            document.getElementById("btnSelectAll").style.display = "none";
+        }
+        Data_Bind_Budget();
+        
+    }
+    function calculateBgdwqtyTotal() {
+        let items = state.tblbbudget || [];
+        let total = items.reduce((sum, item) => {
+            return sum + (parseFloat(item.bgdwqty) || 0);
+        }, 0);
+
+        document.getElementById("bgdwqtyTotal").innerText = total;
+    }
+    async function loadInitialData() {
     }
     return {
         init: init
