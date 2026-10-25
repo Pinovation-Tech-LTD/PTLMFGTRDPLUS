@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "Service Interface";
+    var stages = new[]
+    {
+        ("receive", "Receive", "receiveCount", "Received products"),
+        ("assign", "Assign", "assignCount", "Engineer assignment"),
+        ("diagnosis", "Diagnosis", "diagnosisCount", "Pending diagnosis"),
+        ("qc", "QC Check", "qcCount", "Quality control"),
+        ("bill", "Bill", "billCount", "Billing queue"),
+        ("delivery", "Delivery", "deliveryCount", "Ready or returned")
+    };
+}
+
+<div class="interface-workspace">
+    <div class="interface-toolbar">
+        <div class="interface-filter-group" aria-label="Service interface filters">
+            <div class="interface-filter-field">
+                <label for="txtFromDate">From</label>
+                <input id="txtFromDate"
+                       type="text"
+                       class="form-control ui-size-xs datepicker"
+                       autocomplete="off" />
+            </div>
+            <div class="interface-filter-field">
+                <label for="txtToDate">To</label>
+                <input id="txtToDate"
+                       type="text"
+                       class="form-control ui-size-xs datepicker"
+                       autocomplete="off" />
+            </div>
+            <div class="interface-filter-field">
+                <label for="ddlServiceCenter">Service center</label>
+                <select id="ddlServiceCenter"
+                        class="form-select ui-size-xs"
+                        data-placeholder="Select service center">
+                </select>
+            </div>
+            <div class="interface-filter-field">
+                <label for="ddlServiceType">Service type</label>
+                <select id="ddlServiceType"
+                        class="form-select ui-size-xs"
+                        data-placeholder="Select service type">
+                </select>
+            </div>
+            <div class="interface-filter-field">
+                <label for="txtImei">IMEI</label>
+                <input id="txtImei"
+                       type="text"
+                       class="form-control ui-size-xs"
+                       autocomplete="off"
+                       placeholder="Search IMEI" />
+            </div>
+            <button id="btnLoad" type="button" class="btn btn-primary ui-size-xs">
+                <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+                Load
+            </button>
+        </div>
+        <div class="interface-toolbar-actions">
+            <span class="interface-help-text">Select a workflow stage to view service records</span>
+            <button id="btnNewReceive" type="button" class="btn btn-success ui-size-xs">
+                <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                Receive new
+            </button>
+        </div>
+    </div>
+
+    <div class="interface-kpi-grid" id="serviceInterfaceSummary" aria-label="Service workflow summary">
+        @for (int index = 0; index < stages.Length; index++)
+        {
+            var stage = stages[index];
+            <button type="button"
+                    class="interface-kpi-card @(index == 0 ? "active" : string.Empty)"
+                    data-interface="@stage.Item1"
+                    aria-pressed="@(index == 0 ? "true" : "false")">
+                <span class="interface-kpi-title">@stage.Item2</span>
+                <span class="interface-kpi-meta">
+                    <span class="interface-kpi-dot" aria-hidden="true"></span>
+                    @stage.Item4
+                </span>
+                <strong class="interface-kpi-value" id="@stage.Item3">0</strong>
+            </button>
+        }
+    </div>
+
+    <section class="interface-data-card" aria-label="Service workflow records">
+        <div class="interface-table-region">
+            <div class="table-responsive">
+                <table id="serviceInterfaceTable"
+                       class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/js/J_20_Service/jRptServInterface.js" asp-append-version="true"></script>
+}

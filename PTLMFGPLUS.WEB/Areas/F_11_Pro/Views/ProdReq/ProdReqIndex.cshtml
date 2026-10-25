@@ -1,0 +1,175 @@
+@{
+    var requestType = Context.Request.Query["Type"].ToString();
+    var wipType = requestType == "EntrySemi"
+        ? "FgSeWIP"
+        : requestType == "PreEntrySemi"
+            ? "FgPreSeWIP"
+            : "FgWIP";
+    ViewData["Title"] = requestType == "EntrySemi"
+        ? "Semi Production Requisition Information"
+        : requestType == "PreEntrySemi"
+            ? "Production Requisition Information (SMT)"
+            : "Production Requisition Information";
+}
+
+<div class="enterprise-entry-page prod-req-page">
+    <div class="card entry-header-card">
+        <div class="card-body">
+            <div class="entry-form-grid">
+                <div class="entry-field entry-span-1">
+                    <label for="txtReqDate" class="form-label">Date</label>
+                    <input id="txtReqDate"
+                           type="text"
+                           class="form-control ui-size-xs prod-req-date"
+                           autocomplete="off" />
+                </div>
+                <div class="entry-field entry-span-1">
+                    <label for="txtDprNo" class="form-label">DPR No.</label>
+                    <input id="txtDprNo"
+                           type="text"
+                           class="form-control ui-size-xs"
+                           readonly />
+                </div>
+                <div class="entry-field entry-span-2">
+                    <label for="ddlBudget" class="form-label">Production Budget</label>
+                    <select id="ddlBudget"
+                            class="form-select ui-size-xs"
+                            data-placeholder="Select production budget">
+                    </select>
+                </div>
+                <div class="entry-field entry-span-4">
+                    <label for="ddlBatch" class="form-label">Batch Number</label>
+                    <div class="d-flex align-items-stretch flex-nowrap gap-1 batch-picker">
+                        <select id="ddlBatch"
+                                class="form-select ui-size-xs"
+                                data-placeholder="Select batch">
+                        </select>
+                        <a class="btn btn-success ui-size-xs d-inline-flex align-items-center"
+                           href="/F_33_Mgt/AccWIPCode?Type=@wipType"
+                           target="_blank"
+                           title="Add WIP code"
+                           aria-label="Add WIP code">
+                            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="entry-field entry-span-3">
+                    <label for="ddlPreviousDpr" class="form-label">Previous DPR</label>
+                    <select id="ddlPreviousDpr"
+                            class="form-select ui-size-xs"
+                            data-placeholder="New DPR">
+                    </select>
+                </div>
+                <div class="entry-field-actions entry-span-1">
+                    <button id="btnOpen" type="button" class="btn btn-primary ui-size-xs w-100">
+                        <i class="bi bi-folder2-open" aria-hidden="true"></i>
+                        Open
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="reqWorkspace" class="entry-panel" style="display: none;">
+        <section class="card entry-section-card">
+            <div class="card-header">
+                <span>
+                    <i class="bi bi-box-seam me-1" aria-hidden="true"></i>
+                    Production Requisition
+                </span>
+                <span class="entry-empty-help">Enter product quantities, then generate materials</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="entry-native-table-shell">
+                            <table id="productReqTable"
+                                   class="table table-striped table-hover table-bordered align-middle enterprise-native-table req-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.</th>
+                                        <th>Description of Item</th>
+                                        <th>Unit</th>
+                                        <th>Budgeted Quantity</th>
+                                        <th>Upto Date Position</th>
+                                        <th>Budget Balance</th>
+                                        <th>Requisition Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            <button id="btnGenerate" type="button" class="btn btn-danger ui-size-xs">
+                                                <i class="bi bi-gear" aria-hidden="true"></i>
+                                                Generate
+                                            </button>
+                                        </th>
+                                        <th class="text-end">Total</th>
+                                        <th id="productBudgetTotal" class="text-end">0</th>
+                                        <th id="productIssuedTotal" class="text-end">0</th>
+                                        <th id="productBalanceTotal" class="text-end">0</th>
+                                        <th id="productReqTotal" class="text-end">0</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <section class="card entry-section-card">
+            <div class="card-header">
+                <span>
+                    <i class="bi bi-boxes me-1" aria-hidden="true"></i>
+                    Material Requisition
+                </span>
+                <span class="entry-empty-help">Review material quantities before saving</span>
+            </div>
+            <div class="card-body">
+                <div class="entry-native-table-shell">
+                    <table id="materialReqTable"
+                           class="table table-striped table-hover table-bordered align-middle enterprise-native-table req-table">
+                        <thead>
+                            <tr>
+                                <th>Sl.</th>
+                                <th>Description of Item</th>
+                                <th>Specification</th>
+                                <th>Unit</th>
+                                <th>BOM Quantity</th>
+                                <th>Budgeted Quantity</th>
+                                <th>Upto Date Position</th>
+                                <th>Budget Balance</th>
+                                <th>Requisition Quantity</th>
+                                <th>Stock Quantity</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th colspan="4">Total:</th>
+                                <th id="budgetMaterialQtyTotal" class="text-end">0</th>
+                                <th id="uptoMaterialQtyTotal" class="text-end">0</th>
+                                <th id="budgetMaterialbalanceTotal" class="text-end">0</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/J_11_Pro/jProdReq.js" asp-append-version="true"></script>
+}

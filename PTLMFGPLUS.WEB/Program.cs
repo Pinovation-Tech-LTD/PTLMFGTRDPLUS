@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PTLMFGPLUS.SERVICE;
 using PTLMFGPLUS.WEB;
+using PTLMFGPLUS.WEB.Middleware;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,20 +22,25 @@ builder.Services.AddAppDI();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.Name = "PTLMFGPLUS.Session";
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Login";   // Redirect here if user is not authenticated
+        options.LoginPath = "/Home/Index";
         options.LogoutPath = "/Home/Logout"; // Optional
         options.AccessDeniedPath = "/Home/AccessDenied"; // Optional
         options.ExpireTimeSpan = TimeSpan.FromHours(1);     // Cookie expiration
         options.SlidingExpiration = true;                  // Renew cookie if close to expiration
         options.Cookie.HttpOnly = true;
         options.Cookie.Name = "MFGAppAuth";           // Optional: customize cookie name
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     });
 
 
@@ -67,19 +74,18 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-app.UseDeveloperExceptionPage();
 //Middle Ware
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseHttpsRedirection();
 //app.UseResponseCompression();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseSession();
 //app.MapHub<NotificationHub>("/notificationHub");
 //app.MapHub<SalesHub>("/salesHub");
 app.MapControllers();

@@ -1,0 +1,201 @@
+@{
+    ViewData["Title"] = "User Page Permission";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/controlpanel/user-permission.css" asp-append-version="true" />
+}
+
+<div class="user-permission-page">
+    @Html.AntiForgeryToken()
+
+    <section id="userListPanel" class="card permission-card">
+        <div class="card-body">
+            <div class="list-toolbar">
+                <div class="user-search-filter">
+                    <label for="txtUserSearch" class="form-label">Find user</label>
+                    <div class="input-group">
+                        <input type="search" id="txtUserSearch" class="form-control ui-size-xm" placeholder="ID, name or designation" />
+                        <button type="button" id="btnSearchUser" class="btn btn-primary ui-size-xm" aria-label="Search users">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="record-count">
+                    <strong id="userCount">0</strong>
+                    <span>users</span>
+                </div>
+                <div class="list-actions">
+                    <a asp-area="ControlPanel" asp-controller="ComPermission" asp-action="ComPermissionIndex" class="btn btn-outline-primary ui-size-xm">
+                        <i class="bi bi-building-gear me-1"></i>Company permission
+                    </a>
+                    <button type="button" id="btnAddUser" class="btn btn-primary ui-size-xm">
+                        <i class="bi bi-person-plus me-1"></i>New user
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive table-shell">
+                <table id="tblUsers" class="table table-hover align-middle w-100">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Full name</th>
+                            <th>Designation</th>
+                            <th>Employee</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="permissionPanel" class="card permission-card d-none">
+        <div class="card-body">
+            <div class="permission-toolbar">
+                <div class="selected-user">
+                    <button type="button" id="btnBackToUsers" class="btn btn-outline-secondary ui-size-xm" aria-label="Back to users">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                    <div>
+                        <small>Permissions for</small>
+                        <strong id="selectedUserName"></strong>
+                        <span id="selectedUserId"></span>
+                    </div>
+                </div>
+                <div>
+                    <label for="ddlPermissionModule" class="form-label">Module</label>
+                    <select id="ddlPermissionModule" class="form-select ui-size-xm" data-placeholder="Select module"></select>
+                </div>
+                <div class="show-all-control">
+                    <input type="checkbox" id="chkShowAllPages" class="form-check-input" />
+                    <label for="chkShowAllPages" class="form-check-label">Show all company pages</label>
+                </div>
+                <div class="permission-summary">
+                    <span><strong id="pageCount">0</strong> pages</span>
+                    <span><strong id="permittedCount">0</strong> permitted</span>
+                </div>
+            </div>
+
+            <div class="table-responsive table-shell">
+                <table id="tblUserPermissions" class="table table-hover align-middle w-100">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Module / Section</th>
+                            <th>Page</th>
+                            <th>
+                                <span>View</span>
+                                <input type="checkbox" class="form-check-input bulk-permission" data-field="chkper" aria-label="Select all view permissions" />
+                            </th>
+                            <th>
+                                <span>Entry / Edit</span>
+                                <input type="checkbox" class="form-check-input bulk-permission" data-field="entry" aria-label="Select all entry permissions" />
+                            </th>
+                            <th>
+                                <span>Delete</span>
+                                <input type="checkbox" class="form-check-input bulk-permission" data-field="deleteck" aria-label="Select all delete permissions" />
+                            </th>
+                            <th>
+                                <span>Print</span>
+                                <input type="checkbox" class="form-check-input bulk-permission" data-field="printable" aria-label="Select all print permissions" />
+                            </th>
+                            <th>
+                                <span>All</span>
+                                <input type="checkbox" id="chkAllActions" class="form-check-input" aria-label="Select every permission" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-6" id="userEditModalLabel">User information</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <label for="txtUserId" class="form-label">User ID <span class="text-danger">*</span></label>
+                        <input type="text" id="txtUserId" class="form-control ui-size-xm" maxlength="20" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="txtShortName" class="form-label">Short name <span class="text-danger">*</span></label>
+                        <input type="text" id="txtShortName" class="form-control ui-size-xm" maxlength="100" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="txtFullName" class="form-label">Full name <span class="text-danger">*</span></label>
+                        <input type="text" id="txtFullName" class="form-control ui-size-xm" maxlength="150" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="txtDesignation" class="form-label">Designation</label>
+                        <input type="text" id="txtDesignation" class="form-control ui-size-xm" maxlength="100" />
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ddlEmployee" class="form-label">Employee</label>
+                        <select id="ddlEmployee" class="form-select ui-size-xm" data-placeholder="Select employee"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ddlUserRole" class="form-label">User role</label>
+                        <select id="ddlUserRole" class="form-select ui-size-xm" data-placeholder="Select role"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtPassword" class="form-label">Password</label>
+                        <input type="password" id="txtPassword" class="form-control ui-size-xm" maxlength="100" autocomplete="new-password" />
+                        <small class="form-text">Leave blank to keep the current password.</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtRemarks" class="form-label">Remarks</label>
+                        <input type="text" id="txtRemarks" class="form-control ui-size-xm" maxlength="250" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" id="chkUserActive" class="form-check-input" />
+                            <label for="chkUserActive" class="form-check-label">Active user</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary ui-size-xm" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="btnSaveUser" class="btn btn-primary ui-size-xm">Save user</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="copyPermissionModal" tabindex="-1" aria-labelledby="copyPermissionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-6" id="copyPermissionModalLabel">Copy user privileges</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="copy-source">Copy permissions from <strong id="copyFromUserName"></strong></p>
+                <label for="ddlCopyToUser" class="form-label">Target user</label>
+                <select id="ddlCopyToUser" class="form-select ui-size-xm" data-placeholder="Select target user"></select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary ui-size-xm" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="btnCopyPermissions" class="btn btn-primary ui-size-xm">Copy privileges</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/j_controlpanel/user-permission.js" asp-append-version="true"></script>
+}

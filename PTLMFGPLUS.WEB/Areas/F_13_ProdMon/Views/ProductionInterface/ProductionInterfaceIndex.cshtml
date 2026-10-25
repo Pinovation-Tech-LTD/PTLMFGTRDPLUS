@@ -1,368 +1,267 @@
-﻿<link rel="stylesheet" href="~/css/common_design/production-dashboard.css" asp-append-version="true" />
+@{
+    ViewData["Title"] = "Production Interface";
+    var cards = new[]
+    {
+        //Item1=Card Div ID, Item2=Name of Card, Item3=Number Id of Card, Item4==completed ? "processed" : "pending"
+        ("requestsDiv", "Requests", "reqQty", "requests"),
+        ("reqApprovalDiv", "Requisitions", "reqApprQty", "requisitions"),
+        ("materialIssueDiv", "Material Issues", "materialIssueQty", "issues"),
+        ("issueAppDiv", "Issue Approved", "issueApprQty", "approvals"),
+        ("matTransferedDiv", "In Process", "mattTransQty", "process"),
+        ("ProEntryProdDiv", "Production Entry", "ProEntryProdIntQty", "production"),
+        ("QcEntryDiv", "Quality Control", "QcProdIntQty", "qc"),
+        ("FgReceiveProdDiv", "Floor Receive", "FgReceiveProdIntQty", "floorReceive"),
+        ("WhReceiveProdDiv", "WH Receive", "WhReceiveProdIntQty", "warehouseReceive"),
+        ("CompletedProdDiv", "Completed", "CompletedProdIntQty", "completed"),
+        ("ReworkDiv", "Rework", "ReworkQty", "rework")
+    };
+}
 
-<div class="container-fluid production-dashboard">
-
-    <div class="pm-toolbar">
-        <div class="pm-filter-group">
-            <label for="txtfrmdate">From</label>
-            <input id="txtfrmdate" type="text"
-                   class="form-control form-control-sm datepicker datepicker-current" />
-
-            <label for="txttodate">To</label>
-            <input id="txttodate" type="text"
-                   class="form-control form-control-sm datepicker datepicker-current" />
-
-            <button id="btnOk" class="btn btn-primary btn-sm">
-                Load Data
+<div class="interface-workspace">
+    <div class="interface-toolbar">
+        <div class="interface-filter-group" aria-label="Production date filter">
+            <div class="interface-filter-field">
+                <label for="txtfrmdate">From</label>
+                <input id="txtfrmdate" type="text" class="form-control ui-size-xs datepicker datepicker-current" autocomplete="off" />
+            </div>
+            <div class="interface-filter-field">
+                <label for="txttodate">To</label>
+                <input id="txttodate" type="text" class="form-control ui-size-xs datepicker datepicker-current" autocomplete="off" />
+            </div>
+            <button id="btnOk" type="button" class="btn btn-primary ui-size-xs">
+                <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+                Load
             </button>
-            </div>
-            <div class="pm-toolbar-actions">
-                <button id="requisitionEntry" class="btn btn-success btn-sm">
-                    <i class="bi bi-plus-circle me-1"></i> New Budget
-                </button>
-            </div>
-        </div>       
+        </div>
+        <div class="interface-toolbar-actions">
+            <span class="interface-help-text">Select a workflow to view pending transactions</span>
+            <button id="requisitionEntry" type="button" class="btn btn-success ui-size-xs">
+                <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                New budget
+            </button>
+        </div>
     </div>
 
-    <div class="pm-kpi-grid" id="interfacevalue">
-        <div class="pm-kpi-card" id="requestsDiv">
-            <div class="pm-kpi-title">Requests</div>
-            <div class="pm-kpi-value text-primary" id="reqQty"></div>
-            <div class="pm-kpi-bar bg-primary"></div>
-        </div>
-
-        <div class="pm-kpi-card" id="reqApprovalDiv">
-            <div class="pm-kpi-title">Requisitions</div>
-            <div class="pm-kpi-value text-warning" id="reqApprQty"></div>
-            <div class="pm-kpi-bar bg-warning"></div>
-        </div>
-
-        <div class="pm-kpi-card" id="materialIssueDiv">
-            <div class="pm-kpi-title">Material Issues</div>
-            <div class="pm-kpi-value text-info" id="materialIssueQty"></div>
-            <div class="pm-kpi-bar bg-info"></div>
-        </div>
-
-        <div class="pm-kpi-card" id="issueAppDiv">
-            <div class="pm-kpi-title">Issue Approved</div>
-            <div class="pm-kpi-value text-success" id="issueApprQty"></div>
-            <div class="pm-kpi-bar bg-success"></div>
-        </div>
-
-        <div class="pm-kpi-card" id="matTransferedDiv">
-            <div class="pm-kpi-title">In Process</div>
-            <div class="pm-kpi-value text-danger" id="mattTransQty"></div>
-            <div class="pm-kpi-bar bg-danger"></div>
-        </div>  
-        <div class="pm-kpi-card" id="ProEntryProdDiv">
-            <div class="pm-kpi-title">Pro. Entry</div>
-            <div class="pm-kpi-value text-danger" id="ProEntryProdIntQty"></div>
-            <div class="pm-kpi-bar bg-danger"></div>
-        </div>  
-        <div class="pm-kpi-card" id="QcEntryDiv">
-            <div class="pm-kpi-title">QC</div>
-            <div class="pm-kpi-value text-danger" id="QcProdIntQty"></div>
-            <div class="pm-kpi-bar bg-danger"></div>
-        </div>  
-        <div class="pm-kpi-card" id="FgReceiveProdDiv">
-            <div class="pm-kpi-title">FG Receive</div>
-            <div class="pm-kpi-value text-danger" id="FgReceiveProdIntQty"></div>
-            <div class="pm-kpi-bar bg-danger"></div>
-        </div>  
-        <div class="pm-kpi-card" id="WhReceiveProdDiv">
-            <div class="pm-kpi-title">WH Receive</div>
-            <div class="pm-kpi-value text-danger" id="WhReceiveProdIntQty"></div>
-            <div class="pm-kpi-bar bg-danger"></div>
-        </div>  
-        <div class="pm-kpi-card" id="CompletedProdDiv">
-            <div class="pm-kpi-title">Completed</div>
-            <div class="pm-kpi-value text-danger" id="CompletedProdIntQty"></div>
-            <div class="pm-kpi-bar bg-danger"></div>
-        </div>  
-
-
+    <div class="interface-kpi-grid" id="interfacevalue" aria-label="Production workflow summary">
+        @for (int index = 0; index < cards.Length; index++)
+        {
+            var card = cards[index];
+            <button type="button"
+                    class="interface-kpi-card @(index == 0 ? "active" : string.Empty)"
+                    id="@card.Item1"
+                    data-interface="@card.Item4"
+                    aria-pressed="@(index == 0 ? "true" : "false")">
+                <span class="interface-kpi-title">@card.Item2</span>
+                <span class="interface-kpi-meta">
+                    <span class="interface-kpi-dot" aria-hidden="true"></span>
+                    @(card.Item4 == "completed" ? "Processed" : "Pending")
+                </span>
+                <strong class="interface-kpi-value" id="@card.Item3">0</strong>
+            </button>
+        }
     </div>
 
-    <div class="pm-table-card table-section">
-        <div id="tableContainerReq"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 fit-grid">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Budget Name</th>
-                        <th>Date</th>
-                        <th>Product Name</th>
-                        <th>Item Count</th>
-                        <th>Budgeted Qty</th>
-                        <th>Budgeted Amount</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Current Status</th>
-                        <th>WIP Name</th>
-                    </tr>
-                </thead>
-
-                <tbody id="selectedtabledataReq"></tbody>
-            </table>
+    <section class="interface-data-card" aria-label="Production workflow records">
+        <div class="interface-table-region">
+            <div id="tableContainerReq" class="table-responsive" style="display: none;">
+                <table id="productionRequestTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Budget Name</th>
+                            <th>Date</th>
+                            <th>Product Name</th>
+                            <th>Item Count</th>
+                            <th>Budgeted Qty</th>
+                            <th>Budgeted Amount</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Current Status</th>
+                            <th>WIP Name</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerReqApp" class="table-responsive" style="display: none;">
+                <table id="productionRequisitionTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Budget Number</th>
+                            <th>Date</th>
+                            <th>Product Name</th>
+                            <th>Item Count</th>
+                            <th>Budgeted Qty</th>
+                            <th>Budgeted Amount</th>
+                            <th>Budget Balance</th>
+                            <th>WIP Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerMaterialissue" class="table-responsive" style="display: none;">
+                <table id="productionIssueTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Budget No</th>
+                            <th>Req. No</th>
+                            <th>Date</th>
+                            <th>Batch No</th>
+                            <th>Req. Qty</th>
+                            <th>Item Count</th>
+                            <th>Bal. Issue Item</th>
+                            <th>Current Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerIssueAppr" class="table-responsive" style="display: none;">
+                <table id="productionIssueApprovalTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Issue No</th>
+                            <th>Issue Date</th>
+                            <th>Req. No</th>
+                            <th>Store Name</th>
+                            <th>Batch</th>
+                            <th>Req. Qty</th>
+                            <th>Issue Qty</th>
+                            <th>Mat. Issue Qty</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainermatTransfered" class="table-responsive" style="display: none;">
+                <table id="productionProcessTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Budget No</th>
+                            <th>Req. No</th>
+                            <th>Date</th>
+                            <th>Batch No</th>
+                            <th>Item Name</th>
+                            <th>Item Count</th>
+                            <th>Req. Qty</th>
+                            <th>Bal. Item</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerProentry" class="table-responsive" style="display: none;">
+                <table id="productionEntryTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Budget No</th>
+                            <th>Date</th>
+                            <th>Product Name</th>
+                            <th>Batch Name</th>
+                            <th>Item Count</th>
+                            <th>Budget Qty</th>
+                            <th>Prod. Bal Qty</th>
+                            <th>Production Amount</th>
+                            <th>Current Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerQcEntry" class="table-responsive" style="display: none;">
+                <table id="productionQcTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Budget No</th>
+                            <th>Production No</th>
+                            <th>Date</th>
+                            <th>Batch Name</th>
+                            <th>Item Count</th>
+                            <th>Production Qty</th>
+                            <th>Production Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerFgReceive" class="table-responsive" style="display: none;">
+                <table id="productionFloorReceiveTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Receive No</th>
+                            <th>Receive Date</th>
+                            <th>QC Number</th>
+                            <th>Batch Name</th>
+                            <th>Item Count</th>
+                            <th>Receive Qty</th>
+                            <th>Receive Amount</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerWhReceive" class="table-responsive" style="display: none;">
+                <table id="productionWarehouseReceiveTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Receive No</th>
+                            <th>Receive Date</th>
+                            <th>QC Number</th>
+                            <th>Batch Name</th>
+                            <th>Item Count</th>
+                            <th>Receive Qty</th>
+                            <th>Receive Amount</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerCompletedProd" class="table-responsive" style="display: none;">
+                <table id="productionCompletedTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Budget No</th>
+                            <th>Date</th>
+                            <th>Item Count</th>
+                            <th>Budgeted Qty</th>
+                            <th>Budgeted Amount</th>
+                            <th>Current Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tableContainerRework" class="table-responsive" style="display: none;">
+                <table id="productionReworkTable" class="table table-hover align-middle mb-0 interface-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Requisition No</th>
+                            <th>Req. Date</th>
+                            <th>Batch Name</th>
+                            <th>Req. Qty</th>
+                            <th>Rework Bal.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
-
-        <div id="tableContainerReqApp"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1300px;">
-
-                <thead>
-                    <tr>
-                    <th>#</th>
-                    <th>Budget Number</th>
-                    <th>Date</th>
-                    <th>Product Name</th>
-                    <th>Item Count</th>
-                    <th>Budgeted Qty</th>
-                    <th>Budgeted Amount</th>
-                    <th>Budget Balance</th>
-                    <th>WIP Name</th>
-                    </tr>
-                </thead>
-
-                <tbody id="selectedtabledataReqApp"></tbody>
-            </table>
-        </div>
-
-        <div id="tableContainerMaterialissue"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1400px;">
-
-                <thead>
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th style="width:140px;">Budget No</th>
-                        <th style="width:120px;">Req. No</th>
-                        <th style="width:120px;">Date</th>
-                        <th style="width:240px;">Batch No</th>
-                        <th style="width:240px;">Req. Qty</th>
-                        <th style="width:200px;">Item Count</th>
-                        <th style="width:100px;">Bal. Issue Item</th>
-                        <th style="width:120px;">Current Status</th>                        
-                    </tr>
-                </thead>
-
-                <tbody id="selectedtabledataMaterialissue"></tbody>
-            </table>
-        </div>
-
-        <div id="tableContainerIssueAppr"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1500px;">
-
-                <thead>
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th style="width:140px;">Issue No</th>
-                        <th style="width:150px;">Issue Date</th>
-                        <th style="width:120px;">Req. No</th>
-                        <th style="width:100px;">Store Name</th>
-                        <th style="width:240px;">Batch</th>
-                        <th style="width:240px;">Req. Qty</th>
-                        <th style="width:180px;">Issue Qty</th>
-                        <th style="width:100px;">Mat. Issue Qty</th>
-
-                    </tr>
-                </thead>
-
-            <tbody id="selectedtabledataIssueAppr"></tbody>
-            </table>
-        </div>
-    <div id="tableContainermatTransfered"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1500px;">
-
-                <thead>
-                    <tr>
-                        <th style="width:50px;">#</th>
-                    <th style="width:140px;">Budget No</th>
-                    <th style="width:150px;">Req. No</th>
-                        <th style="width:120px;">Date</th>
-                    <th style="width:100px;">Batch No</th>
-                    <th style="width:240px;">Item Name</th>
-                        <th style="width:240px;">Item Count</th>
-                        <th style="width:180px;">Req. Qty</th>
-                    <th style="width:100px;"> Bal. Item</th>
-
-                    </tr>
-                </thead>
-
-            <tbody id="selectedtabledatamattransfered"></tbody>
-            </table>
-        </div>
-
-        <div id="tableContainermatttransfer"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1600px;">
-
-                <thead>
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th style="width:140px;">Req. No</th>
-                        <th style="width:150px;">GPN. No</th>
-                        <th style="width:150px;">TRN. No</th>
-                        <th style="width:120px;">Req. Date</th>
-                        <th style="width:100px;">Matt. Ref</th>
-                        <th style="width:240px;">Trans. From</th>
-                        <th style="width:240px;">Trans. To</th>
-                        <th style="width:100px;">Note</th>
-                        <th style="width:100px;">Req. Qty</th>
-                        <th style="width:100px;">Req. Amount</th>
-                        <th style="width:100px;">Transfer Qty</th>
-                        <th style="width:100px;">Posted By</th>
-                    </tr>
-                </thead>
-
-                <tbody id="selectedtabledatamatttransfer"></tbody>
-            </table>
-        </div>
-        <div id="tableContainerProentry"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1600px;">
-
-                <thead>
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th style="width:140px;">Budget No</th>
-                        <th style="width:150px;">Date</th>
-                        <th style="width:100px;">Product Name</th>
-                        <th style="width:120px;">Batch Name</th>
-                        <th style="width:100px;">Item Count</th>
-                        <th style="width:240px;">Budget Qty</th>
-                        <th style="width:240px;">Prod. Bal Qty</th>
-                        <th style="width:100px;">Production Amount</th>
-                        <th style="width:100px;">Current Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="selectedtabledataproentry"></tbody>
-            </table>
-        </div>
-        <div id="tableContainerQcEntry"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1600px;">
-
-                <thead>
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th style="width:140px;">Budget No</th>
-                        <th style="width:150px;">Production No</th>
-                        <th style="width:150px;">Date</th>
-                        <th style="width:120px;">Batch Name</th>
-                        <th style="width:100px;">Item Count</th>
-                        <th style="width:240px;">Production Qty</th>
-                        <th style="width:100px;">Production Amount</th>
-                        <th style="width:100px;">Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="selectedtabledataqcentry"></tbody>
-            </table>
-        </div>
-        <div id="tableContainerFgReceive"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1600px;">
-
-                <thead>
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th style="width:140px;">Receive No</th>
-                        <th style="width:150px;">Receive Date</th>
-                        <th style="width:150px;">Qc Number</th>
-                        <th style="width:120px;">Batch Name</th>
-                        <th style="width:100px;">Item Count</th>
-                        <th style="width:240px;">Receive Qty</th>
-                        <th style="width:100px;">Receive Amount</th>
-                        <th style="width:100px;">type</th>
-                    </tr>
-                </thead>
-
-                <tbody id="selectedtabledatafgreceive"></tbody>
-            </table>
-        </div>
-
-        <div id="tableContainerWhReceive"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1600px;">
-
-                <thead>
-                    <tr>
-                    <th style="width:50px;">#</th>
-                    <th style="width:140px;">Receive No</th>
-                    <th style="width:150px;">Receive Date</th>
-                    <th style="width:150px;">Qc Number</th>
-                    <th style="width:120px;">Batch Name</th>
-                    <th style="width:100px;">Item Count</th>
-                    <th style="width:240px;">Receive Qty</th>
-                    <th style="width:100px;">Receive Amount</th>
-                    <th style="width:100px;">type</th>
-                    </tr>
-                </thead>
-
-                <tbody id="selectedtabledatawhreceive"></tbody>
-            </table>
-        </div>
-    <div id="tableContainerCompletedProd"
-             class="table-responsive w-100"
-             style="display:none;">
-
-            <table class="table table-hover align-middle mb-0 text-nowrap"
-                   style="min-width:1600px;">
-
-                <thead>
-                    <tr>
-                    <th style="width:50px;">#</th>
-                    <th style="width:140px;">Budget No</th>
-                    <th style="width:150px;">Date</th>
-                    <th style="width:150px;">Item Count</th>
-                    <th style="width:120px;">budgeted Qty</th>
-                    <th style="width:100px;">budgeted Amount</th>
-                    <th style="width:240px;">Current Status</th>
-                    </tr>
-                </thead>
-
-            <tbody id="selectedtabledatacompletedprod"></tbody>
-            </table>
-        </div>
-
+    </section>
 </div>
 
 @section Scripts {
     <script src="~/js/j_13_prodmon/jproductioninterface.js" asp-append-version="true"></script>
-    <script src="~/js/common/production-dashboard.js" asp-append-version="true"></script>
-   
 }

@@ -14,6 +14,7 @@ namespace PTLMFGPLUS.LIB
         public string Calltype { get; set; }
         public DataSet Dxml01 { get; set; }
         public DataSet Dxml02 { get; set; }
+        public string Xml01 { get; set; }
         public Byte[] Dbin01 { get; set; }
         public string Desc01 { get; set; }
         public string Desc02 { get; set; }

@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "Access Denied";
+    string returnUrl = ViewBag.ReturnUrl as string ?? string.Empty;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/access-denied.css" asp-append-version="true" />
+}
+
+<main class="access-denied-page">
+    <section class="access-denied-card" aria-labelledby="accessDeniedTitle">
+        <div class="access-denied-icon" aria-hidden="true">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+        <span class="access-denied-code">403 · Restricted access</span>
+        <h1 id="accessDeniedTitle">You do not have permission to open this page</h1>
+        <p>
+            Your account is signed in, but the requested page is outside your assigned responsibilities.
+            Contact your system administrator if you need access.
+        </p>
+
+        @if (!string.IsNullOrWhiteSpace(returnUrl))
+        {
+            <div class="requested-resource">
+                <span>Requested resource</span>
+                <code>@returnUrl</code>
+            </div>
+        }
+
+        <div class="access-denied-actions">
+            <button type="button" class="btn btn-outline-secondary ui-size-xm" onclick="history.back()">
+                <i class="bi bi-arrow-left me-1"></i>Go back
+            </button>
+            <a asp-controller="Home" asp-action="DashboardIndex" class="btn btn-primary ui-size-xm">
+                <i class="bi bi-grid me-1"></i>Dashboard
+            </a>
+        </div>
+    </section>
+</main>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="PTLMFGPLUS engineering guide for writing, migrating, and maintaining code.">
+    <title>PTLMFGPLUS Developer Guide</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to guide</a>
+
+    <div class="guide-shell">
+        <aside class="sidebar" aria-label="Developer guide navigation">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">P+</div>
+                <div>
+                    <span class="eyebrow">Engineering handbook</span>
+                    <strong>PTLMFGPLUS</strong>
+                </div>
+            </div>
+
+            <nav class="section-nav">
+                <a href="#start">Start here</a>
+                <a href="#architecture">Request path</a>
+                <a href="#reuse">Reusable functions</a>
+                <a href="#javascript">JavaScript standard</a>
+                <a href="#controller">Controller standard</a>
+                <a href="#service">Service and data</a>
+                <a href="#errors">Error handling</a>
+                <a href="#views">Views and UI</a>
+                <a href="#migration">Migration workflow</a>
+                <a href="#checklist">Definition of done</a>
+            </nav>
+
+            <div class="sidebar-note">
+                <span class="status-dot" aria-hidden="true"></span>
+                <p>Web Forms defines behavior. ASP.NET Core MVC defines implementation style.</p>
+            </div>
+        </aside>
+
+        <main id="main-content" class="content">
+            <header id="start" class="hero">
+                <div class="hero-copy">
+                    <span class="eyebrow">Direct guide for contributors</span>
+                    <h1>Write code that fits the system.</h1>
+                    <p>
+                        Use this guide when adding a page, migrating Web Forms behavior, reviewing a pull request,
+                        or fixing production code in PTLMFGPLUS.
+                    </p>
+                </div>
+                <div class="hero-meta" aria-label="Guide metadata">
+                    <span>ASP.NET Core MVC</span>
+                    <span>Enterprise ERP</span>
+                    <span>Updated 23-Oct-2026</span>
+                </div>
+            </header>
+
+            <section class="callout callout-primary" aria-labelledby="golden-rule-title">
+                <div class="callout-icon" aria-hidden="true">01</div>
+                <div>
+                    <h2 id="golden-rule-title">The golden rule</h2>
+                    <p>
+                        Preserve the business behavior from PTLMFGERP Web Forms, but implement it using the existing
+                        PTLMFGPLUS MVC architecture. Never carry ViewState, control events, or page lifecycle code into MVC.
+                    </p>
+                </div>
+            </section>
+
+            <section id="architecture" class="guide-section">
+                <div class="section-heading">
+                    <span class="section-number">01</span>
+                    <div>
+                        <p class="kicker">Architecture</p>
+                        <h2>Keep the complete request path visible</h2>
+                        <p>A feature is incomplete when only the screen or controller is implemented.</p>
+                    </div>
+                </div>
+
+                <div class="flow" aria-label="Application request flow">
+                    <div class="flow-step"><span>1</span><strong>View</strong><small>Semantic Razor markup</small></div>
+                    <div class="flow-arrow" aria-hidden="true">→</div>
+                    <div class="flow-step"><span>2</span><strong>Page JS</strong><small>State and workflows</small></div>
+                    <div class="flow-arrow" aria-hidden="true">→</div>
+                    <div class="flow-step"><span>3</span><strong>Controller</strong><small>Auth and validation</small></div>
+                    <div class="flow-arrow" aria-hidden="true">→</div>
+                    <div class="flow-step"><span>4</span><strong>Service</strong><small>Business coordination</small></div>
+                    <div class="flow-arrow" aria-hidden="true">→</div>
+                    <div class="flow-step"><span>5</span><strong>Data / SP</strong><small>CallType and mapping</small></div>
+                </div>
+
+                <div class="rule-grid">
+                    <article class="rule-card">
+                        <span class="rule-label">Trust boundary</span>
+                        <h3>Server owns authority</h3>
+                        <p>Resolve company, user, and permissions from the authenticated server context. Never trust posted COMCOD, user ID, totals, or status.</p>
+                    </article>
+                    <article class="rule-card">
+                        <span class="rule-label">Business boundary</span>
+                        <h3>Service owns coordination</h3>
+                        <p>Controllers validate the HTTP request. Services coordinate business rules and data access. JavaScript only improves usability.</p>
+                    </article>
+                    <article class="rule-card">
+                        <span class="rule-label">Data boundary</span>
+                        <h3>Stored procedures stay compatible</h3>
+                        <p>Preserve procedure name, CallType, parameter meaning, null behavior, result-set order, decimal precision, and transaction boundaries.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="reuse" class="guide-section">
+                <div class="section-heading">
+                    <span class="section-number">02</span>
+                    <div>
+                        <p class="kicker">Reuse before creating</p>
+                        <h2>Use the shared function that already owns the concern</h2>
+                        <p>Do not create local alternatives for loading, requests, notifications, controls, tables, dates, or footer actions.</p>
+                    </div>
+                </div>
+
+                <div class="table-shell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Need</th>
+                                <th scope="col">Use</th>
+                                <th scope="col">When</th>
+                                <th scope="col">Do not</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>GET or POST request</td>
+                                <td><code>FetchHelpers</code></td>
+                                <td>Every page-to-controller request</td>
+                                <td>Repeat raw <code>fetch</code> parsing</td>
+                            </tr>
+                            <tr>
+                                <td>Busy indicator</td>
+                                <td><code>Helpers.withLoader</code></td>
+                                <td>User-visible async workflows</td>
+                                <td>Manually pair loader calls</td>
+                            </tr>
+                            <tr>
+                                <td>Business lookup</td>
+                                <td><code>Helpers.loadSelect2WithData</code></td>
+                                <td>Searchable, loaded lookup values</td>
+                                <td>Initialize Select2 twice</td>
+                            </tr>
+                            <tr>
+                                <td>Page controls</td>
+                                <td><code>EnterpriseUI.initialize</code></td>
+                                <td>Initialize shared Select2 and Datepicker behavior</td>
+                                <td>Add page-specific date formats</td>
+                            </tr>
+                            <tr>
+                                <td>Read-heavy grid</td>
+                                <td><code>EnterpriseUI.createDataTable</code></td>
+                                <td>Sorting, filtering, paging, export</td>
+                                <td>Duplicate DataTable defaults</td>
+                            </tr>
+                            <tr>
+                                <td>Common columns</td>
+                                <td><code>EnterpriseUI.dataTableColumns</code></td>
+                                <td>Text, wrapped text, number, date, row number</td>
+                                <td>Reimplement date and numeric rendering</td>
+                            </tr>
+                            <tr>
+                                <td>Routine feedback</td>
+                                <td><code>Notifications.Toastr</code></td>
+                                <td>Success, warning, or short status</td>
+                                <td>Use browser <code>alert</code></td>
+                            </tr>
+                            <tr>
+                                <td>Failed request</td>
+                                <td><code>Notifications.handleError</code></td>
+                                <td>Inside an awaited workflow catch block</td>
+                                <td>Display raw response or exception details</td>
+                            </tr>
+                            <tr>
+                                <td>Page actions</td>
+                                <td>Shared footer functions</td>
+                                <td>Save, Refresh, Recalculate, Approve, Delete, Cancel</td>
+                                <td>Add another page-level Save button</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="code-card">
+                    <div class="code-heading">
+                        <span>Example · service request with loader</span>
+                        <span class="language">JavaScript</span>
+                    </div>
+                    <pre><code>async loadProjects() {
+    return Helpers.withLoader(function () {
+        return FetchHelpers.getForm(
+            FetchHelpers.urlconfig(`${commonPath}GetProjects`)
+        );
+    });
+}</code></pre>
+                </div>
+            </section>
+
+            <section id="javascript" class="guide-section">
+                <div class="section-heading">
+                    <span class="section-number">03</span>
+                    <div>
+                        <p class="kicker">Frontend structure</p>
+                        <h2>Write one private page module</h2>
+                        <p>Place scripts in <code>wwwroot/js/J_{AreaName}/j{PageName}.js</code> and expose only <code>init</code>.</p>
+                    </div>
+                </div>
+
+                <div class="split-layout">
+                    <div class="code-card code-card-tall">
+                        <div class="code-heading">
+                            <span>Canonical page shape</span>
+                            <span class="language">JavaScript</span>
+                        </div>
+                        <pre><code>const commonPath = "/F_07_RM/MaterialTransfer/";
+
+var MaterialTransferPage = (function () {
+    "use strict";
+
+    const state = {
+        documentId: null,
+        lines: [],
+        isSaving: false
+    };
+
+    const service = {
+        async save(request) {
+            return Helpers.withLoader(function () {
+                return FetchHelpers.postJson(
+                    FetchHelpers.urlconfig(`${commonPath}Save`),
+                    request
+                );
+            });
+        }
+    };
+
+    const ui = {
+        setSaving(isSaving) {
+            state.isSaving = isSaving;
+            document.querySelector("#btnFooterSave").disabled = isSaving;
+        }
+    };
+
+    const validation = {
+        buildRequest() {
+            return {
+                documentId: state.documentId,
+                lines: state.lines
+            };
+        }
+    };
+
+    async function saveDocument() {
+        if (state.isSaving) {
+            return;
+        }
+
+        ui.setSaving(true);
+
+        try {
+            const response = await service.save(
+                validation.buildRequest()
+            );
+
+            Notifications.Toastr.success(
+                "Saved",
+                response.message
+            );
+        }
+        catch (error) {
+            Notifications.handleError(
+                error,
+                "The material transfer could not be saved."
+            );
+        }
+        finally {
+            ui.setSaving(false);
+        }
+    }
+
+    function bindEvents() {
+        document
+            .querySelector("#btnFooterSave")
+            ?.addEventListener("click", saveDocument);
+    }
+
+    function init() {
+        bindEvents();
+        EnterpriseUI.initialize(document);
+        ShowFooterWithButtons();
+    }
+
+    return {
+        init: init
+    };
+})();
+
+document.addEventListener(
+    "DOMContentLoaded",
+    MaterialTransferPage.init
+);</code></pre>
+                    </div>
+
+                    <div class="stack">
+                        <article class="rule-card accent-blue">
+                            <span class="rule-label">State</span>
+                            <h3>Mutable page data only</h3>
+                            <p>Keep identifiers, rows, selections, and pending flags private. Do not store trusted authorization context or stale DOM nodes.</p>
+                        </article>
+                        <article class="rule-card accent-cyan">
+                            <span class="rule-label">Service</span>
+                            <h3>Network calls only</h3>
+                            <p>Return the response. Do not read the DOM, render controls, or silently convert a rejected request into empty data.</p>
+                        </article>
+                        <article class="rule-card accent-violet">
+                            <span class="rule-label">UI</span>
+                            <h3>DOM work only</h3>
+                            <p>Read values, render rows, show states, initialize controls, and manage focus. Use <code>textContent</code> for untrusted values.</p>
+                        </article>
+                        <article class="rule-card accent-amber">
+                            <span class="rule-label">Workflow</span>
+                            <h3>Coordinate by business verb</h3>
+                            <p>Build and validate the request, set pending state, call the service, update state, render, notify, and reset in <code>finally</code>.</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="do-dont">
+                    <article>
+                        <h3><span class="good" aria-hidden="true">✓</span> Do</h3>
+                        <ul>
+                            <li>Bind events once in <code>bindEvents()</code>.</li>
+                            <li>Use named async workflow functions.</li>
+                            <li>Use <code>const</code>; use <code>let</code> only for reassignment.</li>
+                            <li>Keep source readable with braces and tags on separate lines.</li>
+                            <li>Repeat critical validation and all authorization on the server.</li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3><span class="bad" aria-hidden="true">×</span> Do not</h3>
+                        <ul>
+                            <li>Use inline <code>onclick</code> or global mutable state.</li>
+                            <li>Bind handlers inside rendering loops.</li>
+                            <li>Mix callbacks and promises in one workflow.</li>
+                            <li>Use <code>setTimeout</code> instead of awaiting real work.</li>
+                            <li>Trust client totals, company, user, permission, or record status.</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section id="controller" class="guide-section">
+                <div class="section-heading">
+                    <span class="section-number">04</span>
+                    <div>
+                        <p class="kicker">HTTP boundary</p>
+                        <h2>Keep controllers thin, explicit, and protected</h2>
+                        <p>A controller translates HTTP input into a validated service call and a deliberate HTTP response.</p>
+                    </div>
+                </div>
+
+                <div class="code-card">
+                    <div class="code-heading">
+                        <span>Preferred state-changing endpoint</span>
+                        <span class="language">C#</span>
+                    </div>
+                    <pre><code>[Authorize]
+[Area("F_07_RM")]
+public class MaterialTransferController(
+    IMaterialTransferService service) : Controller
+{
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [PagePermission(
+        "F_07_RM",
+        "MaterialTransfer",
+        "Index",
+        "",
+        PagePermissionAccess.Entry)]
+    public async Task&lt;IActionResult&gt; Save(
+        [FromBody] SaveMaterialTransferRequest request)
+    {
+        if (request == null || request.Lines.Count == 0)
+        {
+            return BadRequest(new ApiErrorResponse
+            {
+                Message = "Add at least one material line.",
+                ErrorCode = "VALIDATION_ERROR"
+            });
+        }
+
+        SaveMaterialTransferResponse result =
+            await service.SaveAsync(request);
+
+        return Ok(result);
+    }
+}</code></pre>
+                </div>
+
+                <div class="rule-grid rule-grid-four">
+                    <article class="mini-rule"><strong>Authenticate</strong><span>Use <code>[Authorize]</code>.</span></article>
+                    <article class="mini-rule"><strong>Authorize</strong><span>Apply <code>PagePermission</code> to the page and AJAX actions.</span></article>
+                    <article class="mini-rule"><strong>Validate</strong><span>Check required input, ranges, dates, ownership, and business state.</span></article>
+                    <article class="mini-rule"><strong>Protect</strong><span>Use the project anti-forgery convention on state changes.</span></article>
+                    <article class="mini-rule"><strong>Bind safely</strong><span>Accept request DTOs, not editable database entities.</span></article>
+                    <article class="mini-rule"><strong>Respond clearly</strong><span>Use 400, 401, 403, 404, and 409 deliberately.</span></article>
+                    <article class="mini-rule"><strong>Stay thin</strong><span>Do not build DataTables or implement calculations here.</span></article>
+                    <article class="mini-rule"><strong>Stay async</strong><span>Await I/O. Never wrap synchronous database calls in <code>Task.Run</code>.</span></article>
+                </div>
+
+                <aside class="warning">
+                    <strong>Important:</strong>
+                    Some legacy controllers return <code>GetError()?.Message</code> or caught exception messages to the browser.
+                    Do not copy that pattern into new code. Return a safe business message and let unexpected exceptions reach
+                    <code>GlobalExceptionMiddleware</code> for correlation-based logging.
+                </aside>
+            </section>
+
+            <section id="service" class="guide-section">
+                <div class="section-heading">
+                    <span class="section-number">05</span>
+                    <div>
+                        <p class="kicker">Business and data layer</p>
+                        <h2>Preserve rules and isolate company data</h2>
+                        <p>Use injected services and repositories. Build stored-procedure parameters from trusted context.</p>
+                    </div>
+                </div>
+
+                <div class="code-card">
+                    <div class="code-heading">
+                        <span>Stored-procedure call pattern</span>
+                        <span class="language">C#</span>
+                    </div>
+                    <pre><code>public async Task&lt;IEnumerable&lt;MaterialRow&gt;&gt; GetMaterialsAsync(
+    string projectCode)
+{
+    var parameters = new ClassProAccessParams
+    {
+        StoredProcedure = "SP_ENTRY_MATERIAL_TRANSFER",
+        Calltype = "GETMATERIALS",
+        Comp1 = common.GetComcod(),
+        Desc01 = projectCode,
+        UserID = common.GetUserId()
+    };
+
+    return await unitOfWork.SP_Call.ListAsync&lt;MaterialRow&gt;(
+        parameters
+    );
+}</code></pre>
+                </div>
+
+                <div class="compact-columns">
+                    <article>
+                        <h3>Always preserve</h3>
+                        <ul>
+                            <li>Stored procedure name and CallType.</li>
+                            <li>Parameter order, meaning, and null behavior.</li>
+                            <li>Result-set order and typed mappings.</li>
+                            <li>Decimal precision and calculation order.</li>
+                            <li>Existing transaction boundaries.</li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3>Always enforce</h3>
+                        <ul>
+                            <li>COMCOD and user ID from <code>ICommonService</code> or trusted context.</li>
+                            <li>Company filtering on read, write, lookup, print, and export.</li>
+                            <li>Record ownership before update or delete.</li>
+                            <li>Parameterized database calls.</li>
+                            <li>Explicit <code>DBNull</code> and nullable handling.</li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3>Prefer typed results</h3>
+                        <ul>
+                            <li>Typed entity or response models for stable shapes.</li>
+                            <li>A response object with typed lists for multiple result sets.</li>
+                            <li><code>DataSet</code> only for dynamic or existing integrations.</li>
+                            <li>Focused request DTOs to protect server-owned fields.</li>
+                            <li>DI registration in <code>ApplicationDI.cs</code>.</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section id="errors" class="guide-section">
+                <div class="section-heading">
+                    <span class="section-number">06</span>
+                    <div>
+                        <p class="kicker">Failure behavior</p>
+                        <h2>Make failures safe, visible, and traceable</h2>
+                        <p>Expected failures get deliberate responses. Unexpected failures get centralized logging and a reference ID.</p>
+                    </div>
+                </div>
+
+                <div class="error-flow">
+                    <article><span>Browser</span><strong><code>FetchHelpers</code></strong><p>Adds correlation ID and normalizes HTTP/network errors.</p></article>
+                    <div aria-hidden="true">→</div>
+                    <article><span>Page workflow</span><strong><code>try / catch / finally</code></strong><p>Shows a safe operation-specific message and restores pending state.</p></article>
+                    <div aria-hidden="true">→</div>
+                    <article><span>Server</span><strong>Global middleware</strong><p>Logs method, route, user, trace ID, and exception details.</p></article>
+                </div>
+
+                <div class="split-layout">
+                    <div class="code-card">
+                        <div class="code-heading">
+                            <span>Frontend failure handling</span>
+                            <span class="language">JavaScript</span>
+                        </div>
+                        <pre><code>try {
+    const result = await service.save(request);
+    Notifications.Toastr.success(
+        "Saved",
+        result.message
+    );
+}
+catch (error) {
+    Notifications.handleError(
+        error,
+        "The request could not be saved."
+    );
+}
+finally {
+    ui.setSaving(false);
+}</code></pre>
+                    </div>
+                    <div class="status-list" aria-label="HTTP response guide">
+                        <div><span class="status-code">400</span><p><strong>Invalid input</strong> — explain what the user can correct.</p></div>
+                        <div><span class="status-code">401</span><p><strong>Unauthenticated</strong> — sign-in is required.</p></div>
+                        <div><span class="status-code">403</span><p><strong>Forbidden</strong> — permission or company access denied.</p></div>
+                        <div><span class="status-code">404</span><p><strong>Not found</strong> — authorized record does not exist.</p></div>
+                        <div><span class="status-code">409</span><p><strong>Conflict</strong> — current business state prevents the action.</p></div>
+                        <div><span class="status-code">500</span><p><strong>Unexpected</strong> — middleware returns a safe message and trace ID.</p></div>
+                    </div>
+                </div>
+
+                <div class="do-dont">
+                    <article>
+                        <h3><span class="good" aria-hidden="true">✓</span> Catch when</h3>
+                        <ul>
+                            <li>You can recover safely.</li>
+                            <li>You convert a known business condition into a deliberate response.</li>
+                            <li>You add meaningful context and rethrow.</li>
+                            <li>You must restore UI pending state in <code>finally</code>.</li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3><span class="bad" aria-hidden="true">×</span> Never</h3>
+                        <ul>
+                            <li>Catch <code>Exception</code> and return false, null, or an empty list.</li>
+                            <li>Return exception messages, SQL, connection details, or stack traces.</li>
+                            <li>Show both a local error and an unhandled rejection.</li>
+                            <li>Present a failed load as a valid empty state.</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section id="views" class="guide-section">
+                <div class="section-heading">
+                    <span class="section-number">07</span>
+                    <div>
+                        <p class="kicker">Razor and UI</p>
+                        <h2>Build calm, dense, predictable ERP screens</h2>
+                        <p>Use <code>_AdminLayout.cshtml</code>, shared enterprise classes, and the established application shell.</p>
+                    </div>
+                </div>
+
+                <div class="rule-grid rule-grid-four">
+                    <article class="mini-rule"><strong>Readable markup</strong><span>Break lines between tags. Do not compress a whole table onto one line.</span></article>
+                    <article class="mini-rule"><strong>Dates</strong><span>Use Bootstrap Datepicker and display <code>dd-MMM-yyyy</code>.</span></article>
+                    <article class="mini-rule"><strong>Numbers</strong><span>Right-align quantities, rates, amounts, and numeric inputs.</span></article>
+                    <article class="mini-rule"><strong>Actions</strong><span>Use the shared footer for page-level workflow actions.</span></article>
+                    <article class="mini-rule"><strong>Tables</strong><span>Native table for editable lines; DataTables for read-heavy lists.</span></article>
+                    <article class="mini-rule"><strong>Forms</strong><span>Use persistent labels, server validation, and task-sequence field order.</span></article>
+                    <article class="mini-rule"><strong>Accessibility</strong><span>Use semantic elements, visible focus, keyboard order, and labels for icon buttons.</span></article>
+                    <article class="mini-rule"><strong>CSS</strong><span>Reuse enterprise tokens and classes; avoid inline styles and page-specific control heights.</span></article>
+                </div>
+
+                <div class="callout">
+                    <div class="callout-icon" aria-hidden="true">20</div>
+                    <div>
+                        <h3>DataTables defaults</h3>
+                        <p>Default to 20 rows with page lengths <code>10, 15, 20, 30, 50, 100, 300</code>. Preserve the current page after a row update when practical.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="migration" class="guide-section">
+                <div class="section-heading">
+                    <span class="section-number">08</span>
+                    <div>
+                        <p class="kicker">Migration workflow</p>
+                        <h2>Investigate before implementing</h2>
+                        <p>Migration is behavior discovery first, code writing second.</p>
+                    </div>
+                </div>
+
+                <ol class="timeline">
+                    <li><span>1</span><div><strong>Inspect the Web Forms feature</strong><p>Read ASPX, code-behind, JavaScript, stored-procedure CallTypes, report definitions, permissions, and linked workflows.</p></div></li>
+                    <li><span>2</span><div><strong>Inventory every action</strong><p>Record load, search, save, update, delete, approve, calculate, print, and export behavior, including validations and result sets.</p></div></li>
+                    <li><span>3</span><div><strong>Select the MVC page pattern</strong><p>Choose operational workspace, transaction entry, master list, report/inquiry, or guided process.</p></div></li>
+                    <li><span>4</span><div><strong>Trace the full implementation path</strong><p>Build View → JS → Controller → Service → repository/stored-procedure mapping. Keep filters and selected IDs explicit.</p></div></li>
+                    <li><span>5</span><div><strong>Verify behavior, not appearance alone</strong><p>Compare calculations, validation, permissions, company isolation, totals, reports, empty data, failed saves, and approval state with Web Forms.</p></div></li>
+                </ol>
+
+                <aside class="warning">
+                    <strong>When source behavior is unclear:</strong>
+                    document the uncertainty and ask for a decision. Do not silently “fix” a business rule during migration.
+                </aside>
+            </section>
+
+            <section id="checklist" class="guide-section checklist-section">
+                <div class="section-heading">
+                    <span class="section-number">09</span>
+                    <div>
+                        <p class="kicker">Pull request gate</p>
+                        <h2>Definition of done</h2>
+                        <p>A reviewer should be able to confirm every item before merging.</p>
+                    </div>
+                </div>
+
+                <div class="checklist-grid">
+                    <article>
+                        <h3>Behavior</h3>
+                        <label><input type="checkbox"> Web Forms actions and rules were inventoried.</label>
+                        <label><input type="checkbox"> Calculations, rounding, totals, and workflow match.</label>
+                        <label><input type="checkbox"> Print and export use the same authorized filters.</label>
+                    </article>
+                    <article>
+                        <h3>Security</h3>
+                        <label><input type="checkbox"> Company and user come from trusted server context.</label>
+                        <label><input type="checkbox"> AJAX endpoints enforce permissions.</label>
+                        <label><input type="checkbox"> State changes follow anti-forgery convention.</label>
+                    </article>
+                    <article>
+                        <h3>Implementation</h3>
+                        <label><input type="checkbox"> Shared helpers and components are reused.</label>
+                        <label><input type="checkbox"> JS separates state, service, UI, validation, and workflow.</label>
+                        <label><input type="checkbox"> Stable result shapes use typed models.</label>
+                    </article>
+                    <article>
+                        <h3>Experience</h3>
+                        <label><input type="checkbox"> Dates and numbers follow project formatting.</label>
+                        <label><input type="checkbox"> Loading, empty, validation, success, and error states exist.</label>
+                        <label><input type="checkbox"> Keyboard and responsive behavior were checked.</label>
+                    </article>
+                    <article>
+                        <h3>Verification</h3>
+                        <label><input type="checkbox"> Empty and invalid inputs were tested.</label>
+                        <label><input type="checkbox"> Failed save and permission denial were tested.</label>
+                        <label><input type="checkbox"> Project builds and relevant tests pass.</label>
+                    </article>
+                    <article>
+                        <h3>Scope</h3>
+                        <label><input type="checkbox"> Changes are focused on the requested feature.</label>
+                        <label><input type="checkbox"> No secrets or generated files were committed.</label>
+                        <label><input type="checkbox"> Remaining gaps are documented clearly.</label>
+                    </article>
+                </div>
+            </section>
+
+            <footer class="page-footer">
+                <p>PTLMFGPLUS Engineering · Build for accuracy, consistency, and operator speed.</p>
+                <a href="#start">Back to top ↑</a>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

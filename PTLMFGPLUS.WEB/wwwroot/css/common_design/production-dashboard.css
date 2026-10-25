@@ -59,7 +59,7 @@
     flex: 0 0 140px;
     width: 140px;
     min-width: 140px;
-    height: 110px;
+    /*height: 110px;*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -71,6 +71,8 @@
     border: 1px solid #d7deea;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    border-top: 4px solid var(--card-accent, #0d6efd);
+    background: var(--card-bg, #fff);
 }
 
     .pm-kpi-card:hover {
@@ -91,7 +93,7 @@
         }
 
 .pm-kpi-title {
-    min-height: 28px;
+    /*min-height: 28px;*/
     color: #334155;
     font-size: clamp(8px, .7vw, 12px);
     font-weight: 800;
@@ -109,10 +111,11 @@
 }
 
 .pm-kpi-value {
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     font-size: clamp(20px, 2.1vw, 34px);
     font-weight: 700;
     line-height: 1;
+    color: var(--card-accent, #0d6efd) !important;
 }
 
 .pm-kpi-bar {
@@ -123,69 +126,22 @@
 /* =========================================================
    KPI Card Colors
 ========================================================= */
-#requisitionDiv {
-    border-color: #b7d4ff;
-}
+.pm-kpi-card:nth-child(1)  { --card-accent: #2563eb; --card-bg: #eff6ff; }
+.pm-kpi-card:nth-child(2)  { --card-accent: #d97706; --card-bg: #fffbeb; }
+.pm-kpi-card:nth-child(3)  { --card-accent: #0891b2; --card-bg: #ecfeff; }
+.pm-kpi-card:nth-child(4)  { --card-accent: #059669; --card-bg: #ecfdf5; }
+.pm-kpi-card:nth-child(5)  { --card-accent: #dc2626; --card-bg: #fef2f2; }
+.pm-kpi-card:nth-child(6)  { --card-accent: #7c3aed; --card-bg: #f5f3ff; }
+.pm-kpi-card:nth-child(7)  { --card-accent: #db2777; --card-bg: #fdf2f8; }
+.pm-kpi-card:nth-child(8)  { --card-accent: #0284c7; --card-bg: #f0f9ff; }
+.pm-kpi-card:nth-child(9)  { --card-accent: #4f46e5; --card-bg: #eef2ff; }
+.pm-kpi-card:nth-child(10) { --card-accent: #16a34a; --card-bg: #f0fdf4; }
+.pm-kpi-card:nth-child(11) { --card-accent: #ea580c; --card-bg: #fff7ed; }
 
-#reqApprovalDiv {
-    border-color: #ffe08a;
-}
-
-#storeIssueDiv {
-    border-color: #9eeaf9;
-}
-
-#storeReceiveDiv {
-    border-color: #a8dfc2;
-}
-
-#mattTransferedDiv {
-    border-color: #f5b5bf;
-}
-
-#requisitionDiv:hover {
-    border-color: #0d6efd;
-}
-
-#reqApprovalDiv:hover {
-    border-color: #f5b400;
-}
-
-#storeIssueDiv:hover {
-    border-color: #0dcaf0;
-}
-
-#storeReceiveDiv:hover {
-    border-color: #198754;
-}
-
-#mattTransferedDiv:hover {
-    border-color: #dc3545;
-}
-
-#requisitionDiv.active {
-    background: #dbeafe;
-    border-color: #0d6efd;
-}
-
-#reqApprovalDiv.active {
-    background: #fef3c7;
-    border-color: #f5b400;
-}
-
-#storeIssueDiv.active {
-    background: #cffafe;
-    border-color: #0dcaf0;
-}
-
-#storeReceiveDiv.active {
-    background: #d1fae5;
-    border-color: #198754;
-}
-
-#mattTransferedDiv.active {
-    background: #ffe4e6;
-    border-color: #dc3545;
+.pm-kpi-card:hover,
+.pm-kpi-card.active {
+    border-color: var(--card-accent);
+    background: var(--card-bg);
 }
 
 
@@ -703,4 +659,69 @@
     font-size: 14px !important;
     font-weight: 400 !important;
     color: #000 !important;
+}
+
+.pm-interface-table {
+    width: 100% !important;
+    table-layout: auto;
+    font-size: 11px;
+}
+
+.pm-interface-table th {
+    padding: 7px 5px !important;
+    font-size: 10px !important;
+    line-height: 1.15;
+    text-align: center !important;
+    vertical-align: middle;
+    white-space: normal !important;
+}
+
+.pm-interface-table td {
+    padding: 6px 5px !important;
+    line-height: 1.2;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.pm-interface-table td.pm-wrap-cell {
+    width: 150px;
+    min-width: 115px;
+    max-width: 175px;
+    text-align: left;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.pm-interface-table td.pm-actions-cell {
+    width: 1%;
+    min-width: 72px;
+    white-space: nowrap;
+}
+
+.pm-row-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+.pm-action-btn {
+    width: 26px;
+    height: 26px;
+    padding: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    line-height: 1;
+}
+
+.pm-action-btn .bi {
+    font-size: 12px;
+}
+
+.table-section .dt-container {
+    padding: 8px 10px 10px;
 }

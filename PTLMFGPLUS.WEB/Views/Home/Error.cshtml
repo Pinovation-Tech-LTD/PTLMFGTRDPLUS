@@ -1,0 +1,33 @@
+@model PTLMFGPLUS.WEB.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Request Error";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5 text-center">
+                    <i class="bi bi-exclamation-triangle text-warning fs-1" aria-hidden="true"></i>
+                    <h1 class="h3 mt-3">We could not complete your request</h1>
+                    <p class="text-muted mb-3">
+                        @Model.Message
+                    </p>
+                    @if (!string.IsNullOrWhiteSpace(Model.TraceId))
+                    {
+                        <p class="small mb-4">
+                            Reference ID:
+                            <code>@Model.TraceId</code>
+                        </p>
+                    }
+                    <a class="btn btn-primary" href="javascript:history.back()">
+                        Go back
+                    </a>
+                    <a class="btn btn-outline-secondary ms-2" asp-controller="Home" asp-action="DashboardIndex">
+                        Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

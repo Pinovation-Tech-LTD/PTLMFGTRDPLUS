@@ -1,0 +1,194 @@
+@{
+    ViewData["Title"] = "Receive Warranty Product";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="enterprise-entry-page service-receive-page">
+    <section class="card entry-header-card">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="entry-field mb-2">
+                        <label for="ddlServiceCenter" class="form-label required">Service center</label>
+                        <select id="ddlServiceCenter" class="form-select ui-size-xm"></select>
+                    </div>
+                    <div class="entry-field mb-2">
+                        <label for="txtSalesCenter" class="form-label">Sales center</label>
+                        <input id="txtSalesCenter" class="form-control ui-size-xm" type="text" readonly />
+                    </div>
+                    <div class="entry-field mb-2">
+                        <label for="txtDistributor" class="form-label">Distributor name</label>
+                        <input id="txtDistributor" class="form-control ui-size-xm" type="text" readonly />
+                    </div>
+                    <div class="entry-field mb-2">
+                        <label for="txtDistributorAddress" class="form-label">Distributor address</label>
+                        <textarea id="txtDistributorAddress" class="form-control" rows="2" readonly></textarea>
+                    </div>
+                    <div class="entry-field mb-2">
+                        <label for="txtProduct" class="form-label">Model</label>
+                        <input id="txtProduct" class="form-control ui-size-xm" type="text" readonly />
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6 entry-field">
+                            <label for="txtSalesDate" class="form-label">Warehouse delivery</label>
+                            <input id="txtSalesDate" class="form-control ui-size-xm" type="text" readonly />
+                        </div>
+                        <div class="col-6 entry-field">
+                            <label for="ddlServiceType" class="form-label required">Service type</label>
+                            <select id="ddlServiceType" class="form-select ui-size-xm"></select>
+                        </div>
+                    </div>
+                    <div id="courierFields" class="row g-2 mb-2">
+                        <div class="col-6 entry-field">
+                            <label for="ddlTransport" class="form-label">Courier name</label>
+                            <select id="ddlTransport" class="form-select ui-size-xm"></select>
+                        </div>
+                        <div class="col-6 entry-field">
+                            <label for="txtConsignment" class="form-label">CN no.</label>
+                            <input id="txtConsignment" class="form-control ui-size-xm" type="text" />
+                        </div>
+                    </div>
+                    <div class="entry-field">
+                        <label for="txtComplaint" class="form-label">Customer complaint</label>
+                        <textarea id="txtComplaint" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 border-lg-start border-lg-end">
+                    <div class="entry-field mb-2">
+                        <label for="txtImei" class="form-label required">IMEI / serial number</label>
+                        <div class="input-group">
+                            <input id="txtImei" class="form-control ui-size-xm" type="text" autocomplete="off" placeholder="Scan or input here" />
+                            <button id="btnFindProduct" class="btn btn-primary ui-size-xm" type="button">
+                                <i class="bi bi-search" aria-hidden="true"></i>
+                                Find
+                            </button>
+                        </div>
+                        <span id="productStatus" class="badge text-bg-secondary mt-1">Not loaded</span>
+                    </div>
+                    <div class="entry-field mb-2">
+                        <label for="ddlCustomer" class="form-label required">Distributor list</label>
+                        <select id="ddlCustomer" class="form-select ui-size-xm"></select>
+                    </div>
+                    <div class="entry-field mb-2">
+                        <label for="txtCustomerName" class="form-label">Client name</label>
+                        <input id="txtCustomerName" class="form-control ui-size-xm" type="text" />
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6 entry-field">
+                            <label for="txtMobile" class="form-label">Mobile number</label>
+                            <input id="txtMobile" class="form-control ui-size-xm" type="text" />
+                        </div>
+                        <div class="col-6 entry-field">
+                            <label for="txtEmail" class="form-label">Email ID</label>
+                            <input id="txtEmail" class="form-control ui-size-xm" type="email" />
+                        </div>
+                    </div>
+                    <div class="entry-field mb-2">
+                        <label for="txtMobile2" class="form-label">Client number</label>
+                        <input id="txtMobile2" class="form-control ui-size-xm" type="text" />
+                    </div>
+                    <div class="entry-field mb-2">
+                        <label for="txtAddress" class="form-label">Address</label>
+                        <input id="txtAddress" class="form-control ui-size-xm" type="text" />
+                    </div>
+                    <div class="d-flex gap-2 align-items-end mb-2">
+                        <div class="entry-field flex-grow-1">
+                            <label for="ddlProblem" class="form-label">Problem list</label>
+                            <select id="ddlProblem" class="form-select ui-size-xs"></select>
+                        </div>
+                        <button id="btnAddProblem" class="btn btn-primary ui-size-xs" type="button" aria-label="Add problem">
+                            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="entry-native-table-shell">
+                        <table class="table table-bordered enterprise-native-table" id="problemTable">
+                            <thead>
+                                <tr>
+                                    <th>Problem details</th>
+                                    <th>Remarks</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="row g-2 mb-2">
+                        <div class="col-6 entry-field">
+                            <label for="txtReceiveNo" class="form-label">Received ID no.</label>
+                            <input id="txtReceiveNo" class="form-control ui-size-xm" type="text" readonly />
+                        </div>
+                        <div class="col-6 entry-field">
+                            <label for="txtEntryDate" class="form-label required">Date</label>
+                            <input id="txtEntryDate" class="form-control ui-size-xm ui-datepicker-input" type="text" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6 entry-field">
+                            <label for="txtProbableDate" class="form-label required">Pr. del. date</label>
+                            <input id="txtProbableDate" class="form-control ui-size-xm ui-datepicker-input" type="text" autocomplete="off" />
+                        </div>
+                        <div class="col-6 entry-field">
+                            <label for="txtActivationDate" class="form-label required">Activation date</label>
+                            <input id="txtActivationDate" class="form-control ui-size-xm ui-datepicker-input" type="text" autocomplete="off" />
+                        </div>
+                    </div>
+                    <div id="bookingDateField" class="entry-field mb-2">
+                        <label for="txtBookingDate" class="form-label">Booking date</label>
+                        <input id="txtBookingDate" class="form-control ui-size-xm ui-datepicker-input" type="text" autocomplete="off" />
+                    </div>
+                    <div id="vehicleFields" class="row g-2 mb-2" hidden>
+                        <div class="col-6 entry-field">
+                            <label for="txtOdometer" class="form-label">ODO meter reading (km)</label>
+                            <input id="txtOdometer" class="form-control ui-size-xm text-end" type="number" min="0" step="0.01" />
+                        </div>
+                        <div class="col-6 entry-field">
+                            <label for="txtRegistration" class="form-label">Reg. no.</label>
+                            <input id="txtRegistration" class="form-control ui-size-xm" type="text" />
+                        </div>
+                        <div class="col-6 entry-field">
+                            <label for="ddlMechanic" class="form-label">Engineer name</label>
+                            <select id="ddlMechanic" class="form-select ui-size-xm"></select>
+                        </div>
+                        <div class="col-6 entry-field">
+                            <label for="txtAdvance" class="form-label">Advance</label>
+                            <input id="txtAdvance" class="form-control ui-size-xm text-end" type="number" min="0" step="0.01" value="0" />
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 align-items-end mb-2">
+                        <div class="entry-field flex-grow-1">
+                            <label for="ddlAccessory" class="form-label">Accessories</label>
+                            <select id="ddlAccessory" class="form-select ui-size-xs"></select>
+                        </div>
+                        <button id="btnAddAccessory" class="btn btn-primary ui-size-xs" type="button" aria-label="Add accessory">
+                            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="entry-native-table-shell mb-2">
+                        <table class="table table-bordered enterprise-native-table" id="accessoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Accessory name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="entry-field">
+                        <label for="txtMissing" class="form-label">Missing item</label>
+                        <textarea id="txtMissing" class="form-control" rows="1"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/js/J_20_Service/jRecProductEntry.js" asp-append-version="true"></script>
+}

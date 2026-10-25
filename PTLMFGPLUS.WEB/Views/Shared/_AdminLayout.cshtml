@@ -1,361 +1,207 @@
-﻿@{
-    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
-    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-
-    bool IsActive(string area, string controller, string action)
-    {
-        return string.Equals(currentArea, area, StringComparison.OrdinalIgnoreCase)
-            && string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase)
-            && string.Equals(currentAction, action, StringComparison.OrdinalIgnoreCase);
-    }
-
-    bool interfaceOpen =
-        IsActive("F_07_RM", "RawMattInterface", "InterfaceIndex")
-        || IsActive("F_13_ProdMon", "ProductionInterface", "ProductionInterfaceIndex");
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment WebHostEnvironment
+@{
+    string pageTitle = ViewData["Title"]?.ToString() ?? "Workspace";
+    string companyName = User.FindFirst("CompanyName")?.Value ?? "PTL Manufacturing Plus";
+    string companyShortName = User.FindFirst("CompanyShortName")?.Value ?? companyName;
+    string companyCode = User.FindFirst("Comcod")?.Value ?? string.Empty;
+    string userName = User.FindFirst("UserShortName")?.Value
+        ?? User.Identity?.Name
+        ?? "User";
+    string userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "User";
+    string sessionId = User.FindFirst("SessionId")?.Value ?? string.Empty;
+    string companyLogoFile = $"logo{companyCode}.PNG";
+    string companyLogoPath = System.IO.Path.Combine(WebHostEnvironment.WebRootPath, "Images", "Company_Logo", companyLogoFile);
+    string companyLogoUrl = System.IO.File.Exists(companyLogoPath)
+        ? Url.Content($"~/Images/Company_Logo/{companyLogoFile}")
+        : Url.Content("~/Images/Company_Logo/logo1.PNG");
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dark Admin Dashboard</title>
+    <meta name="color-scheme" content="light dark" />
+    <title>@pageTitle | @companyShortName</title>
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem("theme") || "light";
+            document.documentElement.setAttribute("data-theme", savedTheme);
+        })();
+    </script>
 
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Select 2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    <link rel="stylesheet"
-          href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-
-    <link href="~/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
-
-
-    <!-- =========================================================
-         DATATABLE CSS
-    ========================================================= -->
-    <!-- Core DataTable -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.min.css">
-
-    <!-- Responsive -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.bootstrap5.min.css">
-
-    <!-- Buttons -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/buttons/3.2.4/css/buttons.bootstrap5.min.css">
-
-    <!-- Fixed Header -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/fixedheader/4.0.2/css/fixedHeader.bootstrap5.min.css">
-
-    <!-- Fixed Columns -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/fixedcolumns/5.0.5/css/fixedColumns.bootstrap5.min.css">
-
-    <!-- Select -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/select/3.0.0/css/select.bootstrap5.min.css">
-
-    <link href="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.23.0/sweetalert2.css" integrity="sha512-/j+6zx45kh/MDjnlYQL0wjxn+aPaSkaoTczyOGfw64OB2CHR7Uh5v1AML7VUybUnUTscY5ck/gbGygWYcpCA7w==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- CSS -->
-    <link rel="stylesheet" href="~/css/common_design/site.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/css/common_design/sidebar.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/css/common_design/topbar.css" asp-append-version="true">
+    <link rel="icon" href="~/favicon.ico" />
+    <link rel="stylesheet" href="~/offline/bootstrap-5.0.2-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/offline/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/offline/css/select2.min.css" />
+    <link rel="stylesheet" href="~/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" />
+    <link rel="stylesheet" href="~/offline/dataTables/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/offline/dataTables/css/responsive.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/offline/dataTables/css/buttons.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/vendor/sweetalert2/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" href="~/css/common_design/enterprise-components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/common_design/interface-workspace.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/common_design/transaction-entry.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/common_design/admin-shell.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="admin-page">
+    <div class="admin-shell">
+        <aside class="app-sidebar" id="appSidebar">
+            <div class="sidebar-brand">
+                <a class="sidebar-brand-mark"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="DashboardIndex"
+                   aria-label="Open dashboard">
+                    <img src="@companyLogoUrl"
+                         alt="@companyShortName logo" />
+                </a>
+            </div>
 
-    <div class="app-wrapper">
+            <div class="sidebar-content">
+                <p class="sidebar-section-label">
+                    Operations
+                </p>
+                @await Component.InvokeAsync("AdminNavigation")
+            </div>
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar" id="sidebar">
-
-            <div class="sidebar-top">
-
-                <div class="brand-area">
-                    <img src="~/Images/Company_Logo/logo1.png" alt="LOGO" width="150px" class="img-fluid"/>
-                    @* <div class="brand-logo">A</div>
-
-                    <div class="brand-text sidebar-text ms-3">
-                        <h5>Axiom</h5>
-                    </div> *@
-
-
-                   @*  <button class="sidebar-toggle-btn" id="sidebarToggle">
-                        <i class="bi bi-layout-sidebar-inset"></i>
-                    </button> *@
+            <div class="sidebar-footer">
+                <div class="sidebar-session">
+                    <i class="bi bi-shield-check sidebar-session-icon" aria-hidden="true"></i>
+                    <div class="sidebar-session-copy">
+                        <strong>Secure session</strong>
+                        <span>@(string.IsNullOrWhiteSpace(sessionId) ? "Authenticated" : $"ID {sessionId}")</span>
+                    </div>
                 </div>
-
-                <ul class="sidebar-menu">
-
-                    <li>
-                        <a href="#">
-                            <div class="menu-left">
-                                <i class="bi bi-house-door"></i>
-                                <span class="sidebar-text">Home</span>
-                            </div>
-
-                            <span class="menu-dot sidebar-text"></span>
-                        </a>
-                    </li>
-
-                    <!-- MODULE -->
-                    <li class="has-submenu">
-
-                        <a href="javascript:void(0)" class="submenu-toggle">
-                            <div class="menu-left">
-                                <i class="bi bi-boxes"></i>
-                                <span class="sidebar-text">Modules</span>
-                            </div>
-
-                            <i class="bi bi-chevron-right submenu-arrow sidebar-text"></i>
-                        </a>
-
-                        <ul class="submenu">
-                            <li><a href="#">HRM</a></li>
-                            <li><a href="#">Accounts</a></li>
-                            <li><a href="#">Inventory</a></li>
-                            <li><a href="#">Payroll</a></li>
-                        </ul>
-
-                    </li>
-
-                    <!-- INTERFACE -->
-                    <li class="has-submenu @(interfaceOpen ? "open" : "")">
-
-                       <a href="javascript:void(0)" class="submenu-toggle">
-                            <div class="menu-left">
-                                <i class="bi bi-grid"></i>
-                                <span class="sidebar-text">Interface</span>
-                            </div>
-
-                            <i class="bi bi-chevron-right submenu-arrow sidebar-text"></i>
-                        </a>
-
-                        <ul class="submenu">
-                            <li>
-                                <a asp-area="F_07_RM"
-                                    asp-controller="RawMattInterface"
-                                    asp-action="InterfaceIndex"
-                                    class="@(IsActive("F_07_RM", "RawMattInterface", "InterfaceIndex") ? "active" : "")">
-                                    MATERIALS TRANSFER INTERFACE
-                                </a>
-                            </li>
-
-                            <li>
-                                <a asp-area="F_13_ProdMon"
-                                    asp-controller="ProductionInterface"
-                                    asp-action="ProductionInterfaceIndex"
-                                    class="@(IsActive("F_13_ProdMon", "ProductionInterface", "ProductionInterfaceIndex") ? "active" : "")">
-                                    PRODUCTION INTERFACE- FG
-                                </a>
-                            </li>
-
-                             <li><a href="#">Dashboard</a></li>
-                            <li><a href="#">Widgets</a></li>
-                            <li><a href="#">Reports</a></li>
-                            <li><a href="#">Analytics</a></li>    
-                        </ul>
-                    </li>
-
-                </ul>
             </div>
         </aside>
 
-        <!-- MAIN -->
-        <main class="main-content">
+        <div class="mobile-sidebar-backdrop" id="sidebarBackdrop"></div>
 
-            <!-- TOPBAR -->
-            <header class="topbar">
+        <div class="app-main">
+            <header class="app-topbar">
+                <button class="topbar-action"
+                        id="sidebarToggle"
+                        type="button"
+                        aria-label="Toggle navigation">
+                    <i class="bi bi-list" aria-hidden="true"></i>
+                </button>
 
-                <div class="topbar-left">
-                    <button class="sidebar-toggle-btn" id="sidebarToggle">
-                        <i class="bi bi-layout-sidebar-inset"></i>
-                    </button>
+                <div class="topbar-company">
+                    <h1>@pageTitle</h1>
+                    @* <p>
+                        @companyName
+                        @if (!string.IsNullOrWhiteSpace(companyCode))
+                        {
+                            <span> · @companyCode</span>
+                        }
+                    </p> *@
                 </div>
 
-                <div class="topbar-center">
-                    <h3>Dashboard Overview</h3>
-                </div>
-
-                <div class="topbar-right">
-
-                    <button class="notification-btn" onclick="toggleTheme()" id="light-dark-toggle">
-                        <i class="bi bi-moon-fill"></i>
-                    </button>
-
-                    <!-- PROFILE -->
-                    <div class="profile-dropdown">
-
-                        <button class="profile-btn" id="profileBtn">
-
-                            <div class="profile-avatar">
-                                <i class="bi bi-person"></i>
-                            </div>
-
-                            <div class="profile-info">
-                                <h6>Alex Renner</h6>
-                            </div>
-
-                            <i class="bi bi-chevron-down"></i>
-
+                <div class="topbar-tools">
+                    <div class="report-toolbar" aria-label="Report output">
+                        <label class="visually-hidden" for="DDPrintOpt">
+                            Report format
+                        </label>
+                        <select class="form-select form-select-sm no-select2"
+                                id="DDPrintOpt"
+                                name="DDPrintOpt"
+                                aria-label="Report format">
+                            <option value="PDF" selected>PDF</option>
+                            <option value="HTML">HTML</option>
+                            <option value="WORD">Word</option>
+                            <option value="EXCEL">Excel</option>
+                        </select>
+                        <button class="btn btn-sm report-print-button"
+                                id="lnkPrint"
+                                type="button"
+                                title="Print or export report"
+                                aria-label="Print or export report">
+                            <i class="bi bi-printer" aria-hidden="true"></i>
                         </button>
-
-                        <!-- DROPDOWN -->
-                        <div class="profile-menu" id="profileMenu">
-
-                            <div class="profile-menu-header">
-                                <h6>Alex Renner</h6>
-                                <span>Super Admin</span>
-                            </div>
-
-                            <a href="#">
-                                <i class="bi bi-person"></i>
-                                Profile Settings
-                            </a>
-
-                            <a href="#" class="logout-link">
-                                <i class="bi bi-box-arrow-right"></i>
-                                Logout
-                            </a>
-
-                        </div>
-
                     </div>
 
-                </div>
+                    <button class="topbar-action"
+                            id="themeToggle"
+                            type="button"
+                            aria-label="Use dark mode">
+                        <i class="bi bi-moon-stars-fill" aria-hidden="true"></i>
+                    </button>
 
+                    <div class="profile-dropdown">
+                        <button class="profile-button"
+                                id="profileButton"
+                                type="button"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                            <span class="profile-avatar">
+                                <i class="bi bi-person" aria-hidden="true"></i>
+                            </span>
+                            <span class="profile-copy">
+                                <strong>@userName</strong>
+                                @* <span>@userRole</span> *@
+                            </span>
+                            <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="profile-menu" id="profileMenu">
+                            <div class="profile-menu-header">
+                                <strong>@userName</strong>
+                                @* <span>@userRole · @companyShortName</span> *@
+                            </div>
+                            <form asp-area=""
+                                  asp-controller="Home"
+                                  asp-action="Logout"
+                                  method="post">
+                                <button class="profile-menu-action logout" type="submit">
+                                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                                    Sign out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </header>
 
-            <!-- DASHBOARD CONTENT -->
-            <section class="dashboard-content container-fluid">
-                @RenderBody()
-            </section>
+            <main class="app-content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </main>
 
-        </main>
+            <footer class="app-footer">
+                <span>© @DateTime.Now.Year Pinovation Tech Ltd. · PTL Manufacturing Plus</span>
+            </footer>
+        </div>
+
         <partial name="_Footer" />
-
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"></script>
-    <!-- JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Select 2 -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-
-
-    <!-- Core -->
-    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
-
-    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js"></script>
-
-    <!-- Responsive -->
-    <script src="https://cdn.datatables.net/responsive/3.0.4/js/dataTables.responsive.min.js"></script>
-
-    <script src="https://cdn.datatables.net/responsive/3.0.4/js/responsive.bootstrap5.min.js"></script>
-
-    <!-- Buttons -->
-    <script src="https://cdn.datatables.net/buttons/3.2.4/js/dataTables.buttons.min.js"></script>
-
-    <script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.bootstrap5.min.js"></script>
-
-    <!-- Export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-
-    <script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.html5.min.js"></script>
-
-    <script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.print.min.js"></script>
-
-    <!-- Fixed Header -->
-    <script src="https://cdn.datatables.net/fixedheader/4.0.2/js/dataTables.fixedHeader.min.js"></script>
-
-    <!-- Fixed Columns -->
-    <script src="https://cdn.datatables.net/fixedcolumns/5.0.5/js/dataTables.fixedColumns.min.js"></script>
-
-    <!-- Select -->
-    <script src="https://cdn.datatables.net/select/3.0.0/js/dataTables.select.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-   
+    <script>
+        var appPath = '@Url.Content("~/")';
+    </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/offline/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/offline/js/select2.min.js"></script>
     <script src="~/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.23.0/sweetalert2.min.js" integrity="sha512-pnPZhx5S+z5FSVwy62gcyG2Mun8h6R+PG01MidzU+NGF06/ytcm2r6+AaWMBXAnDHsdHWtsxS0dH8FBKA84FlQ==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/js/app.js" asp-append-version="true"></script>
+    <script src="~/offline/dataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/offline/dataTables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/offline/dataTables/js/dataTables.responsive.min.js"></script>
+    <script src="~/offline/dataTables/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/offline/dataTables/js/dataTables.buttons.min.js"></script>
+    <script src="~/offline/dataTables/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/offline/js/jszip.min.js"></script>
+    <script src="~/offline/dataTables/js/buttons.html5.min.js"></script>
+    <script src="~/offline/dataTables/js/buttons.print.min.js"></script>
+    <script src="~/offline/js/busy-load.min.js"></script>
+    <script src="~/vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="~/offline/js/toastr.min.js"></script>
     <script src="~/js/common/site.js" asp-append-version="true"></script>
     <script src="~/js/common/FetchHelper.js" asp-append-version="true"></script>
     <script src="~/js/common/Helper.js" asp-append-version="true"></script>
-    <script src="~/js/common/notifyhelper.js" asp-append-version="true"></script>
-    <script asp-append-version="true">
-        var appPath= '@Url.Content("~/")';
-         $(".datepicker").datepicker({
-                format: 'dd-M-yyyy',
-                closeOnDateSelect: true,
-                autoclose: true,
-                todayHighlight:true,
-                todayBtn: "linked",
-                toggleActive: true,
-                orientation: 'bottom'
-            }).on('changeDate', function(e){
-                $(this).datepicker('hide');
-            }).on('show', function (e) {
-                if (e.date) {
-                    $(this).data('stickyDate', e.date);
-                }
-                else {
-                    $(this).data('stickyDate', null);
-                }
-            }).on('hide', function (e) {
-                var stickyDate = $(this).data('stickyDate');
-                if (!e.date && stickyDate) {
-                    $(this).datepicker('setDate', stickyDate);
-                    $(this).data('stickyDate', null);
-                }
-            });
-        function initCommonPlugins() {
-            $(document).on("select2:open", () => {
-                document.querySelector(".select2-search__field").focus();
-            });
-            $("select:not(.no-select2)").select2();
-            toastr.options = {
-                closeButton: true,
-                newestOnTop: true,
-                progressBar: true,
-                positionClass: "toast-top-center",
-                showDuration: "500",
-                hideDuration: "1000",
-                timeOut: "5000",
-                extendedTimeOut: "1000",
-                showEasing: "swing",
-                hideEasing: "linear",
-                showMethod: "fadeIn",
-                hideMethod: "fadeOut"
-            };
-            $(".datepicker-current").datepicker("setDate", new Date());
-            $(".datepicker-current").datepicker("setEndDate", new Date());
-            let savedTheme = localStorage.getItem("theme");
-            if (!savedTheme) {
-                savedTheme = "light"; // default
-            }
-            setTheme(savedTheme);
-        }
-        $(document).ready(initCommonPlugins);
-
-    </script>
+    <script src="~/js/common/NotifyHelper.js" asp-append-version="true"></script>
+    <script src="~/js/common/enterprise-ui.js" asp-append-version="true"></script>
+    <script src="~/js/common/admin-shell.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

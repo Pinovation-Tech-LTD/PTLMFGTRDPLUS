@@ -1,0 +1,107 @@
+.permission-page {
+    --permission-accent: var(--app-primary, #0f766e);
+    --permission-surface: var(--app-surface, #ffffff);
+}
+
+.permission-card .card-body {
+    padding: 0.65rem;
+}
+
+.permission-toolbar {
+    align-items: end;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: minmax(190px, 1fr) auto auto auto;
+    margin-bottom: 0.5rem;
+}
+
+.permission-module-filter {
+    min-width: 0;
+}
+
+.permission-module-filter .select2-container {
+    width: 100% !important;
+}
+
+.permission-switch,
+.permission-actions {
+    align-items: center;
+    display: flex;
+    gap: 0.4rem;
+}
+
+.permission-switch {
+    min-height: 34px;
+}
+
+.permission-summary {
+    align-items: center;
+    color: var(--bs-secondary-color);
+    display: flex;
+    font-size: 0.78rem;
+    gap: 0.7rem;
+    min-height: 34px;
+    white-space: nowrap;
+}
+
+.permission-summary strong {
+    color: var(--permission-accent);
+}
+
+.permission-table-wrap {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.55rem;
+}
+
+#tblpageperCheck {
+    margin-bottom: 0;
+}
+
+#tblpageperCheck thead th {
+    background: color-mix(in srgb, var(--permission-accent) 12%, var(--permission-surface));
+    border-bottom-color: color-mix(in srgb, var(--permission-accent) 35%, var(--bs-border-color));
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+#tblpageperCheck td {
+    font-size: 0.8rem;
+    padding-block: 0.35rem;
+}
+
+#tblpageperCheck .serial-column {
+    width: 44px;
+}
+
+#tblpageperCheck .permission-column {
+    text-align: center;
+    width: 110px;
+}
+
+#tblpageperCheck .permission-column label {
+    margin-right: 0.35rem;
+}
+
+#tblpageperCheck .module-name,
+#tblpageperCheck small {
+    display: block;
+}
+
+#tblpageperCheck small {
+    color: var(--bs-secondary-color);
+}
+
+@media (max-width: 767.98px) {
+    .permission-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .permission-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .permission-actions .btn {
+        font-size: 0.72rem;
+    }
+}

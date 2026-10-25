@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using PTLMFGPLUS.ENTITY;
 using PTLMFGPLUS.LIB.Repository.IRepository;
 using System;
 using System.Collections.Generic;
@@ -21,25 +22,42 @@ namespace PTLMFGPLUS.SERVICE
         string GetIPAddress();
         Exception? GetError();   
         string GetUserName();
+        string GetTerminalId();
+        string GetPostedDate();
     }
     public class CommonService(IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork) : ICommonService
     {
+        private EClass_Login.EUserInfo? LoginUser =>
+            GetSessionObject<EClass_Login.EUserInfo>("LoginUser");
+
+        private EClass_Login.CompanyInfo? LoginCompany =>
+            GetSessionObject<EClass_Login.CompanyInfo>("LoginCompany");
+
+        private EClass_Login.LoginSessionContext? LoginContext =>
+            GetSessionObject<EClass_Login.LoginSessionContext>("LoginContext");
+
+        private T? GetSessionObject<T>(string key)
+        {
+            string? json = httpContextAccessor.HttpContext?.Session.GetString(key);
+            return string.IsNullOrWhiteSpace(json) ? default : JsonConvert.DeserializeObject<T>(json);
+        }
+
         public string GetComcod()
         {
-            return httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(claim => claim.Type == "Comcod")?.Value ?? string.Empty;
+            return GetClaim("Comcod") ?? LoginCompany?.comcod ?? string.Empty;
         }
         public string GetUserId()
         {
-            return httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(claim => claim.Type == "UserId")?.Value ?? string.Empty;
+            return GetClaim("UserId") ?? GetClaim(ClaimTypes.NameIdentifier) ?? LoginUser?.usrid ?? string.Empty;
         }
         public string GetEmpId()
         {
-            string empid = httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(claim => claim.Type == "EmpId")?.Value ?? "";
+            string empid = GetClaim("EmpId") ?? LoginUser?.empid ?? string.Empty;
             return empid == "" ? "93" : empid;
         }
         public string GetRoleId()
         {
-            return httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value ?? string.Empty;
+            return GetClaim(ClaimTypes.Role) ?? LoginUser?.userrole ?? string.Empty;
         }
         public Exception? GetError()
         {
@@ -52,7 +70,20 @@ namespace PTLMFGPLUS.SERVICE
         }
         public string GetUserName()
         {
-            return httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value ?? string.Empty;
+            return GetClaim(ClaimTypes.Name) ?? LoginUser?.usrname ?? string.Empty;
+        }
+        public string GetTerminalId()
+        {
+            return LoginContext?.terminal ?? LoginContext?.compname ?? LoginContext?.trmid ?? string.Empty;
+        }
+        public string GetPostedDate()
+        {
+            return LoginContext?.posteddate ?? string.Empty;
+        }
+
+        private string? GetClaim(string claimType)
+        {
+            return httpContextAccessor.HttpContext?.User.FindFirst(claimType)?.Value;
         }
     }
 }

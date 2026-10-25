@@ -1,0 +1,185 @@
+@model PTLMFGPLUS.ENTITY.AdminNavigationViewModel
+@{
+    string currentPath = Context.Request.Path.Value ?? string.Empty;
+    bool IsActive(string url) => !string.IsNullOrWhiteSpace(url)
+        && currentPath.Equals(url, StringComparison.OrdinalIgnoreCase);
+    bool modulesOpen = currentPath.Contains("StepOfOperation", StringComparison.OrdinalIgnoreCase);
+    bool interfacesOpen = Model.Interfaces.Any(item => IsActive(item.Url));
+    bool dashboardsOpen = Model.Dashboards.Any(item => IsActive(item.Url));
+    bool analysisOpen = Model.Analysis.Any(item => IsActive(item.Url));
+}
+
+<nav class="app-navigation" aria-label="Primary navigation">
+    <a class="nav-item-link @(currentPath.Equals("/Home/DashboardIndex", StringComparison.OrdinalIgnoreCase) ? "active" : string.Empty)"
+       asp-area=""
+       asp-controller="Home"
+       asp-action="DashboardIndex">
+        <span class="nav-item-icon">
+            <i class="bi bi-speedometer2" aria-hidden="true"></i>
+        </span>
+        <span class="nav-item-label">
+            Dashboard
+        </span>
+    </a>
+
+    <section class="nav-group @(modulesOpen ? "open" : string.Empty)">
+        <button class="nav-group-toggle" type="button" aria-expanded="@(modulesOpen.ToString().ToLowerInvariant())">
+            <span class="nav-item-icon">
+                <i class="bi bi-boxes" aria-hidden="true"></i>
+            </span>
+            <span class="nav-item-label">
+                Modules
+            </span>
+            <span class="nav-count">
+                @Model.Modules.Count
+            </span>
+            <i class="bi bi-chevron-down nav-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="nav-group-content">
+            @if (Model.Modules.Count == 0)
+            {
+                <p class="nav-empty">
+                    No permitted modules
+                </p>
+            }
+            else
+            {
+                @foreach (var module in Model.Modules)
+                {
+                    string url = Url.Content($"~/StepOfOperation/{module.moduleid}");
+                    <a class="nav-child-link @(IsActive(url) ? "active" : string.Empty)"
+                       href="@url">
+                        <span class="nav-child-dot"></span>
+                        <span>@module.modulename</span>
+                    </a>
+                }
+            }
+        </div>
+    </section>
+
+   
+
+    <section class="nav-group @(interfacesOpen ? "open" : string.Empty)">
+        <button class="nav-group-toggle" type="button" aria-expanded="@(interfacesOpen.ToString().ToLowerInvariant())">
+            <span class="nav-item-icon nav-item-icon-accent">
+                <i class="bi bi-grid-1x2" aria-hidden="true"></i>
+            </span>
+            <span class="nav-item-label">
+                Interfaces
+            </span>
+            <span class="nav-count nav-count-accent">
+                @Model.Interfaces.Count
+            </span>
+            <i class="bi bi-chevron-down nav-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="nav-group-content">
+            @if (Model.Interfaces.Count == 0)
+            {
+                <p class="nav-empty">
+                    No permitted interfaces
+                </p>
+            }
+            else
+            {
+                @foreach (var item in Model.Interfaces)
+                {
+                    <a class="nav-child-link @(IsActive(item.Url) ? "active" : string.Empty)"
+                       href="@item.Url">
+                        <i class="bi @item.Icon" aria-hidden="true"></i>
+                        <span>@item.Title</span>
+                    </a>
+                }
+            }
+        </div>
+    </section>
+
+    <section class="nav-group @(analysisOpen ? "open" : string.Empty)">
+        <button class="nav-group-toggle" type="button" aria-expanded="@(analysisOpen.ToString().ToLowerInvariant())">
+            <span class="nav-item-icon nav-item-icon-highlight">
+                <i class="bi bi-bar-chart-line" aria-hidden="true"></i>
+            </span>
+            <span class="nav-item-label">
+                Analysis
+            </span>
+            <span class="nav-count nav-count-highlight">
+                @Model.Analysis.Count
+            </span>
+            <i class="bi bi-chevron-down nav-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="nav-group-content">
+            @if (Model.Analysis.Count == 0)
+            {
+                <p class="nav-empty">
+                    No permitted analysis pages
+                </p>
+            }
+            else
+            {
+                @foreach (var item in Model.Analysis)
+                {
+                    <a class="nav-child-link @(IsActive(item.Url) ? "active" : string.Empty)"
+                       href="@item.Url">
+                        <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                        <span>@item.Title</span>
+                    </a>
+                }
+            }
+        </div>
+    </section>
+    @if (Model.AllInOne != null)
+    {
+        <a class="nav-item-link @(IsActive(Model.AllInOne.Url) ? "active" : string.Empty)"
+           href="@Model.AllInOne.Url">
+            <span class="nav-item-icon nav-item-icon-accent">
+                <i class="bi bi-columns-gap" aria-hidden="true"></i>
+            </span>
+            <span class="nav-item-label">
+                At a glance
+            </span>
+        </a>
+    }
+   
+    <section class="nav-group nav-shortcuts">
+        <button class="nav-group-toggle" type="button" aria-expanded="false">
+            <span class="nav-item-icon nav-item-icon-highlight">
+                <i class="bi bi-lightning-charge" aria-hidden="true"></i>
+            </span>
+            <span class="nav-item-label">
+                Shortcuts
+            </span>
+            <span class="nav-count nav-count-highlight">
+                @Model.Shortcuts.Count
+            </span>
+            <i class="bi bi-chevron-down nav-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="nav-group-content">
+            @if (Model.Shortcuts.Count == 0)
+            {
+                <p class="nav-empty">
+                    No saved shortcuts
+                </p>
+            }
+            else
+            {
+                @foreach (var item in Model.Shortcuts)
+                {
+                    <a class="nav-child-link @(IsActive(item.Url) ? "active" : string.Empty)"
+                       href="@item.Url">
+                        <i class="bi bi-star" aria-hidden="true"></i>
+                        <span>@item.Title</span>
+                    </a>
+                }
+            }
+        </div>
+    </section>
+
+    <a class="nav-item-link"
+       href="javascript:history.back()">
+        <span class="nav-item-icon">
+            <i class="bi bi-arrow-left-circle" aria-hidden="true"></i>
+        </span>
+        <span class="nav-item-label">
+            Back to last page
+        </span>
+    </a>
+</nav>
