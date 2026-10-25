@@ -1,75 +1,62 @@
-﻿@{
-    string url_basic = Url.Content("~/");
-
-    List<EUserModule> moduleList = ViewBag.ddlmodule == null ? new List<EUserModule>() : (List<EUserModule>)ViewBag.ddlmodule;
+@{
+    ViewData["Title"] = "Company Page Permission";
+    List<EUserModule> moduleList = ViewBag.ddlmodule as List<EUserModule> ?? new List<EUserModule>();
 }
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3  col-sm-12 col-xs-12">
-                        <label for="tblModule" class="form-label">Module Name</label>
-                        <select class="form-select select2" id="ddlmodule" data-toggle="select2">
-                            @if (ViewBag.ddlmodule != null)
-                            {
-                                foreach (var item in moduleList)
-                                {
-                                    if (item.moduleid == "AA")
-                                    {
-                                        <option value="@(item.moduleid)" selected>@(item.modulename)</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@(item.moduleid)">@(item.modulename)</option>
-                                    }
+@section Styles {
+    <link rel="stylesheet" href="~/css/controlpanel/company-permission.css" asp-append-version="true" />
+}
 
-                                }
-                            }
-                        </select>
-                    </div>
-
-                    <div class="col-lg-2 col-md-4 col-sm-3 col-xs-12 mb-1 align-self-end d-flex align-items-center">
-                        <input type="checkbox" id="showAll" data-switch="primary" />
-                        <label for="showAll" data-on-label="" data-off-label=""></label>
-                        <span>  Show All</span>
-                    </div>
-                    <div class="offset-md-2 col-lg-2 col-md-2 col-sm-3 col-xs-12 mb-1 align-self-end d-flex align-items-center">
-                        <a asp-area="ControlPanel" asp-controller="UserPerm" asp-action="UserPermIndex" class="btn btn-sm btn-primary"><i class="bi bi-plus-circle"></i> User Permission</a>
-                    </div>
+<div class="permission-page">
+    @Html.AntiForgeryToken()
+    <div class="card permission-card">
+        <div class="card-body">
+            <div class="permission-toolbar">
+                <div class="permission-module-filter">
+                    <label for="ddlmodule" class="form-label">Module</label>
+                    <select class="form-select ui-size-xm" id="ddlmodule" data-placeholder="Select module">
+                        @foreach (EUserModule item in moduleList)
+                        {
+                            <option value="@item.moduleid" selected="@(item.moduleid == "AA")">@item.modulename</option>
+                        }
+                    </select>
                 </div>
-
-                <div class="row">
-
-                    <div class="col-md-8 col-sm-12 col-xs-12">
-
-                        <table id="tblpageperCheck" class="table table-bordered display w-100">
-                            <thead class="table-light">
-                                <tr id="searchRow">
-                                    <th class="align-middle text-center">#</th>
-                                    <th class="align-middle text-center">Menu</th>
-                                    <th class="align-middle text-left">Description</th>
-                                    <th class="align-middle text-center">Permission<input type="checkbox" id="chktblall" /></th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-white">
-                            </tbody>
-                        </table>
-                    </div>
-
-
+                <div class="permission-switch">
+                    <input class="form-check-input" type="checkbox" id="showAll" />
+                    <label class="form-check-label" for="showAll">Show all available pages</label>
                 </div>
+                <div class="permission-summary" aria-live="polite">
+                    <span><strong id="availableCount">0</strong> available</span>
+                    <span><strong id="selectedCount">0</strong> permitted</span>
+                </div>
+                <div class="permission-actions">
+                    <a asp-area="ControlPanel" asp-controller="UserPerm" asp-action="UserPermIndex" class="btn btn-outline-primary ui-size-xm">
+                        <i class="bi bi-people me-1"></i>User permission
+                    </a>
+                </div>
+            </div>
 
+            <div class="table-responsive permission-table-wrap">
+                <table id="tblpageperCheck" class="table table-hover align-middle w-100">
+                    <thead>
+                        <tr>
+                            <th class="serial-column">#</th>
+                            <th>Module / Section</th>
+                            <th>Page description</th>
+                            <th>Alias</th>
+                            <th class="permission-column">
+                                <label for="chktblall">Permission</label>
+                                <input type="checkbox" id="chktblall" class="form-check-input" aria-label="Select all pages" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-
-@* @section Scripts {
-    <script src="~/js/controlpanel/compermission.js" asp-append-version="true"></script>
+@section Scripts {
+    <script src="~/js/j_controlpanel/compermission.js" asp-append-version="true"></script>
 }
- *@
-
-

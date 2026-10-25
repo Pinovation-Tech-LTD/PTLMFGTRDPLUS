@@ -19,12 +19,15 @@ window.hideLoader = function () {
 
 function setTheme(theme) {
     document.documentElement.style.transition = "all 0.35s ease";
+    const themeButton = document.getElementById("themeToggle") || document.getElementById("light-dark-toggle");
 
-    if (theme == "dark") {
-        document.getElementById("light-dark-toggle").innerHTML = `<i class="bi bi-brightness-high-fill"></i>`;
-    }
-    else {
-        document.getElementById("light-dark-toggle").innerHTML = `<i class="bi bi-moon-fill"></i>`;
+    if (themeButton) {
+        if (theme == "dark") {
+            themeButton.innerHTML = `<i class="bi bi-brightness-high-fill"></i>`;
+        }
+        else {
+            themeButton.innerHTML = `<i class="bi bi-moon-fill"></i>`;
+        }
     }
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
@@ -44,11 +47,25 @@ function toggleTheme() {
 
 function ShowFooterWithButtons() {
     const divFooter = document.querySelector("#div-footer");
-    divFooter.style.display = "block";
+
+    if (!divFooter) {
+        return;
+    }
+
+    divFooter.style.display = "flex";
+    divFooter.setAttribute("aria-hidden", "false");
+    document.body.classList.add("has-action-footer");
 }
 function HideFooterWithButtons() {
     const divFooter = document.querySelector("#div-footer");
-    divFooter.style.display = "block";
+
+    if (!divFooter) {
+        return;
+    }
+
+    divFooter.style.display = "none";
+    divFooter.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("has-action-footer");
 }
 
 function HideRefresh() {
@@ -93,10 +110,91 @@ function ShowSaveNew() {
     btn.style.display = "inline";
 }
 function formatDate(dateStr) {
+    if (window.EnterpriseUI?.dates) {
+        return window.EnterpriseUI.dates.format(dateStr);
+    }
+
     const d = new Date(dateStr);
+
+    if (Number.isNaN(d.getTime())) {
+        return "";
+    }
+
     const day = String(d.getDate()).padStart(2, '0');
     const month = d.toLocaleString('en-US', { month: 'short' });
     const year = d.getFullYear();
 
     return `${day}-${month}-${year}`;
 }
+
+// Shared, reference-counted loader. This override keeps legacy showLoader/hideLoader
+// calls compatible while preventing concurrent or nested requests from hiding early.
+window.AppLoader = (function () {
+    "use strict";
+
+    let requestCount = 0;
+    const defaults = {
+        spinner: "accordion",
+        text: "Please wait...",
+        background: "rgba(0,0,0,0.6)"
+    };
+
+    function show(options) {
+        requestCount += 1;
+
+        if (requestCount > 1 || !window.jQuery?.busyLoadFull) {
+            return;
+        }
+
+        $.busyLoadFull("show", $.extend({}, defaults, options || {}));
+    }
+
+    function hide() {
+        requestCount = Math.max(0, requestCount - 1);
+
+        if (requestCount === 0 && window.jQuery?.busyLoadFull) {
+            $.busyLoadFull("hide");
+        }
+    }
+
+    function reset() {
+        requestCount = 0;
+
+        if (window.jQuery?.busyLoadFull) {
+            $.busyLoadFull("hide");
+        }
+    }
+
+    async function run(action, options) {
+        if (typeof action !== "function") {
+            throw new TypeError("AppLoader.run requires an action function.");
+        }
+
+        show(options);
+
+        try {
+            return await action();
+        }
+        finally {
+            hide();
+        }
+    }
+
+    return {
+        show: show,
+        hide: hide,
+        reset: reset,
+        run: run,
+        getCount: function () {
+            return requestCount;
+        }
+    };
+})();
+
+window.showLoader = function (options) {
+    window.AppLoader.show(options);
+};
+
+window.hideLoader = function () {
+    window.AppLoader.hide();
+};

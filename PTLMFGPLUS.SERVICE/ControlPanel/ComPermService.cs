@@ -16,8 +16,9 @@ namespace PTLMFGPLUS.SERVICE.ControlPanel
         Exception? GetError();
         Task<DataSet> ShowUserInfo(string filtername = "%%");     
         Task<DataSet> ShowPagePer();
-        Task<IEnumerable<ECompanyPagePermission>> ShowData();
+        Task<IEnumerable<ECompanyPagePermission>> ShowData(string moduleid);
         Task<IEnumerable<ECompanyPagePermission>> ShowAllData(string moduleid);
+        Task<bool> SavePermissions(SaveCompanyPagePermissionRequest request);
 
     }
 
@@ -48,14 +49,16 @@ namespace PTLMFGPLUS.SERVICE.ControlPanel
         }
 
 
-        public async Task<IEnumerable<ECompanyPagePermission>> ShowData()
+        public async Task<IEnumerable<ECompanyPagePermission>> ShowData(string moduleid)
         {
             ClassProAccessParams parms = new ClassProAccessParams();
-            parms.StoredProcedure = "SP_UTILITY_COMPAUSER_PERM";
-            parms.Calltype = "SHOWCOMPANYPAGEPERMISSION";
+            parms.StoredProcedure = "SP_UTILITY_LOGIN_MGT";
+            parms.Calltype = "SHOWUSERPERFORMASITUSER";
             parms.Comp1 = common.GetComcod();
             var items = await unitOfWork.SP_Call.ListAsync<ECompanyPagePermission>(parms);
-            return items;
+            return moduleid == "AA"
+                ? items.OrderBy(x => x.frmid)
+                : items.Where(x => x.frmid.StartsWith(moduleid, StringComparison.Ordinal)).OrderBy(x => x.frmid);
           
 
         }
@@ -63,8 +66,8 @@ namespace PTLMFGPLUS.SERVICE.ControlPanel
         public async Task<IEnumerable<ECompanyPagePermission>> ShowAllData(string moduleid)
         {
             ClassProAccessParams parms = new ClassProAccessParams();
-            parms.StoredProcedure = "SP_UTILITY_COMPAUSER_PERM";
-            parms.Calltype = "SHOWCOMPANYPAGEPERMISSION";
+            parms.StoredProcedure = "SP_UTILITY_LOGIN_MGT";
+            parms.Calltype = "SHOWUSERPERFORMASITUSER";
             parms.Comp1 = common.GetComcod();
             var lst = await unitOfWork.SP_Call.ListAsync<ECompanyPagePermission>(parms);           
             List<ECompForm> lstconsinfo = ConstantInfo.GetPermissionScope();
@@ -86,7 +89,8 @@ namespace PTLMFGPLUS.SERVICE.ControlPanel
                                 dscrption = p.frmname,
                                 chkper = p.chkper,
                                 modulename = t.modulename,
-                                fmgrpdesc = ""
+                                fmgrpdesc = "",
+                                alias = p.frmname
                             }).ToList();
             }
             else
@@ -104,7 +108,8 @@ namespace PTLMFGPLUS.SERVICE.ControlPanel
                                 dscrption = p.frmname,
                                 chkper = p.chkper,
                                 modulename = t.modulename,
-                                fmgrpdesc = ""
+                                fmgrpdesc = "",
+                                alias = p.frmname
                             }).ToList();
 
             }
@@ -124,7 +129,7 @@ namespace PTLMFGPLUS.SERVICE.ControlPanel
 
             //left join 
             var lstfinal = (from a in lstall
-                            join b in lst on a.frmid equals b.frmid into gj
+                            join b in lst on new { a.frmid, a.qrytype } equals new { b.frmid, b.qrytype } into gj
                             from b in gj.DefaultIfEmpty()
                             select new ECompanyPagePermission
                             {
@@ -135,7 +140,11 @@ namespace PTLMFGPLUS.SERVICE.ControlPanel
                                 dscrption = a.dscrption,
                                 chkper = b?.chkper ?? a.chkper,
                                 modulename = a.modulename,
-                                fmgrpdesc = a.fmgrpdesc
+                                fmgrpdesc = a.fmgrpdesc,
+                                alias = string.IsNullOrWhiteSpace(b?.alias) ? a.alias : b.alias,
+                                entry = b?.entry ?? false,
+                                printable = b?.printable ?? false,
+                                deleteck = b?.deleteck ?? false
 
                             }).ToList().OrderBy(l=>l.frmid);
 
@@ -146,6 +155,72 @@ namespace PTLMFGPLUS.SERVICE.ControlPanel
 
             
 
+        }
+
+        public async Task<bool> SavePermissions(SaveCompanyPagePermissionRequest request)
+        {
+            string modulePrefix = request.moduleId == "AA" ? "" : request.moduleId;
+            List<ECompForm> allowedPages = ConstantInfo.GetPermissionScope()
+                .Where(x => modulePrefix.Length == 0 || x.frmid.StartsWith(modulePrefix, StringComparison.Ordinal))
+                .ToList();
+            var allowedKeys = allowedPages.Select(x => $"{x.frmid}|{x.qrytype}")
+                .ToHashSet(StringComparer.Ordinal);
+            var selected = request.permissions
+                .Where(x => x.chkper && allowedKeys.Contains($"{x.frmid}|{x.qrytype}"))
+                .GroupBy(x => $"{x.frmid}|{x.qrytype}", StringComparer.Ordinal)
+                .Select(x => x.First())
+                .ToList();
+
+            var delete = new ClassProAccessParams
+            {
+                Comp1 = common.GetComcod(),
+                StoredProcedure = "SP_UTILITY_LOGIN_MGT",
+                Calltype = "DELETECOMP",
+                Desc01 = common.GetComcod() + "001",
+                Desc02 = modulePrefix + "%",
+                UserID = common.GetUserId()
+            };
+            if (!await unitOfWork.SP_Call.ExecuteAsync(delete))
+            {
+                return false;
+            }
+            if (selected.Count == 0)
+            {
+                return true;
+            }
+
+            DataTable table = new DataTable("tbl1");
+            table.Columns.Add("frmid1", typeof(string));
+            table.Columns.Add("frmid", typeof(string));
+            table.Columns.Add("frmname", typeof(string));
+            table.Columns.Add("qrytype", typeof(string));
+            table.Columns.Add("frmdesc", typeof(string));
+            table.Columns.Add("dscrption", typeof(string));
+            table.Columns.Add("modulename", typeof(string));
+            table.Columns.Add("chkper", typeof(bool));
+            table.Columns.Add("entry", typeof(bool));
+            table.Columns.Add("printable", typeof(bool));
+            table.Columns.Add("deleteck", typeof(bool));
+            table.Columns.Add("alias", typeof(string));
+
+            foreach (CompanyPagePermissionRow row in selected)
+            {
+                ECompForm page = allowedPages.First(x => x.frmid == row.frmid && x.qrytype == row.qrytype);
+                table.Rows.Add(page.frmgrp, page.frmid, page.frmname, page.qrytype, "", page.frmname, "", true,
+                    page.entry, page.printable, false, string.IsNullOrWhiteSpace(row.alias) ? page.frmname : row.alias.Trim());
+            }
+
+            DataSet data = new DataSet("ds1");
+            data.Tables.Add(table);
+            var insert = new ClassProAccessParams
+            {
+                Comp1 = common.GetComcod(),
+                StoredProcedure = "SP_UTILITY_LOGIN_MGT",
+                Calltype = "INSERTCOMPPER",
+                Dxml01 = data,
+                UserID = common.GetUserId()
+            };
+            return await unitOfWork.SP_Call.ExecuteAsync(insert);
         }
     }
 

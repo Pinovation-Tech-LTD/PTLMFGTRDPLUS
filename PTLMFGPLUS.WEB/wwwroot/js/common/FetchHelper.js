@@ -5,6 +5,10 @@
     ========================= */
 
     function urlconfig(path) {
+        if (/^https?:\/\//i.test(path)) {
+            return path;
+        }
+
         return appPath.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
     }
 
@@ -16,14 +20,62 @@
         if (typeof hideLoader === "function") hideLoader();
     }
 
+    function createTraceId() {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+            return window.crypto.randomUUID();
+        }
+
+        return Date.now().toString(36) + Math.random().toString(36).slice(2);
+    }
+
+    function getMessage(payload, status) {
+        if (typeof payload === "string" && payload.trim()) {
+            return payload;
+        }
+
+        return payload?.message
+            || payload?.objError
+            || payload?.title
+            || `Request failed with status ${status}.`;
+    }
+
+    function createError(response, payload, requestTraceId) {
+        const error = new Error(getMessage(payload, response.status));
+        error.name = "HttpError";
+        error.status = response.status;
+        error.errorCode = payload?.errorCode || "REQUEST_FAILED";
+        error.traceId = payload?.traceId
+            || response.headers.get("X-Correlation-ID")
+            || requestTraceId;
+        error.errors = payload?.errors || null;
+        error.payload = payload;
+        error.objError = error.message;
+        return error;
+    }
+
     async function request(method, url, body, contentType, showLoading = true) {
 
         if (showLoading) showLoaderSafe();
 
+        const requestTraceId = createTraceId();
         const options = {
             method,
-            headers: {}
+            headers: {
+                "Accept": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-Correlation-ID": requestTraceId
+            }
         };
+
+        if (method !== "GET") {
+            const verificationToken = document.querySelector(
+                'input[name="__RequestVerificationToken"]'
+            )?.value;
+
+            if (verificationToken) {
+                options.headers.RequestVerificationToken = verificationToken;
+            }
+        }
 
         if (contentType) {
             options.headers["Content-Type"] = contentType;
@@ -46,11 +98,23 @@
             }
 
             if (!response.ok) {
-                // FIX: throw parsed JSON instead of raw text
-                throw result;
+                throw createError(response, result, requestTraceId);
             }
 
             return result;
+        }
+        catch (error) {
+            if (error?.name === "HttpError") {
+                throw error;
+            }
+
+            const networkError = new Error("The server could not be reached. Check your connection and try again.");
+            networkError.name = "NetworkError";
+            networkError.errorCode = "NETWORK_ERROR";
+            networkError.traceId = requestTraceId;
+            networkError.cause = error;
+            networkError.objError = networkError.message;
+            throw networkError;
         }
 
         finally {
@@ -150,6 +214,7 @@
         postForm,
         postJson,
         deleteForm,
+        request,
         urlconfig
     };
 

@@ -1,0 +1,150 @@
+@model PTLMFGPLUS.ENTITY.StepOfOperationViewModel
+@{
+    ViewData["Title"] = "Steps of Operation";
+    int availableItems = Model.Sections.Sum(section => section.Items.Count);
+}
+
+@section Styles
+{
+    <link rel="stylesheet"
+          href="~/css/common_design/step-of-operation.css"
+          asp-append-version="true" />
+}
+
+<div class="operation-workspace">
+    <section class="operation-hero d-none">
+        <div class="operation-hero-copy">
+            <span class="operation-eyebrow">
+                Module @Model.SelectedModuleId
+            </span>
+            <h2>
+                @Model.SelectedModuleName
+            </h2>
+            <p>
+                Choose an authorized task, transaction, or report to continue.
+            </p>
+        </div>
+        <div class="operation-hero-stat">
+            <strong>@availableItems</strong>
+            <span>available actions</span>
+        </div>
+    </section>
+
+    <section class="operation-toolbar" aria-label="Module controls">
+        <div class="operation-module-field">
+            <label class="form-label" for="moduleSelector">
+                Module
+            </label>
+            <select class="form-select ui-size-xs"
+                    id="moduleSelector"
+                    aria-label="Select module">
+                @foreach (var module in Model.Modules)
+                {
+                    <option value="@module.moduleid"
+                            selected="@(module.moduleid == Model.SelectedModuleId)">
+                        @module.modulename
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="operation-filter-field">
+            <label class="form-label" for="operationFilter">
+                Find an action
+            </label>
+            <div class="operation-filter-input">
+                <i class="bi bi-search" aria-hidden="true"></i>
+                <input class="form-control ui-size-xs"
+                       id="operationFilter"
+                       type="search"
+                       placeholder="Search this module"
+                       autocomplete="off" />
+            </div>
+        </div>
+        <div class="operation-company">
+            <span>Working company</span>
+            <strong>@Model.CompanyName</strong>
+        </div>
+    </section>
+
+    @if (availableItems == 0)
+    {
+        <div class="operation-empty">
+            <i class="bi bi-shield-lock" aria-hidden="true"></i>
+            <h3>No authorized actions</h3>
+            <p>
+                This module has no pages assigned to your current user account.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="operation-grid" id="operationGrid">
+            @foreach (var operationSection in Model.Sections.Where(value => value.Items.Count > 0))
+            {
+                <section class="operation-section" data-operation-section>
+                    <header class="operation-section-header">
+                        <span class="operation-section-icon">
+                            <i class="bi @operationSection.Icon" aria-hidden="true"></i>
+                        </span>
+                        <div>
+                           @*  <span class="operation-section-code">
+                                @operationSection.Code
+                            </span> *@
+                            <h3>@operationSection.Title</h3>
+                            <p>@operationSection.Subtitle</p>
+                        </div>
+                        <span class="operation-section-count">
+                            @operationSection.Items.Count
+                        </span>
+                    </header>
+                    <div class="operation-list">
+                        @foreach (var item in operationSection.Items)
+                        {
+                            @if (item.IsTemplate)
+                            {
+                                <div class="operation-link operation-link-template"
+                                     data-operation-link
+                                     data-operation-name="@item.Title.ToLowerInvariant()">
+                                    <span class="operation-link-number">
+                                        @item.Code.Substring(2, 2)
+                                    </span>
+                                    <span class="operation-link-copy">
+                                        <strong>@item.Title</strong>
+                                    </span>
+                                    <span class="operation-template-badge">
+                                        Template
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <a class="operation-link"
+                                   href="@item.Url"
+                                   data-operation-link
+                                   data-operation-name="@item.Title.ToLowerInvariant()">
+                                    <span class="operation-link-number">
+                                        @item.Code.Substring(2, 2)
+                                    </span>
+                                    <span class="operation-link-copy">
+                                        <strong>@item.Title</strong>
+                                    </span>
+                                    <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                                </a>
+                            }
+                        }
+                    </div>
+                </section>
+            }
+        </div>
+        <div class="operation-no-results" id="operationNoResults" hidden>
+            <i class="bi bi-search" aria-hidden="true"></i>
+            No matching action was found.
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/js/common/step-of-operation.js"
+            asp-append-version="true"></script>
+}

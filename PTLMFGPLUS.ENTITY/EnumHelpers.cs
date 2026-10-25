@@ -28,8 +28,14 @@ namespace PTLMFGPLUS.ENTITY
             KPI=28,
             Doc= 29,
             MgtAccount=31,
+            InputModule=32,
             Mgt=33,
+            GroupAccount=35,
+            GroupManagement=36,
+            Trading=38,
+            Loan=51,
             CRM=52,
+            LegalKPI=79,
             HR=80
         }
 

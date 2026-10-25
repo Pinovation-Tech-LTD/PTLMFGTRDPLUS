@@ -144,7 +144,7 @@ namespace PTLMFGPLUS.LIB.Repository
                     ClearErrors();
                     param.Add("@Comp1", parm.Comp1);
                     param.Add("@CallType", parm.Calltype);
-                    param.Add("@Dxml01", parm.Dxml01?.GetXml());
+                    param.Add("@Dxml01", parm.Xml01 ?? parm.Dxml01?.GetXml());
                     param.Add("@Dxml02", parm.Dxml02?.GetXml());
                     var props = parm.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
                     foreach (var prop in props)

@@ -1,0 +1,86 @@
+@{
+    ViewData["Title"] = "Service Products";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="enterprise-entry-page service-product-list-page">
+    <section class="card entry-header-card">
+        <div class="card-body">
+            <div class="entry-form-grid">
+                <div class="entry-field entry-span-3">
+                    <label for="ddlServiceCenter" class="form-label">Service center</label>
+                    <select id="ddlServiceCenter" class="form-select ui-size-xm"></select>
+                </div>
+                <div class="entry-field entry-span-2">
+                    <label for="txtFromDate" class="form-label">From</label>
+                    <input id="txtFromDate" class="form-control ui-size-xm ui-datepicker-input" type="text" autocomplete="off" />
+                </div>
+                <div class="entry-field entry-span-2">
+                    <label for="txtToDate" class="form-label">To</label>
+                    <input id="txtToDate" class="form-control ui-size-xm ui-datepicker-input" type="text" autocomplete="off" />
+                </div>
+                <div class="entry-field entry-span-3">
+                    <label for="txtReceiveNo" class="form-label">Receive no.</label>
+                    <input id="txtReceiveNo" class="form-control ui-size-xm" type="text" placeholder="Optional receive number" />
+                </div>
+                <div class="entry-field-actions entry-span-2">
+                    <button id="btnShow" class="btn btn-primary ui-size-xm w-100" type="button">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        Show
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card entry-section-card">
+        <div class="card-header">
+            <span>
+                <span id="listHeading">Received products</span>
+                <span id="recordCount" class="entry-empty-help ms-2">0 records</span>
+            </span>
+            <button id="btnNewReceived" class="btn btn-primary ui-size-xs" type="button">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                New receive
+            </button>
+        </div>
+        <div class="card-body p-0">
+            <div class="entry-native-table-shell">
+                <table id="allRecProductTable" class="table table-hover align-middle enterprise-native-table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="assignmentModal" tabindex="-1" aria-labelledby="assignmentModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-6" id="assignmentModalTitle">Assign engineer</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="entry-field">
+                    <label for="ddlEmployee" id="assignmentLabel" class="form-label required">Engineer</label>
+                    <select id="ddlEmployee" class="form-select ui-size-xm"></select>
+                </div>
+                <div id="hotlineMessageField" class="entry-field mt-3" hidden>
+                    <label for="txtHotlineMessage" class="form-label">Hotline message</label>
+                    <textarea id="txtHotlineMessage" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary ui-size-xm" data-bs-dismiss="modal">Cancel</button>
+                <button id="btnSaveAssignment" type="button" class="btn btn-primary ui-size-xm">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/J_20_Service/jAllRecProduct.js" asp-append-version="true"></script>
+}

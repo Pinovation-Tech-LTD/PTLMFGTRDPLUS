@@ -1,11 +1,105 @@
 ﻿var Helpers = (function () {
+    function getSelect2DropdownParent($element, dropdownParent) {
+        if (window.EnterpriseUI?.getSelect2DropdownParent) {
+            return window.EnterpriseUI.getSelect2DropdownParent(
+                $element,
+                dropdownParent
+            );
+        }
+
+        if (dropdownParent) {
+            return $(dropdownParent);
+        }
+
+        const $modal = $element.closest(".modal");
+        return $modal.length ? $modal : $(document.body);
+    }
+
     async function withLoader(action) {
+        if (window.AppLoader) {
+            return window.AppLoader.run(action);
+        }
+
         showLoader();
+
         try {
             return await action();
         }
         finally {
             hideLoader();
+        }
+    }
+
+    function resolveElements(target) {
+        if (!target) {
+            return [];
+        }
+
+        if (typeof target === "string") {
+            return Array.from(document.querySelectorAll(target));
+        }
+
+        if (target instanceof Element) {
+            return [target];
+        }
+
+        return Array.from(target).filter(function (item) {
+            return item instanceof Element;
+        });
+    }
+
+    function setPending(target, pending) {
+        resolveElements(target).forEach(function (element) {
+            element.disabled = Boolean(pending);
+            element.setAttribute("aria-busy", String(Boolean(pending)));
+        });
+    }
+
+    async function executeRequest(options) {
+        const settings = options || {};
+
+        if (typeof settings.action !== "function") {
+            throw new TypeError("Helpers.executeRequest requires an action function.");
+        }
+
+        setPending(settings.pending, true);
+
+        try {
+            const result = settings.useLoader === false
+                ? await settings.action()
+                : await withLoader(settings.action);
+
+            if (typeof settings.onSuccess === "function") {
+                await settings.onSuccess(result);
+            }
+
+            return result;
+        }
+        catch (error) {
+            const details = window.Notifications?.handleError
+                ? window.Notifications.handleError(
+                    error,
+                    settings.fallbackMessage || "The operation could not be completed.",
+                    { silent: settings.silent === true }
+                )
+                : { message: error?.message || settings.fallbackMessage };
+
+            if (typeof settings.onError === "function") {
+                await settings.onError(error, details);
+            }
+
+            if (settings.rethrow === true) {
+                throw error;
+            }
+
+            return null;
+        }
+        finally {
+            setPending(settings.pending, false);
+
+            if (typeof settings.onFinally === "function") {
+                await settings.onFinally();
+            }
         }
     }
 
@@ -59,7 +153,6 @@
     }) {
 
         const $element = $(`#${selector}`);
-        console.log($element);
         // Destroy if already initialized
         if ($element.hasClass("select2-hidden-accessible")) {
             $element.select2("destroy");
@@ -70,8 +163,15 @@
             placeholder: placeholder,
             width: "100%",
             allowClear: true,
-            dropdownParent: dropdownParent ? $(dropdownParent) : $('body')
+            dropdownParent: getSelect2DropdownParent(
+                $element,
+                dropdownParent
+            )
         });
+
+        if (window.EnterpriseUI?.applySelect2Size) {
+            window.EnterpriseUI.applySelect2Size($element);
+        }
 
         try {
 
@@ -148,8 +248,15 @@
                 placeholder: placeholder,
                 width: "100%",
                 allowClear: true,
-                dropdownParent: dropdownParent ? $(dropdownParent) : $('body')
+                dropdownParent: getSelect2DropdownParent(
+                    $element,
+                    dropdownParent
+                )
             });
+
+            if (window.EnterpriseUI?.applySelect2Size) {
+                window.EnterpriseUI.applySelect2Size($element);
+            }
 
             // Set selected value if provided
             if (selectedValue !== null) {
@@ -163,6 +270,8 @@
 
     return {
         withLoader,
+        executeRequest,
+        setPending,
         populateDropdown,
         loadSelect2WithAjax,
         loadSelect2WithData

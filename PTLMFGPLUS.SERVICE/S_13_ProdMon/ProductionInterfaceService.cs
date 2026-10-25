@@ -4,6 +4,7 @@ using PTLMFGPLUS.LIB.Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,12 +33,14 @@ namespace PTLMFGPLUS.SERVICE.S_13_ProdMon
                 parms.StoredProcedure = "SP_REPORT_PRODUCTION_INTERFACE";
                 parms.Calltype = "RPTPRODUCTIONDASHBOARD";
                 parms.Comp1 = comcod;
-                parms.Desc01 = frmdate;
-                parms.Desc02 = todate;
-                parms.Desc03 = "41%";
+                parms.Desc01 = DateTime.Parse(frmdate, CultureInfo.InvariantCulture).ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture);
+                parms.Desc02 = DateTime.Parse(todate, CultureInfo.InvariantCulture).ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture);
+                parms.Desc03 = type.Equals("SemiFG", StringComparison.OrdinalIgnoreCase)
+                    ? "0101999%"
+                    : type.Equals("PreSemiFG", StringComparison.OrdinalIgnoreCase) ? "0101998%" : "41%";
                 var results = await _unitofwork.SP_Call.DataSetAsync(parms);
                 var finalresult = new List<object>();
-                if (results != null && results.Tables.Count > 0)
+                if (results != null && results.Tables.Count >= 9)
                 {
                     finalresult.Add(results.Tables[0].DataTableToList<InterfaceProductInfoData>());
                     finalresult.Add(results.Tables[1].DataTableToList<InterfaceProductProIssue>());

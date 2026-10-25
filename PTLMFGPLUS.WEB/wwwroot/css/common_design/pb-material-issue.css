@@ -1,0 +1,8 @@
+.pbmi-page { font-size: .82rem; }
+.pbmi-page .form-label { margin-bottom: .2rem; font-weight: 600; }
+.pbmi-page table { min-width: 1180px; }
+.pbmi-page th { white-space: nowrap; vertical-align: middle; background: var(--bs-tertiary-bg); }
+.pbmi-page td { vertical-align: middle; }
+.pbmi-page .desc-cell { min-width: 170px; white-space: normal; overflow-wrap: anywhere; }
+.pbmi-page .number-input { min-width: 92px; text-align: right; }
+[data-bs-theme="dark"] .pbmi-page input:disabled, [data-bs-theme="dark"] .pbmi-page input[readonly] { background-color: #26313c; color: #e5e7eb; opacity: 1; }

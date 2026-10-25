@@ -412,6 +412,33 @@ ul {
     background: var(--bg-surface-2);
 }
 
+.app-action-footer {
+    z-index: 1025;
+    min-height: 48px;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.4rem 0.75rem;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.1);
+}
+
+.app-action-footer-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+}
+
+.app-action-footer .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    margin: 0;
+    white-space: nowrap;
+}
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;

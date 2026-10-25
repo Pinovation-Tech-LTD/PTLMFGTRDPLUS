@@ -27,8 +27,10 @@ namespace PTLMFGPLUS.ENTITY.ControlPanel
 
         public class ECompanyPagePermission
         {
+            public string frmid1 { get; set; }
             public string frmgrp { get; set; }
             public string frmid { get; set; }
+            public string frmname { get; set; }
             public string pagelink { get; set; }
 
             public string qrytype { get; set; }
@@ -36,6 +38,26 @@ namespace PTLMFGPLUS.ENTITY.ControlPanel
             public bool   chkper { get; set; } = false;
             public string modulename { get; set; }
             public string fmgrpdesc { get; set; }
+            public string frmdesc { get; set; }
+            public string alias { get; set; }
+            public bool entry { get; set; }
+            public bool printable { get; set; }
+            public bool deleteck { get; set; }
+        }
+
+        public class SaveCompanyPagePermissionRequest
+        {
+            public string moduleId { get; set; }
+            public List<CompanyPagePermissionRow> permissions { get; set; } = new List<CompanyPagePermissionRow>();
+        }
+
+        public class CompanyPagePermissionRow
+        {
+            public string frmid { get; set; }
+            public string qrytype { get; set; }
+            public string alias { get; set; }
+            public string floc { get; set; } = "";
+            public bool chkper { get; set; }
         }
     }
 }
