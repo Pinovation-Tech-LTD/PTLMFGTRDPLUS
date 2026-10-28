@@ -28,9 +28,14 @@ namespace PTLMFGPLUS.ENTITY.E_07_Inv
         }
         public class RequisitionItem
         {
-            public string procode { get; set; } public string rsircode { get; set; }
-            public string rsirdesc { get; set; } public string rsirunit { get; set; }
-            public decimal rsqty { get; set; } public decimal issuecomp { get; set; } public decimal balisu { get; set; }
+            public string preqno { get; set; }
+            public string procode { get; set; } 
+            public string rsircode { get; set; }
+            public string rsirdesc { get; set; } 
+            public string rsirunit { get; set; }
+            public decimal rsqty { get; set; } 
+            public decimal issuecomp { get; set; } 
+            public decimal balisu { get; set; }
         }
         public class IssueOpenResponse
         {

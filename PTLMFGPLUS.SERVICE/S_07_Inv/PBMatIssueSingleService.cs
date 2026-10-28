@@ -83,8 +83,10 @@ namespace PTLMFGPLUS.SERVICE.S_07_Inv
         public async Task<bool> Save(SaveIssueRequest request)
         {
             if (request.issueRows.Count == 0) return false;
-            if (!(await GetStores(request.type)).Any(x => x.actcode == request.storeCode)) return false;
-            if (!ValidateQuantities(request)) return false;
+            if (!(await GetStores(request.type)).Any(x => x.actcode == request.storeCode))
+                return false;
+            if (!ValidateQuantities(request))
+                return false;
             var original = request.originalHeader;
             var isEntry = string.Equals(request.type, "Entry", StringComparison.OrdinalIgnoreCase);
             var now = DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
@@ -96,17 +98,37 @@ namespace PTLMFGPLUS.SERVICE.S_07_Inv
             var editBy = isEntry ? "" : (string.IsNullOrWhiteSpace(original?.editbyid) ? common.GetUserId() : original.editbyid);
             var editDate = isEntry ? "01-Jan-1900" : (string.IsNullOrWhiteSpace(original?.editdat) ? DateTime.Today.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture) : original.editdat);
 
-            var header = Params("SP_ENTRY_PURCHASE_03", "UPDATEPURMISSUEINFO"); header.Dxml01 = XmlData("ds2", "tblreqitem", request.requisitionItems);
-            header.Desc01 = "MATISSUEB"; header.Desc02 = request.issueNo; header.Desc03 = request.storeCode; header.Desc04 = request.date;
-            header.Desc05 = request.remarks ?? ""; header.Desc06 = request.referenceNo ?? ""; header.Desc07 = postedBy; header.Desc08 = terminal;
-            header.Desc09 = session; header.Desc10 = postedDate; header.Desc11 = editBy; header.Desc12 = editDate; header.Desc13 = "Normal";
-            if (!await unitOfWork.SP_Call.ExecuteAsync(header)) return false;
+            var header = Params("SP_ENTRY_PURCHASE_03", "UPDATEPURMISSUEINFO");
+            header.Dxml01 = XmlData("ds2", "tblreqitem", request.requisitionItems);
+            header.Desc01 = "MATISSUEB";
+            header.Desc02 = request.issueNo;
+            header.Desc03 = request.storeCode;
+            header.Desc04 = request.date;
+            header.Desc05 = request.remarks ?? "";
+            header.Desc06 = request.referenceNo ?? "";
+            header.Desc07 = postedBy;
+            header.Desc08 = terminal;
+            header.Desc09 = session;
+            header.Desc10 = postedDate;
+            header.Desc11 = editBy;
+            header.Desc12 = editDate;
+            header.Desc13 = "Normal";
+            if (!await unitOfWork.SP_Call.ExecuteAsync(header)) 
+                return false;
 
             foreach (var row in request.issueRows.Where(x => x.isuqty > 0))
             {
-                var p = Params("SP_ENTRY_PURCHASE_03", "UPDATEPURMISSUEINFO"); p.Desc01 = "MATISSUEA"; p.Desc02 = request.issueNo;
-                p.Desc03 = row.bactcode; p.Desc04 = row.rsircode; p.Desc05 = row.procode; p.Desc06 = row.isuqty.ToString(CultureInfo.InvariantCulture);
-                p.Desc07 = row.preqno; p.Desc08 = row.isurate.ToString(CultureInfo.InvariantCulture); p.Desc09 = row.spcfcod; p.Desc10 = request.storeCode;
+                var p = Params("SP_ENTRY_PURCHASE_03", "UPDATEPURMISSUEINFO");
+                p.Desc01 = "MATISSUEA";
+                p.Desc02 = request.issueNo;
+                p.Desc03 = row.bactcode;
+                p.Desc04 = row.rsircode;
+                p.Desc05 = row.procode;
+                p.Desc06 = row.isuqty.ToString(CultureInfo.InvariantCulture);
+                p.Desc07 = row.preqno;
+                p.Desc08 = row.isurate.ToString(CultureInfo.InvariantCulture);
+                p.Desc09 = row.spcfcod;
+                p.Desc10 = request.storeCode;
                 if (!await unitOfWork.SP_Call.ExecuteAsync(p)) return false;
             }
             return true;
@@ -114,17 +136,24 @@ namespace PTLMFGPLUS.SERVICE.S_07_Inv
 
         public async Task<bool> Approve(string issueNo, string storeCode)
         {
-            var p = Params("SP_ENTRY_MATERIAL_ISSUE", "MATERIAL_ISSUE_APPROVE"); p.Desc01 = issueNo; p.Desc02 = storeCode;
-            p.Desc03 = common.GetUserId(); p.Desc04 = common.GetIPAddress(); p.Desc05 = common.GetTerminalId();
+            var p = Params("SP_ENTRY_MATERIAL_ISSUE", "MATERIAL_ISSUE_APPROVE");
+            p.Desc01 = issueNo;
+            p.Desc02 = storeCode;
+            p.Desc03 = common.GetUserId();
+            p.Desc04 = common.GetIPAddress();
+            p.Desc05 = common.GetTerminalId();
             p.Desc06 = DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
             return await unitOfWork.SP_Call.ExecuteAsync(p);
         }
 
         private bool ValidateQuantities(SaveIssueRequest request)
         {
-            if (request.issueRows.Any(x => x.isuqty < 0 || x.isurate < 0 || (!common.GetComcod().StartsWith("87") && !x.rsircode.StartsWith("06") && x.isuqty > x.stockqty))) return false;
-            if (request.requisitionItems.Any(x => x.balisu < 0 || x.issuecomp + x.balisu > x.rsqty)) return false;
-            if (common.GetComcod() != "8321" && request.requisitionItems.Sum(x => x.balisu + x.issuecomp) == request.requisitionItems.Sum(x => x.rsqty) && request.issueRows.Sum(x => x.isuqty) != request.issueRows.Sum(x => x.balqty)) return false;
+            if (request.issueRows.Any(x => x.isuqty < 0 || x.isurate < 0 || (!common.GetComcod().StartsWith("87") && !x.rsircode.StartsWith("06") && x.isuqty > x.stockqty)))
+                return false;
+            if (request.requisitionItems.Any(x => x.balisu < 0 || x.issuecomp + x.balisu > x.rsqty))
+                return false;
+            if (common.GetComcod() != "8321" && request.requisitionItems.Sum(x => x.balisu + x.issuecomp) == request.requisitionItems.Sum(x => x.rsqty) && request.issueRows.Sum(x => x.isuqty) != request.issueRows.Sum(x => x.balqty))
+                return false;
             return true;
         }
 

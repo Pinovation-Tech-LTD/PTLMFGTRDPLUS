@@ -27,6 +27,10 @@ var PBMatIssueSinglePage = (function () {
     function materialKey(row) { return `${row.preqno}|${row.rsircode}|${row.spcfcod}`; }
 
     async function initialize() {
+        ShowFooterWithButtons();
+        HideRefresh();
+        HideCancel();
+        
         const lockDate = el("pbmiPage").dataset.lockDate === "true";
         const initial = lockDate || !requestedDate ? new Date() : parseDate(requestedDate);
         $("#issueDate").datepicker({ format: { toDisplay: dateText, toValue: parseDate }, autoclose: true, todayHighlight: true, orientation: "bottom" }).datepicker("setDate", initial);
@@ -44,11 +48,11 @@ var PBMatIssueSinglePage = (function () {
         $("#requisitionNo").on("change", changeRequisition);
         $("#btnSelect").on("click", selectOne); $("#btnSelectAll").on("click", selectAll);
         $("#btnToggleItems").on("click", () => { $("#reqItemsPanel").toggleClass("d-none"); el("btnToggleItems").textContent = $("#reqItemsPanel").hasClass("d-none") ? "Item Expand" : "Item Collapse"; });
-        $("#btnReload").on("click", reloadMaterials); $("#btnSave").on("click", save);
+        $("#btnReload").on("click", reloadMaterials);
+        $("#btnFooterSave").on("click", save);
         $("#issueTable").on("input", "input[data-field]", updateIssueInput);
         $("#reqItemsTable").on("input", "input[data-index]", updateReqInput);
     }
-
     async function loadPrevious() {
         try {
             state.previous = await api.get("GetPreviousIssues", { date: value("issueDate") }) || [];
@@ -69,7 +73,7 @@ var PBMatIssueSinglePage = (function () {
             loadSelect("requisitionNo", state.requisitions, "preqno", "preqno1", "Select requisition", state.requisitions[0]?.preqno);
             updateMaterialSelect(); renderAll(); state.opened = true;
             el("selectionPanel").classList.toggle("d-none", Boolean(selectedIssue) || type.toLowerCase() === "approve");
-            el("btnSave").querySelector("span").textContent = type.toLowerCase() === "approve" ? "Approve" : "Save";
+            el("btnFooterSave").querySelector("span").textContent = type.toLowerCase() === "approve" ? "Approve" : "Save";
         } catch (error) { showError(error, "Material issue could not be opened."); }
     }
 
@@ -116,10 +120,15 @@ var PBMatIssueSinglePage = (function () {
             if (type.toLowerCase() === "approve") await api.post("Approve", { issueNo: encodedIssueNo(), storeCode: value("storeCode") });
             else await api.post("Save", { type, date: value("issueDate"), issueNo: encodedIssueNo(), storeCode: value("storeCode"), referenceNo: value("referenceNo"), remarks: value("remarks"), issueRows: state.rows, requisitionItems: state.reqItems, originalHeader: state.header });
             Notifications.Toastr.success(type.toLowerCase() === "approve" ? "Material issue approved." : "Material issue saved successfully.");
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
         } catch (error) { showError(error, "Material issue could not be saved."); }
     }
     function reset() { state.previous = []; state.available = []; state.requisitions = []; state.reqItems = []; state.rows = []; state.header = null; state.issueId = ""; state.opened = false; el("referenceNo").value = ""; el("issueNo").value = ""; el("remarks").value = ""; el("previousPanel").classList.add("d-none"); el("selectionPanel").classList.add("d-none"); renderAll(); }
     return { initialize };
 })();
 
-$(function () { PBMatIssueSinglePage.initialize().catch(error => Notifications.Toastr.error(error?.objError || "Material issue page could not be initialized.")); });
+$(function () {
+    PBMatIssueSinglePage.initialize().catch(error => Notifications.Toastr.error(error?.objError || "Material issue page could not be initialized."));
+});

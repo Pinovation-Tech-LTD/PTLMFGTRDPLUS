@@ -63,10 +63,18 @@ namespace PTLMFGPLUS.WEB.Areas.F_07_Inv.Controllers
         [HttpPost]
         public async Task<IActionResult> Save([FromBody] SaveIssueRequest request)
         {
-            if (request == null || !ValidDate(request.date) || string.IsNullOrWhiteSpace(request.issueNo) || string.IsNullOrWhiteSpace(request.storeCode)) return BadRequest(new { objError = "Date, issue number and store are required." });
-            if (request.issueRows.Count == 0) return BadRequest(new { objError = "There are no materials to issue." });
-            try { return await service.Save(request) ? Ok(true) : BadRequest(Error("Material issue validation or save failed.")); }
-            catch { return BadRequest(Error("Material issue could not be saved.")); }
+            if (request == null || !ValidDate(request.date) || string.IsNullOrWhiteSpace(request.issueNo) || string.IsNullOrWhiteSpace(request.storeCode))
+                return BadRequest(new { objError = "Date, issue number and store are required." });
+            if (request.issueRows.Count == 0)
+                return BadRequest(new { objError = "There are no materials to issue." });
+            try
+            {
+                return await service.Save(request) ? Ok(true) : BadRequest(Error("Material issue validation or save failed."));
+            }
+            catch
+            {
+                return BadRequest(Error("Material issue could not be saved."));
+            }
         }
 
         [HttpPost]
