@@ -78,10 +78,10 @@ var ProdReqPage = (function () {
         initializeDate() {
             const today = new Date();
 
-            EnterpriseUI.dates.initializeFilters({
-                txtReqDate: {
-                    value: today,
-                    datepicker: { endDate: today }
+            EnterpriseUI.dates.initializeFilters({                
+                txtReqDate:
+                {
+                    value: 0, datepicker: { endDate: today }
                 }
             });
         },
@@ -288,6 +288,7 @@ var ProdReqPage = (function () {
 
         if (hasLockedBatch() && batchCode === state.requestedBatch) {
             ui.setDisabled("ddlBatch", true);
+            ui.setDisabled("ddlPreviousDpr", true);
         }
 
         await loadPreviousDprs();
@@ -478,54 +479,158 @@ var ProdReqPage = (function () {
         ui.showError(error, "Previous DPRs could not be loaded.");
     }
 
+    // function bindEvents() {
+    //     $("#txtReqDate").on("changeDate", function () {
+    //         $(this).datepicker("hide");
+
+    //         if (!state.initializing && !state.editing) {
+    //             loadPreviousDprs().catch(reportLoadError);
+    //         }
+    //     });
+
+    //     $("#ddlBudget").on("change", function () {
+    //         if (!state.initializing && !state.editing) {
+    //             loadPreviousDprs().catch(reportLoadError);
+    //         }
+    //     });
+
+    //     $("#ddlPreviousDpr").on("change", applyPreviousDpr);
+    //     $("#btnOpen").on("click", function () {
+    //         openRequisition().catch(function (error) {
+    //             ui.showError(error, "Requisition could not be opened.");
+    //         });
+    //     });
+    //     $("#btnGenerate").on("click", generateMaterials);
+    //     $("#btnFooterRecalculate").on("click", ui.renderTotals);
+    //     $("#btnFooterSave").on("click", saveRequisition);
+
+    //     $(document).on("input", ".product-req-qty", function () {
+    //         state.products[$(this).data("index")].cresqty = ui.number(this.value);
+    //         ui.renderTotals();
+    //     });
+    //     $(document).on("input", ".material-req-qty", function () {
+    //         state.materials[$(this).data("index")].cresqty = ui.number(this.value);
+    //     });
+    //     $(document).on("keydown", ".product-req-qty", function (event) {
+    //         if (event.key === "Enter" || event.key === "ArrowDown") {
+    //             event.preventDefault();
+    //             moveProductFocus(this, 1);
+    //         }
+    //         else if (event.key === "ArrowUp") {
+    //             event.preventDefault();
+    //             moveProductFocus(this, -1);
+    //         }
+    //     });
+    //     $(document).on("click", ".delete-product-row", function () {
+    //         state.products.splice($(this).data("index"), 1);
+    //         ui.renderProducts();
+    //         ui.renderTotals();
+    //     });
+    // }
+
     function bindEvents() {
-        $("#txtReqDate").on("changeDate", function () {
-            $(this).datepicker("hide");
 
-            if (!state.initializing && !state.editing) {
-                loadPreviousDprs().catch(reportLoadError);
-            }
-        });
-
-        $("#ddlBudget").on("change", function () {
-            if (!state.initializing && !state.editing) {
-                loadPreviousDprs().catch(reportLoadError);
-            }
-        });
-
-        $("#ddlPreviousDpr").on("change", applyPreviousDpr);
-        $("#btnOpen").on("click", function () {
-            openRequisition().catch(function (error) {
-                ui.showError(error, "Requisition could not be opened.");
+        document.getElementById("txtReqDate")
+            ?.addEventListener("change", function () {
+                if (!state.initializing && !state.editing) {
+                    loadPreviousDprs().catch(reportLoadError);
+                }
             });
-        });
-        $("#btnGenerate").on("click", generateMaterials);
-        $("#btnFooterRecalculate").on("click", ui.renderTotals);
-        $("#btnFooterSave").on("click", saveRequisition);
 
-        $(document).on("input", ".product-req-qty", function () {
-            state.products[$(this).data("index")].cresqty = ui.number(this.value);
+        document.getElementById("ddlBudget")
+            ?.addEventListener("change", function () {
+
+                if (!state.initializing && !state.editing) {
+                    loadPreviousDprs().catch(reportLoadError);
+                }
+            });
+
+        document.getElementById("ddlPreviousDpr")
+            ?.addEventListener("change", applyPreviousDpr);
+
+        document.getElementById("btnOpen")
+            ?.addEventListener("click", function () {
+                openRequisition().catch(function (error) {
+                    ui.showError(
+                        error,
+                        "Requisition could not be opened."
+                    );
+                });
+            });
+        
+        document.getElementById("btnGenerate")
+            ?.addEventListener("click", generateMaterials);
+
+        document.getElementById("btnFooterRecalculate")
+            ?.addEventListener("click", function () {
+                ui.renderTotals();
+            });
+
+        document.getElementById("btnFooterSave")
+            ?.addEventListener("click", saveRequisition);
+
+        document.addEventListener("input", function (event) {
+
+            const input = event.target.closest(".product-req-qty");
+
+            if (!input) return;
+
+            const index = Number(input.dataset.index);
+
+            if (!state.products[index]) return;
+
+            state.products[index].cresqty = ui.number(input.value);
+
             ui.renderTotals();
         });
-        $(document).on("input", ".material-req-qty", function () {
-            state.materials[$(this).data("index")].cresqty = ui.number(this.value);
+        document.addEventListener("input", function (event) {
+
+            const input = event.target.closest(".material-req-qty");
+
+            if (!input) return;
+
+            const index = Number(input.dataset.index);
+
+            if (!state.materials[index]) return;
+
+            state.materials[index].cresqty = ui.number(input.value);
         });
-        $(document).on("keydown", ".product-req-qty", function (event) {
+        document.addEventListener("keydown", function (event) {
+
+            const input = event.target.closest(".product-req-qty");
+
+            if (!input) return;
+
             if (event.key === "Enter" || event.key === "ArrowDown") {
+
                 event.preventDefault();
-                moveProductFocus(this, 1);
-            }
-            else if (event.key === "ArrowUp") {
+                moveProductFocus(input, 1);
+
+            } else if (event.key === "ArrowUp") {
+
                 event.preventDefault();
-                moveProductFocus(this, -1);
+                moveProductFocus(input, -1);
             }
         });
-        $(document).on("click", ".delete-product-row", function () {
-            state.products.splice($(this).data("index"), 1);
+
+        document.addEventListener("click", function (event) {
+
+            const button = event.target.closest(".delete-product-row");
+
+            if (!button) return;
+
+            const index = Number(button.dataset.index);
+
+            if (index < 0 || index >= state.products.length) return;
+
+            state.products.splice(index, 1);
+
             ui.renderProducts();
             ui.renderTotals();
         });
+
     }
+
 
     function init() {
         EnterpriseUI.initialize(document);

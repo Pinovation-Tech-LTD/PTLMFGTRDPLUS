@@ -343,7 +343,7 @@ namespace PTLMFGPLUS.LIB.Repository
 
 
                     await sqlCon.OpenAsync();
-                    var result = await SqlMapper.QueryMultipleAsync(sqlCon, parm.StoredProcedure, param, commandType: System.Data.CommandType.StoredProcedure);
+                    var result = await SqlMapper.QueryMultipleAsync(sqlCon, parm.StoredProcedure, param, commandType: System.Data.CommandType.StoredProcedure,commandTimeout: 0);
                     var item1 = await result.ReadAsync<T1>() ?? Enumerable.Empty<T1>();
                     var item2 = await result.ReadAsync<T2>() ?? Enumerable.Empty<T2>();
                     return new Tuple<IEnumerable<T1>, IEnumerable<T2>>(item1, item2);
