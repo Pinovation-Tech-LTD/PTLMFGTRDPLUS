@@ -31,7 +31,7 @@ namespace PTLMFGPLUS.WEB.Areas.F_13_ProdMon.Controllers
 
                 var rptlist = await _service.GetBatchBudget(pbmno, type);
 
-                string ComLogo = _common.GetComLogoPath("Company_Logo", "logo1.PNG"); 
+                string ComLogo = _common.GetComLogoPath("Images/Company_Logo", "logo1.PNG"); 
 
                 var rdlcPath = Path.GetFullPath(Path.Combine(
                 env.ContentRootPath,

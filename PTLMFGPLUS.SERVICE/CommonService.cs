@@ -62,16 +62,17 @@ namespace PTLMFGPLUS.SERVICE
         }
         public string GetComLogoPath(string fileFolder, string fileName)
         {
+
+            var root = Path.GetFullPath(LoginContext.envpath);
             
-            fileFolder = Path.GetFileName(fileFolder.TrimEnd('/', '\\'));
-            fileName = Path.GetFileName(fileName);
-
-            var fullPath = Path.GetFullPath(Path.Combine(
-                LoginContext.envpath, "Images", fileFolder, fileName));
-
-            if (!File.Exists(fullPath))
-                return " ";   
-
+            fileFolder = (fileFolder ?? "")
+                .Replace('\\', '/')
+                .Trim('/', '~');
+            fileName = Path.GetFileName(fileName ?? "");
+            var fullPath = Path.GetFullPath(Path.Combine(root, fileFolder, fileName));
+            if (!fullPath.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.Ordinal)
+                || !File.Exists(fullPath))
+                return " ";
             return new Uri(fullPath).AbsoluteUri;
         }
 
