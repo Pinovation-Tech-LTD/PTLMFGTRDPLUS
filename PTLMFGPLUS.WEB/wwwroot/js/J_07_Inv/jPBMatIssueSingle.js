@@ -30,7 +30,7 @@ var PBMatIssueSinglePage = (function () {
         ShowFooterWithButtons();
         HideRefresh();
         HideCancel();
-        
+
         const lockDate = el("pbmiPage").dataset.lockDate === "true";
         const initial = lockDate || !requestedDate ? new Date() : parseDate(requestedDate);
         $("#issueDate").datepicker({ format: { toDisplay: dateText, toValue: parseDate }, autoclose: true, todayHighlight: true, orientation: "bottom" }).datepicker("setDate", initial);
@@ -94,19 +94,47 @@ var PBMatIssueSinglePage = (function () {
         el("issueTable").querySelector("tbody").innerHTML = state.rows.map((r, i) => {
             const req = r.preqno === previousReq ? "" : r.preqno1; const batch = r.bactcode === previousBatch ? "" : r.bactdesc; const process = r.procode === previousProcess ? "" : r.prodesc;
             previousReq = r.preqno; previousBatch = r.bactcode; previousProcess = r.procode;
-            return `<tr><td>${i + 1}</td><td>${esc(req)}</td><td class="desc-cell">${esc(batch)}</td><td class="desc-cell">${esc(process)}</td><td class="desc-cell">${esc(r.rsirdesc)}</td><td class="desc-cell">${esc(r.spcfdesc)}</td><td>${esc(r.rsirunit)}</td><td class="text-end">${format(r.stockqty)}</td><td class="text-end">${format(r.reqqty)}</td><td class="text-end">${format(r.balqty)}</td><td><input class="form-control form-control-sm number-input" type="number" min="0" step="any" data-index="${i}" data-field="isuqty" value="${num(r.isuqty)}"></td><td><input class="form-control form-control-sm number-input" type="number" min="0" step="any" data-index="${i}" data-field="isurate" value="${num(r.isurate)}"></td><td class="text-end">${format(num(r.stockqty) - num(r.isuqty))}</td></tr>`;
+            return `<tr>
+            <td>${i + 1}</td>
+            <td>${esc(req)}</td>
+            <td class="desc-cell">${esc(batch)}</td>
+            <td class="desc-cell">${esc(process)}</td>
+            <td class="desc-cell">${esc(r.rsirdesc)}</td>
+            <td class="desc-cell">${esc(r.spcfdesc)}</td>
+            <td>${esc(r.rsirunit)}</td><td class="text-end">${format(r.stockqty)}</td>
+            <td class="text-end">${format(r.reqqty)}</td><td class="text-end">${format(r.balqty)}</td>
+            <td><input class="form-control form-control-sm number-input" type="number" min="0" step="any" data-index="${i}" data-field="isuqty" value="${num(r.isuqty)}"></td>
+            <td><input class="form-control form-control-sm number-input" type="number" min="0" step="any" data-index="${i}" data-field="isurate" value="${num(r.isurate)}"></td>
+            <td class="text-end">${format(num(r.stockqty) - num(r.isuqty))}</td>
+            </tr>`;
         }).join("");
     }
     function renderReqItems() {
-        el("reqItemsTable").querySelector("tbody").innerHTML = state.reqItems.map((r, i) => `<tr><td>${i + 1}</td><td class="desc-cell">${esc(r.rsirdesc)}</td><td>${esc(r.rsirunit)}</td><td class="text-end">${format(r.rsqty)}</td><td class="text-end">${format(r.issuecomp)}</td><td><input class="form-control form-control-sm number-input" type="number" min="0" step="any" data-index="${i}" value="${num(r.balisu)}"></td></tr>`).join("");
+        el("reqItemsTable").querySelector("tbody").innerHTML = state.reqItems.map((r, i) => `<tr><td>${i + 1}</td>
+        <td class="desc-cell">${esc(r.rsirdesc)}</td>
+        <td>${esc(r.rsirunit)}</td><td class="text-end">${format(r.rsqty)}</td>
+        <td class="text-end">${format(r.issuecomp)}</td>
+        <td><input class="form-control form-control-sm number-input" type="number" min="0" step="any" data-index="${i}" value="${num(r.balisu)}"></td>
+        </tr>`
+        ).join("");
     }
-    function updateIssueInput(event) { const input = event.target; state.rows[+input.dataset.index][input.dataset.field] = num(input.value); if (input.dataset.field === "isuqty") renderIssues(); }
-    function updateReqInput(event) { state.reqItems[+event.target.dataset.index].balisu = num(event.target.value); }
+    function updateIssueInput(event) {
+        const input = event.target; state.rows[+input.dataset.index][input.dataset.field] = num(input.value); if (input.dataset.field === "isuqty") renderIssues();
+    }
+    function updateReqInput(event) {
+        state.reqItems[+event.target.dataset.index].balisu = num(event.target.value);
+    }
 
     async function reloadMaterials() {
-        if (state.reqItems.some(x => num(x.issuecomp) + num(x.balisu) > num(x.rsqty))) return Notifications.Toastr.error("Issue balance cannot exceed requisition quantity.");
-        try { state.rows = await api.post("ReloadMaterials", { storeCode: value("storeCode"), date: value("issueDate"), dprNo: value("requisitionNo") || dprNo, requisitionItems: state.reqItems }) || []; renderIssues(); Notifications.Toastr.success("Material list reloaded."); }
-        catch (error) { showError(error, "Material list could not be reloaded."); }
+        if (state.reqItems.some(x => num(x.issuecomp) + num(x.balisu) > num(x.rsqty)))
+            return Notifications.Toastr.error("Issue balance cannot exceed requisition quantity.");
+        try {
+            state.rows = await api.post("ReloadMaterials",
+                { storeCode: value("storeCode"), date: value("issueDate"), dprNo: value("requisitionNo") || dprNo, requisitionItems: state.reqItems }) || []; renderIssues(); Notifications.Toastr.success("Material list reloaded.");
+        }
+        catch (error) {
+            showError(error, "Material list could not be reloaded.");
+        }
     }
 
     function encodedIssueNo() {
@@ -117,16 +145,30 @@ var PBMatIssueSinglePage = (function () {
     async function save() {
         if (!state.opened) return Notifications.Toastr.error("Open the issue first.");
         try {
-            if (type.toLowerCase() === "approve") await api.post("Approve", { issueNo: encodedIssueNo(), storeCode: value("storeCode") });
-            else await api.post("Save", { type, date: value("issueDate"), issueNo: encodedIssueNo(), storeCode: value("storeCode"), referenceNo: value("referenceNo"), remarks: value("remarks"), issueRows: state.rows, requisitionItems: state.reqItems, originalHeader: state.header });
+            if (type.toLowerCase() === "approve")
+                await api.post("Approve", { issueNo: encodedIssueNo(), storeCode: value("storeCode") });
+            else
+                await api.post("Save",
+                    { type, date: value("issueDate"), issueNo: encodedIssueNo(), storeCode: value("storeCode"), referenceNo: value("referenceNo"), remarks: value("remarks"), issueRows: state.rows, requisitionItems: state.reqItems, originalHeader: state.header }
+                );
             Notifications.Toastr.success(type.toLowerCase() === "approve" ? "Material issue approved." : "Material issue saved successfully.");
             setTimeout(() => {
                 window.location.reload();
             }, 1500);
-        } catch (error) { showError(error, "Material issue could not be saved."); }
+        } catch (error) {
+            showError(error, "Material issue could not be saved.");
+        }
     }
-    function reset() { state.previous = []; state.available = []; state.requisitions = []; state.reqItems = []; state.rows = []; state.header = null; state.issueId = ""; state.opened = false; el("referenceNo").value = ""; el("issueNo").value = ""; el("remarks").value = ""; el("previousPanel").classList.add("d-none"); el("selectionPanel").classList.add("d-none"); renderAll(); }
-    return { initialize };
+    function reset() {
+        state.previous = []; state.available = []; state.requisitions = []; state.reqItems = []; state.rows = []; state.header = null; state.issueId = ""; state.opened = false; el("referenceNo").value = "";
+        el("issueNo").value = ""; el("remarks").value = "";
+        el("previousPanel").classList.add("d-none");
+        el("selectionPanel").classList.add("d-none");
+        renderAll();
+    }
+    return {
+        initialize
+    };
 })();
 
 $(function () {
