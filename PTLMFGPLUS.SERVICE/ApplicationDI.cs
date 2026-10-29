@@ -31,6 +31,7 @@ namespace PTLMFGPLUS.SERVICE
             //PRODUCTION INTERFACE
             services.AddScoped<IProductionInterfaceService, ProductionInterfaceService>();
             services.AddScoped<IProdBudgetService, ProdBudgetService>();
+            services.AddScoped<IProdMonReportService, ProdMonReportService>();
 
             //PRODUCTION REQUISITION
             services.AddScoped<IProdReqService, ProdReqService>();

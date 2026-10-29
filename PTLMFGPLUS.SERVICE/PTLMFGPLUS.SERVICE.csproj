@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PTL.PRINTRDLC\PTL.PRINTRDLC.csproj" />
     <ProjectReference Include="..\PTLMFGPLUS.LIB\PTLMFGPLUS.LIB.csproj" />
   </ItemGroup>
 
