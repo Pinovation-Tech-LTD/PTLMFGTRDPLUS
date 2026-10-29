@@ -41,16 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-   
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entity\" />
     <Folder Include="Properties\DataSources\" />
-    <Folder Include="Reports\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Reports\R_13_ProdMon\RptProdBudget.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entity\ER_13_ProdMon\BO_Production.cs" />
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\PTL.PRINTRDLC.dll" />
+    <Content Include="bin\Debug\PTL.PRINTRDLC.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,6 @@
 /* Area/Controller */
 const commonPath = "/F_13_ProdMon/ProductionInterface/";
+const commonPrintPath = "/F_13_ProdMon/ReportProdMon/";
 const urlParams = new URLSearchParams(window.location.search);
 
 var ProductionInterfacePage = (function () {
@@ -29,6 +30,12 @@ var ProductionInterfacePage = (function () {
                 { frmdate, todate, type }
             ));
         }
+        // printProductionBudget(pbmno, type) {
+        //     return Helpers.withLoader(() => FetchHelpers.getForm(
+        //         FetchHelpers.urlconfig(`${commonPrintPath}ProdbudgetPrint`),
+        //         {pbmno,type }
+        //     ));
+        // }
     };
 
     function actionColumn(actions) {
@@ -68,7 +75,10 @@ var ProductionInterfacePage = (function () {
                     dateColumn("sdate"),
                     dateColumn("enddate"),
                     textColumn("pbmststus"),
-                    wrappedTextColumn("actdesc")
+                    wrappedTextColumn("actdesc"),
+                    actionColumn([printAction])              
+
+
                 ]
         },
         requisitions: {
@@ -87,7 +97,8 @@ var ProductionInterfacePage = (function () {
                     numericColumn("bgdamt"),
                     numericColumn("bgdbal"),
                     wrappedTextColumn("actdesc"),
-                    actionColumn([printAction, entryAction, editAction, deleteAction])]
+                    actionColumn([printAction, entryAction, editAction, deleteAction])
+                ]
         },
         issues: {
             container: "tableContainerMaterialissue",
@@ -471,6 +482,7 @@ var ProductionInterfacePage = (function () {
     }
 
 
+
     function openRequisitionEntry(button) {
         const row = EnterpriseUI.getResponsiveRowData(
             "#productionRequisitionTable",
@@ -487,6 +499,23 @@ var ProductionInterfacePage = (function () {
             actcode: row.actcode
         });
         window.open(`/F_11_Pro/ProdReq?${params.toString()}`, "_blank");
+    }
+    function printRequestProduction(button) {
+        const row = EnterpriseUI.getResponsiveRowData(
+            "#productionRequestTable",
+            button
+        );
+        if (!row?.pbmno || !row?.actcode) {
+            Notifications.Toastr.error("Budget or WIP information is missing for this requisition.");
+            return;
+        }
+
+        const params = new URLSearchParams({
+            Type: type,
+            pbmno: row.pbmno,
+            
+        });
+        window.open(`${commonPrintPath}ProdbudgetPrint?${params.toString()}`, "_blank");
     }
 
     function openMaterialIssueEntry(button) {
@@ -547,6 +576,13 @@ var ProductionInterfacePage = (function () {
             '.interface-action-button[data-action="entry"]',
             function () {
                 openRequisitionEntry(this);
+            }
+        );
+        $("#productionRequestTable").on(
+            "click",
+            '.interface-action-button[data-action="print"]',
+            function () {
+                printRequestProduction(this);
             }
         );
 

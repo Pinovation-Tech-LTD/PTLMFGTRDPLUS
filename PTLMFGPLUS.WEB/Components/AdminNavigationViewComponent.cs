@@ -119,7 +119,7 @@ namespace PTLMFGPLUS.WEB.Components
 
             if (title.Contains("production interface", StringComparison.OrdinalIgnoreCase))
             {
-                return "/F_13_ProdMon/ProductionInterface/ProductionInterfaceIndex";
+                return "/F_13_ProdMon/ProductionInterface/ProductionInterfaceIndex?type=FG";
             }
 
             if (title.Contains("service interface", StringComparison.OrdinalIgnoreCase))

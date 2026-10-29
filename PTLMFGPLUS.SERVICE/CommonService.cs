@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
+
 using Newtonsoft.Json;
 using PTLMFGPLUS.ENTITY;
 using PTLMFGPLUS.LIB.Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -24,6 +26,10 @@ namespace PTLMFGPLUS.SERVICE
         string GetUserName();
         string GetTerminalId();
         string GetPostedDate();
+        string GetComName();
+        string GetComAdd();
+        string GetComLogoPath();
+
     }
     public class CommonService(IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork) : ICommonService
     {
@@ -46,6 +52,35 @@ namespace PTLMFGPLUS.SERVICE
         {
             return GetClaim("Comcod") ?? LoginCompany?.comcod ?? string.Empty;
         }
+        public string GetComName()
+        {
+            return LoginContext?.compname ?? string.Empty;
+        }
+        public string GetComAdd()
+        {
+            return LoginContext?.comadd1 ?? string.Empty;
+        }
+        public string GetComLogoPath()
+        {
+            //string companyCode = GetComcod();
+
+            //string companyLogoFile = $"logo{companyCode}.PNG";
+
+            //string companyLogoPath = Path.Combine(
+            //    webHostEnvironment.WebRootPath ?? string.Empty,
+            //    "Images",
+            //    "Company_Logo",
+            //    companyLogoFile
+            //);
+
+            //if (File.Exists(companyLogoPath))
+            //{
+            //    return $"/Images/Company_Logo/{companyLogoFile}";
+            //}
+
+            return "/Images/Company_Logo/logo1.PNG";
+        }
+
         public string GetUserId()
         {
             return GetClaim("UserId") ?? GetClaim(ClaimTypes.NameIdentifier) ?? LoginUser?.usrid ?? string.Empty;
