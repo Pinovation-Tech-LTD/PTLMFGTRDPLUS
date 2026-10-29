@@ -116,6 +116,7 @@ namespace PTLMFGPLUS.ENTITY
         public class LoginSessionContext
         {
             public string comcod { get; set; }
+            public string envpath { get; set; }
             public string comnam { get; set; }
             public string comsnam { get; set; }
             public string comadd { get; set; }

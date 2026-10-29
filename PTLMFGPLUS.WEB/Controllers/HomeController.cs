@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using DocumentFormat.OpenXml.Vml.Office;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using PTLMFGPLUS.SERVICE;
+using PTLMFGPLUS.WEB.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +13,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static PTLMFGPLUS.ENTITY.EClass_Login;
-using PTLMFGPLUS.WEB.Models;
 
 namespace PTLMFGPLUS.WEB.Controllers
 {
@@ -19,10 +20,12 @@ namespace PTLMFGPLUS.WEB.Controllers
     {
         private readonly ILoginService _repLog;
         private readonly LicenseService _licenseService;
-        public HomeController(ILoginService repLog, LicenseService licenseService)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public HomeController(ILoginService repLog, LicenseService licenseService, IWebHostEnvironment webHostEnvironment)
         {
             _repLog = repLog;
             _licenseService = licenseService;
+            _webHostEnvironment = webHostEnvironment;
         }
         [AllowAnonymous]
         public IActionResult Index()
@@ -110,9 +113,14 @@ namespace PTLMFGPLUS.WEB.Controllers
 
                 var standard = items.Item2?.FirstOrDefault();
                 string clientAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+                
+                var fullPath = Path.GetFullPath(_webHostEnvironment.WebRootPath);
+
                 var loginContext = new LoginSessionContext
                 {
                     comcod = company.comcod,
+                    envpath = fullPath,
+
                     comnam = company.comname,
                     comsnam = company.comsname,
                     comadd = company.comadd,

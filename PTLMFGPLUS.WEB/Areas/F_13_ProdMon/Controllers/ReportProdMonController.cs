@@ -14,13 +14,16 @@ namespace PTLMFGPLUS.WEB.Areas.F_13_ProdMon.Controllers
     [Area("F_13_ProdMon")]
     public class ReportProdMonController(IProdMonReportService _service, ICommonService _common, IWebHostEnvironment env) : Controller
     {
-        [HttpGet]
+
+
+
+        [HttpGet]        
         public async Task<IActionResult> ProdbudgetPrint(string pbmno, string type)
         {
             try
             {
                 string comcod = _common.GetComcod();
-                string comnam = "";
+                string comnam = _common.GetComName();
                 string comadd = _common.GetComAdd();
                 string username = _common.GetUserName();
                 string compname = "";
@@ -28,7 +31,8 @@ namespace PTLMFGPLUS.WEB.Areas.F_13_ProdMon.Controllers
 
                 var rptlist = await _service.GetBatchBudget(pbmno, type);
 
-                string ComLogo = _common.GetComLogoPath();
+                string ComLogo = _common.GetComLogoPath("Company_Logo", "logo1.PNG"); 
+
                 var rdlcPath = Path.GetFullPath(Path.Combine(
                 env.ContentRootPath,
                 "..",
