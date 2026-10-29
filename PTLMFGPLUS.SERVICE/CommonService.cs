@@ -28,7 +28,7 @@ namespace PTLMFGPLUS.SERVICE
         string GetPostedDate();
         string GetComName();
         string GetComAdd();
-        string GetComLogoPath();
+        string GetComLogoPath(string fileFolder, string fileName);
 
     }
     public class CommonService(IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork) : ICommonService
@@ -54,31 +54,25 @@ namespace PTLMFGPLUS.SERVICE
         }
         public string GetComName()
         {
-            return LoginContext?.compname ?? string.Empty;
+            return LoginContext?.comnam ?? string.Empty;
         }
         public string GetComAdd()
         {
             return LoginContext?.comadd1 ?? string.Empty;
         }
-        public string GetComLogoPath()
+        public string GetComLogoPath(string fileFolder, string fileName)
         {
-            //string companyCode = GetComcod();
+            
+            fileFolder = Path.GetFileName(fileFolder.TrimEnd('/', '\\'));
+            fileName = Path.GetFileName(fileName);
 
-            //string companyLogoFile = $"logo{companyCode}.PNG";
+            var fullPath = Path.GetFullPath(Path.Combine(
+                LoginContext.envpath, "Images", fileFolder, fileName));
 
-            //string companyLogoPath = Path.Combine(
-            //    webHostEnvironment.WebRootPath ?? string.Empty,
-            //    "Images",
-            //    "Company_Logo",
-            //    companyLogoFile
-            //);
+            if (!File.Exists(fullPath))
+                return " ";   
 
-            //if (File.Exists(companyLogoPath))
-            //{
-            //    return $"/Images/Company_Logo/{companyLogoFile}";
-            //}
-
-            return "/Images/Company_Logo/logo1.PNG";
+            return new Uri(fullPath).AbsoluteUri;
         }
 
         public string GetUserId()
